@@ -78,19 +78,27 @@
             border: 1px solid rgba(251, 191, 36, 0.38);
         }
 
-        /* Subtle Mobile & Desktop Scrollbar */
+        /* High-Visibility Golden Scrollbar for Touch & Desktop */
+        .slide {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(251, 191, 36, 0.7) rgba(0, 0, 0, 0.3);
+        }
         .custom-scroll::-webkit-scrollbar,
         .slide::-webkit-scrollbar { 
-            width: 5px; 
+            width: 6px;
+            display: block !important;
         }
         .custom-scroll::-webkit-scrollbar-track,
         .slide::-webkit-scrollbar-track { 
-            background: rgba(0, 0, 0, 0.2); 
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 9999px;
+            margin: 4.5rem 0;
         }
         .custom-scroll::-webkit-scrollbar-thumb,
         .slide::-webkit-scrollbar-thumb { 
-            background: rgba(251, 191, 36, 0.45); 
-            border-radius: 9999px; 
+            background: linear-gradient(180deg, #F59E0B, #FBBF24);
+            border-radius: 9999px;
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
         }
 
         #hud-layer {
@@ -215,7 +223,12 @@
 
         .slide {
             position: absolute;
-            inset: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -223,21 +236,23 @@
             transform: scale(0.985) translate3d(0, 8px, 0);
             display: flex;
             flex-direction: column;
-            width: 100%;
-            height: 100%;
-            height: 100dvh;
-            padding: max(4.25rem, calc(env(safe-area-inset-top) + 3.25rem)) 1rem max(5.25rem, calc(env(safe-area-inset-bottom) + 4rem)) 1rem;
+            padding: max(4.25rem, calc(env(safe-area-inset-top) + 3.25rem)) 1rem 1.5rem 1rem;
             overflow-y: auto !important;
             overflow-x: hidden !important;
-            -webkit-overflow-scrolling: touch;
-            touch-action: pan-y;
+            -webkit-overflow-scrolling: touch !important;
+            touch-action: pan-y !important;
+            overscroll-behavior-y: contain;
+            -webkit-user-select: text;
+            user-select: text;
             z-index: 10;
+            box-sizing: border-box;
         }
         .slide.active {
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
-            transform: scale(1) translate3d(0, 0, 0);
+            /* CRITICAL: transform: none unlocks WebKit/Android compositing layer so touch scroll flows natively */
+            transform: none !important;
             z-index: 20;
         }
         .slide.exiting {
@@ -250,7 +265,7 @@
 
         @media (min-width: 640px) {
             .slide {
-                padding: 4.75rem 2rem 4.5rem 2rem;
+                padding: 4.75rem 2rem 2rem 2rem;
             }
         }
         @media (min-width: 1024px) {
@@ -1284,65 +1299,77 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Scroll Safety Spacer for Mobile HUD -->
+            <div class="h-28 sm:h-8 shrink-0 w-full pointer-events-none"></div>
         </div>
 
         <!-- SLIDE 13: DARI GAP KE AGENDA RISET (RESEARCH ROADMAP) -->
-        <div id="slide-13" class="slide max-w-6xl mx-auto w-full pb-28 sm:pb-16">
-            <div class="anim-element">
-                <span class="citation-tag mb-3 sm:mb-4">
+        <div id="slide-13" class="slide max-w-6xl mx-auto w-full">
+            <div class="anim-element flex items-center justify-between">
+                <span class="citation-tag mb-2 sm:mb-4">
                     <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
                     Agenda Riset Masa Depan
                 </span>
+                <!-- Subtle Mobile Scroll Indicator -->
+                <span class="sm:hidden text-[9px] font-mono text-amber-300/80 flex items-center gap-1 mb-2 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
+                    <span>Gulir ke bawah</span>
+                    <svg class="w-2.5 h-2.5 animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                </span>
             </div>
 
-            <h2 class="anim-element delay-1 text-xl sm:text-3xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-2 sm:mb-4">
+            <h2 class="anim-element delay-1 text-lg sm:text-3xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-2 sm:mb-4">
                 DARI DESKRIPSI KASUS<br/>
                 <span class="text-gray-400 font-bold">MENUJU PEMBUKTIAN</span> <span class="text-amber-400 loop-shimmer">EVIDENSI KUMULATIF.</span>
             </h2>
 
-            <div class="loop-beam-container p-1 rounded-2xl my-2 anim-element delay-2">
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
-                    <div class="glass-card p-3.5 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-between">
+            <!-- Responsive 2-Column Mobile & 5-Column Desktop Grid -->
+            <div class="loop-beam-container p-1 rounded-2xl my-1 sm:my-2 anim-element delay-2">
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
+                    <div class="glass-card p-3 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-between">
                         <div>
                             <span class="font-mono text-[10px] sm:text-[11px] text-amber-400 font-bold">FASE 01</span>
-                            <h4 class="text-xs sm:text-sm font-bold text-white mt-1">Studi Longitudinal</h4>
+                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5 sm:mt-1">Studi Longitudinal</h4>
                             <p class="text-[10px] sm:text-[11px] text-gray-400 mt-1">Mengukur dampak jangka panjang kepemimpinan digital pada mutu.</p>
                         </div>
                     </div>
-                    <div class="glass-card p-3.5 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-between">
+                    <div class="glass-card p-3 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-between">
                         <div>
                             <span class="font-mono text-[10px] sm:text-[11px] text-amber-400 font-bold">FASE 02</span>
-                            <h4 class="text-xs sm:text-sm font-bold text-white mt-1">Multisitus Pesantren</h4>
+                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5 sm:mt-1">Multisitus Pesantren</h4>
                             <p class="text-[10px] sm:text-[11px] text-gray-400 mt-1">Melibatkan pesantren salaf luar Jawa untuk mengikis bias.</p>
                         </div>
                     </div>
-                    <div class="glass-card p-3.5 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-between">
+                    <div class="glass-card p-3 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-between">
                         <div>
                             <span class="font-mono text-[10px] sm:text-[11px] text-amber-400 font-bold">FASE 03</span>
-                            <h4 class="text-xs sm:text-sm font-bold text-white mt-1">Validasi Alat Ukur</h4>
+                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5 sm:mt-1">Validasi Alat Ukur</h4>
                             <p class="text-[10px] sm:text-[11px] text-gray-400 mt-1">Menyusun instrumen baku kepemimpinan berbasis maqasid syariah.</p>
                         </div>
                     </div>
-                    <div class="glass-card p-3.5 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-between">
+                    <div class="glass-card p-3 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-between">
                         <div>
                             <span class="font-mono text-[10px] sm:text-[11px] text-amber-400 font-bold">FASE 04</span>
-                            <h4 class="text-xs sm:text-sm font-bold text-white mt-1">Uji Empiris Model</h4>
+                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5 sm:mt-1">Uji Empiris Model</h4>
                             <p class="text-[10px] sm:text-[11px] text-gray-400 mt-1">Menguji efektivitas model profetik secara kuantitatif.</p>
                         </div>
                     </div>
-                    <div class="glass-card-gold p-3.5 sm:p-4 rounded-xl border border-amber-400/40 flex flex-col justify-between">
+                    <div class="glass-card-gold p-3 sm:p-4 rounded-xl border border-amber-400/40 flex flex-col justify-between col-span-2 sm:col-span-1">
                         <div>
                             <span class="font-mono text-[10px] sm:text-[11px] text-amber-300 font-bold">FASE 05</span>
-                            <h4 class="text-xs sm:text-sm font-bold text-white mt-1">Audit Kematangan</h4>
+                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5 sm:mt-1">Audit Kematangan</h4>
                             <p class="text-[10px] sm:text-[11px] text-amber-100 mt-1">Menetapkan indeks kesiapan dan mitigasi risiko digital.</p>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="anim-element delay-3 text-center text-[10px] sm:text-xs font-mono text-gray-400 mt-3 pb-6">
+            <div class="anim-element delay-3 text-center text-[10px] sm:text-xs font-mono text-gray-400 mt-2 sm:mt-3">
                 Arah Strategis: Mengubah bidang kajian dari produksi model normatif menjadi pembuktian empiris berbasis data.
             </div>
+
+            <!-- Essential Bottom Spacer: Guarantees 100% Clearance Above Mobile HUD Buttons -->
+            <div class="h-28 sm:h-8 shrink-0 w-full pointer-events-none"></div>
         </div>
 
         <!-- SLIDE 14: KESIMPULAN AKHIR (LAMPU MENYALA DENGAN SAKLAR PEMADAM) -->
