@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-[#050505] text-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Title & SEO Metadata for Vercel Public Sharing -->
+    <title>Problematika Kepemimpinan Digital pada Lembaga Pendidikan Islam - Akbar Tausiur Rido</title>
+    <meta name="description" content="Diseminasi Riset Tesis Pascasarjana Magister MPI UIN Sunan Gunung Djati Bandung oleh Akbar Tausiur Rido. Dosen Pengampu: Dr. H. Mulyawan Safwandy Nugraha, M.Ag., M.Pd.">
+    <meta name="author" content="Akbar Tausiur Rido">
+    <meta name="theme-color" content="#050505">
+
+    <!-- Open Graph / WhatsApp / Telegram Social Preview Cards -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Problematika Kepemimpinan Digital pada Lembaga Pendidikan Islam">
+    <meta property="og:description" content="Systematic Literature Review & Pemetaan Research Gap (2023–2026) - Akbar Tausiur Rido | Magister MPI UIN SGD Bandung">
+    <meta property="og:site_name" content="Diseminasi Riset Akademik MPI UIN Bandung">
+
+    <!-- Google Fonts Inter, JetBrains Mono, & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;800&family=Playfair+Display:ital,wght@1,600;1,800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        serif: ['Playfair Display', 'serif']
+                    },
+                    colors: {
+                        gold: {
+                            400: '#FBBF24',
+                            500: '#F59E0B',
+                            600: '#D97706'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        /* Base Viewport Resets & Safe Area Constraints */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        html, body {
+            height: 100%;
+            height: 100dvh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #050505;
+            color: #FFFFFF;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Glassmorphism Design Tokens */
+        .glass-card {
+            background: rgba(18, 18, 22, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card-gold {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(18, 18, 22, 0.85));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(251, 191, 36, 0.35);
+        }
+
+        /* Custom Scrollbar for Secret Script */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(251, 191, 36, 0.35); border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(251, 191, 36, 0.7); }
+
+        #hud-layer {
+            pointer-events: none !important;
+        }
+        #hud-layer > * {
+            pointer-events: auto;
+        }
+
+        /* Continuous Looping Animations */
+        @keyframes shimmerTextSweep {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .loop-shimmer {
+            background: linear-gradient(90deg, #FFFFFF 0%, #FBBF24 25%, #FFFBEB 50%, #FBBF24 75%, #FFFFFF 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmerTextSweep 5s linear infinite;
+        }
+
+        @keyframes pulseAuraGlow {
+            0%, 100% {
+                text-shadow: 0 0 15px rgba(251, 191, 36, 0.4), 0 0 30px rgba(251, 191, 36, 0.2);
+                filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.3));
+            }
+            50% {
+                text-shadow: 0 0 32px rgba(251, 191, 36, 0.95), 0 0 55px rgba(251, 191, 36, 0.55);
+                filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.75));
+            }
+        }
+        .loop-pulse-glow {
+            animation: pulseAuraGlow 3.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translate3d(0, 0, 0); }
+            50% { transform: translate3d(0, -6px, 0); }
+        }
+        .loop-float {
+            animation: gentleFloat 4.2s ease-in-out infinite;
+        }
+
+        @keyframes beamTravel {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+        .loop-beam-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .loop-beam-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 45%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.85), transparent);
+            animation: beamTravel 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rippleBurst {
+            0% { transform: scale(0.98); opacity: 0.9; }
+            100% { transform: scale(1.18); opacity: 0; }
+        }
+        .ripple-spread {
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(251, 191, 36, 0.5);
+            border-radius: inherit;
+            animation: rippleBurst 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            pointer-events: none;
+        }
+
+        /* Planetary Orbit System Animations */
+        @keyframes orbitRingRotateCW {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes orbitRingRotateCCW {
+            0% { transform: translate(-50%, -50%) rotate(360deg); }
+            100% { transform: translate(-50%, -50%) rotate(0deg); }
+        }
+        @keyframes counterRotateCW {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+        @keyframes counterRotateCCW {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .orbit-track-1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            animation: orbitRingRotateCW 26s linear infinite;
+            transform-origin: center center;
+            pointer-events: none;
+            box-shadow: inset 0 0 16px rgba(251, 191, 36, 0.05), 0 0 16px rgba(251, 191, 36, 0.05);
+        }
+        .orbit-track-2 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            animation: orbitRingRotateCCW 18s linear infinite;
+            transform-origin: center center;
+            pointer-events: none;
+            box-shadow: inset 0 0 14px rgba(56, 189, 248, 0.05), 0 0 14px rgba(56, 189, 248, 0.05);
+        }
+        .counter-rotate-p1 {
+            animation: counterRotateCW 26s linear infinite;
+            transform-origin: center center;
+        }
+        .counter-rotate-p2 {
+            animation: counterRotateCCW 18s linear infinite;
+            transform-origin: center center;
+        }
+
+        /* Slide Stacking & Morph Entrance/Exit */
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1), transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: scale(0.985) translate3d(0, 8px, 0);
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding: 1.5rem;
+            z-index: 10;
+        }
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: scale(1) translate3d(0, 0, 0);
+            z-index: 20;
+        }
+        .slide.exiting {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: scale(1.015) translate3d(0, -8px, 0);
+            z-index: 15;
+        }
+
+        /* Instant Title & Header Entrance - Zero Delay */
+        .slide h1,
+        .slide h2,
+        .anim-title,
+        .citation-tag {
+            opacity: 0;
+            transform: translate3d(0, 5px, 0);
+            transition: opacity 0.16s cubic-bezier(0.16, 1, 0.3, 1), transform 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            transition-delay: 0s !important;
+            will-change: transform, opacity;
+        }
+        .slide.active h1,
+        .slide.active h2,
+        .slide.active .anim-title,
+        .slide.active .citation-tag {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+        .slide.exiting h1,
+        .slide.exiting h2,
+        .slide.exiting .anim-title,
+        .slide.exiting .citation-tag {
+            opacity: 0;
+            transform: translate3d(0, -5px, 0);
+        }
+
+        .slide h2 + p {
+            transition-delay: 0.04s !important;
+            transition-duration: 0.2s !important;
+        }
+
+        /* Staggered Elements Transition System */
+        .anim-element {
+            opacity: 0;
+            transform: translate3d(0, 14px, 0);
+            transition: opacity 0.36s cubic-bezier(0.16, 1, 0.3, 1), transform 0.36s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+        .slide.active .anim-element {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+        .slide.exiting .anim-element {
+            opacity: 0;
+            transform: translate3d(0, -10px, 0);
+        }
+        .delay-1 { transition-delay: 0.05s; }
+        .delay-2 { transition-delay: 0.10s; }
+        .delay-3 { transition-delay: 0.15s; }
+        .delay-4 { transition-delay: 0.20s; }
+        .delay-5 { transition-delay: 0.25s; }
+        .delay-6 { transition-delay: 0.30s; }
+
+        @media (hover: hover) and (pointer: fine) {
+            h1:hover, h2:hover, h3:hover, h4:hover {
+                transform: translate3d(0, -2px, 0) scale(1.015);
+                text-shadow: 0 0 16px rgba(251, 191, 36, 0.6);
+                transition: all 0.25s ease-out;
+            }
+            .glass-card:hover {
+                transform: translate3d(0, -4px, 0) scale(1.02);
+                border-color: rgba(251, 191, 36, 0.5);
+                box-shadow: 0 14px 35px -10px rgba(0, 0, 0, 0.7), 0 0 24px rgba(251, 191, 36, 0.18);
+                transition: all 0.28s ease-out;
+            }
+            [data-count]:hover {
+                transform: scale(1.12);
+                color: #FBBF24 !important;
+                filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.85));
+                transition: all 0.2s ease-out;
+            }
+        }
+
+        /* Interactive Desk / Pendant Lamp Styling */
+        .lamp-assembly {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 35;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        }
+        .lamp-wire {
+            width: 2px;
+            height: 48px;
+            background: linear-gradient(180deg, #4B5563, #1F2937);
+        }
+        .lamp-shade-housing {
+            width: 84px;
+            height: 40px;
+            background: linear-gradient(180deg, #27272A 0%, #18181B 60%, #09090B 100%);
+            border-top-left-radius: 42px;
+            border-top-right-radius: 42px;
+            border-bottom: 2px solid #F59E0B;
+            position: relative;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.8);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .lamp-bulb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #27272A;
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.06);
+            transform: translateY(6px);
+            transition: all 0.4s ease-out;
+        }
+        .lamp-light-cone {
+            position: absolute;
+            top: 86px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            max-width: 1050px;
+            height: 90vh;
+            background: radial-gradient(ellipse at 50% 0%, rgba(251, 191, 36, 0.22) 0%, rgba(245, 158, 11, 0.08) 45%, transparent 75%);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 12;
+        }
+
+        /* State: Lamp Active (Illuminated) */
+        .lamp-active .lamp-bulb {
+            background: #FFFBEB;
+            box-shadow: 0 0 35px #FBBF24, 0 0 75px rgba(251, 191, 36, 0.95);
+        }
+        .lamp-active .lamp-light-cone {
+            opacity: 1;
+        }
+        .lamp-active #lamp-dormant-curtain {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #lamp-lit-content {
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .lamp-active #lamp-lit-content {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate3d(0, 0, 0);
+        }
+
+        /* Pull-Cord Physics & Interaction */
+        .pull-cord-wrapper {
+            position: absolute;
+            top: 78px;
+            left: calc(50% + 24px);
+            z-index: 45;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: grab;
+            touch-action: none;
+            user-select: none;
+        }
+        .pull-cord-wrapper:active {
+            cursor: grabbing;
+        }
+        .cord-chain {
+            width: 2px;
+            height: 85px;
+            background: repeating-linear-gradient(180deg, #FBBF24 0px, #FBBF24 4px, #78350F 4px, #78350F 6px);
+            transform-origin: top center;
+            transition: height 0.05s ease-out;
+            box-shadow: 0 0 4px rgba(0,0,0,0.5);
+        }
+        .cord-handle {
+            width: 14px;
+            height: 22px;
+            background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #B45309 100%);
+            border-radius: 6px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.7), 0 0 12px rgba(251, 191, 36, 0.6);
+            margin-top: -1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cord-pull-hint {
+            position: absolute;
+            top: 108px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            background: rgba(15, 15, 18, 0.88);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            padding: 4px 10px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .idle-swaying {
+            animation: gentleSway 3.6s ease-in-out infinite alternate;
+            transform-origin: top center;
+        }
+        @keyframes gentleSway {
+            0% { transform: rotate(-2.5deg); }
+            100% { transform: rotate(2.5deg); }
+        }
+        .snapping {
+            animation: snapBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes snapBounce {
+            0% { transform: translate3d(0, var(--pull-y, 35px), 0); }
+            50% { transform: translate3d(0, -8px, 0); }
+            100% { transform: translate3d(0, 0, 0); }
+        }
+
+        .notes-modal-panel {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translate3d(-50%, 0, 0) !important;
+            width: 92%;
+            max-width: 54rem;
+            background: rgba(14, 14, 18, 0.96);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(251, 191, 36, 0.35);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            z-index: 90;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.85), 0 0 35px rgba(251, 191, 36, 0.15);
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .citation-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.6875rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(251, 191, 36, 0.12);
+            border: 1px solid rgba(251, 191, 36, 0.35);
+            color: #FCD34D;
+        }
+    </style>
+</head>
+<body class="bg-[#050505] text-white selection:bg-amber-400 selection:text-black">
+
+    <!-- TOP & BOTTOM HUD OVERLAY (CLEAN OF ANY SCRIPT HINTS) -->
+    <div id="hud-layer" class="fixed inset-0 z-50 pointer-events-none flex flex-col justify-between p-4 sm:p-6 opacity-0 transition-opacity duration-500">
+        <!-- Top HUD Row -->
+        <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 border border-white/10 backdrop-blur-md">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span id="live-timer" class="font-mono text-xs tracking-wider font-bold text-gray-200">LIVE 00:00</span>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <div class="px-3.5 py-1.5 rounded-full bg-black/60 border border-white/10 backdrop-blur-md font-mono text-xs font-bold text-gray-300">
+                    <span id="slide-num-current" class="text-amber-400">00</span> / <span id="slide-num-total">15</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom HUD Navigation Row -->
+        <div class="flex items-center justify-between w-full text-xs text-gray-400 font-mono">
+            <div class="hidden sm:flex items-center gap-3">
+                <span class="px-2 py-0.5 rounded bg-white/10 text-white font-bold">← / →</span>
+                <span>Ganti Slide</span>
+            </div>
+            
+            <div class="flex items-center gap-2 ml-auto">
+                <button onclick="previousSlide()" class="p-2.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 transition-all text-white" title="Slide Sebelumnya">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button onclick="nextSlide()" class="p-2.5 rounded-full bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/40 active:scale-95 transition-all text-amber-300" title="Slide Berikutnya">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Thin Bottom Progress Bar -->
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-900/80">
+            <div id="slide-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-300 w-0"></div>
+        </div>
+    </div>
+
+    <!-- MAIN PRESENTATION VIEWPORT -->
+    <div id="presentation-viewport" class="relative w-full h-full overflow-hidden">
+
+        <!-- SLIDE 0: OPENING INTERAKTIF LAMPU BELAJAR BERTALI SAKLAR -->
+        <div id="slide-0" class="slide active items-center justify-center text-center overflow-hidden">
+            <!-- Volumetric Spotlight Cone -->
+            <div class="lamp-light-cone"></div>
+
+            <!-- Hanging Designer Lamp Fixture -->
+            <div class="lamp-assembly">
+                <div class="lamp-wire"></div>
+                <div class="lamp-shade-housing">
+                    <div class="lamp-bulb" id="lamp-bulb-el"></div>
+                </div>
+            </div>
+
+            <!-- Interactive Hanging Pull-Cord / Chain -->
+            <div id="lamp-cord-wrapper" class="pull-cord-wrapper idle-swaying cursor-pointer" onclick="activateLampOpening()" title="Tarik atau klik saklar untuk menyalakan lampu">
+                <div id="lamp-cord-chain" class="cord-chain"></div>
+                <div class="cord-handle" id="lamp-cord-handle">
+                    <div class="w-1.5 h-1.5 rounded-full bg-yellow-200 shadow-sm"></div>
+                </div>
+
+                <div class="cord-pull-hint">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                    <span class="text-[11px] font-mono tracking-wider font-extrabold uppercase text-amber-300">Tarik / Klik Saklar Lampu</span>
+                    <svg class="w-3.5 h-3.5 text-amber-400 animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                </div>
+            </div>
+
+            <!-- Dormant Pitch-Black Studio Curtain -->
+            <div id="lamp-dormant-curtain" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none transition-opacity duration-700 z-10 px-4">
+                <div class="text-gray-600 text-xs font-mono tracking-widest uppercase mb-3">Ruang Sidang Akademik Digital</div>
+                <p class="text-gray-400 text-sm sm:text-base font-light tracking-wide max-w-md">Tarik bandul tali saklar lampu di atas untuk memulai presentasi.</p>
+            </div>
+
+            <!-- Illuminated Content Revealed Under the Lamp -->
+            <div id="lamp-lit-content" class="max-w-4xl mx-auto flex flex-col items-center pt-24 sm:pt-28 pb-4 opacity-0 transform translate-y-6 transition-all duration-700 pointer-events-none relative z-20 px-4">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-mono font-bold tracking-wider uppercase mb-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                    Diseminasi Riset Tesis Pascasarjana
+                </div>
+
+                <h1 class="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-2 loop-shimmer">
+                    PROBLEMATIKA KEPEMIMPINAN DIGITAL<br/>PADA LEMBAGA PENDIDIKAN ISLAM
+                </h1>
+                
+                <h2 class="text-sm sm:text-lg text-gray-300 font-light tracking-wide max-w-2xl mb-5">
+                    Systematic Literature Review & Pemetaan Research Gap (2023–2026)
+                </h2>
+
+                <div class="glass-card-gold px-6 py-4 rounded-2xl border border-amber-400/40 mb-6 w-full max-w-xl shadow-[0_0_35px_rgba(251,191,36,0.15)] loop-float relative">
+                    <div class="ripple-spread"></div>
+                    <div class="text-base sm:text-lg font-black text-white uppercase tracking-wider mb-0.5">Akbar Tausiur Rido</div>
+                    <div class="text-xs text-amber-300 font-mono font-semibold uppercase tracking-wider mb-2">NIM 2269100087 | Magister Manajemen Pendidikan Islam</div>
+                    <div class="text-xs text-gray-300 border-t border-white/10 pt-2 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
+                        <span class="text-gray-400">Dosen Pengampu:</span>
+                        <span class="font-bold text-white">Dr. H. Mulyawan Safwandy Nugraha, M.Ag., M.Pd.</span>
+                    </div>
+                </div>
+
+                <!-- Logo UIN Sunan Gunung Djati Bandung with CDN Resilience Fallback -->
+                <div class="flex items-center justify-center p-2.5 rounded-2xl glass-card border border-white/10 shadow-lg mb-6">
+                    <img src="logo uin.png" alt="Logo UIN SGD" class="h-16 sm:h-20 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/UIN_Sunan_Gunung_Djati_Bandung_logo.png/600px-UIN_Sunan_Gunung_Djati_Bandung_logo.png';"/>
+                </div>
+
+                <!-- Action Button to Advance -->
+                <button onclick="goToSlide(1)" class="px-8 py-3.5 bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-black font-black text-xs sm:text-sm tracking-widest uppercase rounded-full shadow-[0_0_30px_rgba(251,191,36,0.4)] hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2.5">
+                    <span>Lanjutkan ke Paparan Riset</span>
+                    <svg class="w-4 h-4 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- SLIDE 1: PENGANTAR MASALAH (DIGITALISASI BUKAN SEKADAR TEKNOLOGI) -->
+        <div id="slide-1" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Landasan Ontologis Riset
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight uppercase mb-8">
+                DIGITALISASI<br/>
+                <span class="text-gray-500 font-bold">≠ SEKADAR PENGADAAN</span> <span class="text-amber-400 loop-shimmer">TEKNOLOGI.</span>
+            </h2>
+
+            <!-- 4 Connected Structural Dimension Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 my-4 anim-element delay-2">
+                <div class="glass-card p-5 rounded-xl border border-white/10 flex flex-col justify-between min-h-[140px] loop-float">
+                    <span class="font-mono text-xs text-gray-500 font-bold">01 / PERANGKAT</span>
+                    <div class="text-xl sm:text-2xl font-black text-white mt-3">TEKNOLOGI</div>
+                    <span class="text-xs text-gray-400 mt-2">Hardware & Jaringan</span>
+                </div>
+                <div class="glass-card p-5 rounded-xl border border-white/10 flex flex-col justify-between min-h-[140px] loop-float" style="animation-delay: 0.5s;">
+                    <span class="font-mono text-xs text-gray-500 font-bold">02 / AKTOR</span>
+                    <div class="text-xl sm:text-2xl font-black text-white mt-3">MANUSIA</div>
+                    <span class="text-xs text-gray-400 mt-2">Guru, Santri, Staf</span>
+                </div>
+                <div class="glass-card p-5 rounded-xl border border-white/10 flex flex-col justify-between min-h-[140px] loop-float" style="animation-delay: 1s;">
+                    <span class="font-mono text-xs text-gray-500 font-bold">03 / NILAI</span>
+                    <div class="text-xl sm:text-2xl font-black text-white mt-3">BUDAYA</div>
+                    <span class="text-xs text-gray-400 mt-2">Otoritas Kiai & Tradisi</span>
+                </div>
+                <div class="glass-card-gold p-5 rounded-xl border border-amber-400/40 flex flex-col justify-between min-h-[140px] loop-float relative" style="animation-delay: 1.5s;">
+                    <div class="ripple-spread"></div>
+                    <span class="font-mono text-xs text-amber-300 font-bold">04 / KUNCI</span>
+                    <div class="text-xl sm:text-2xl font-black text-amber-300 mt-3 loop-pulse-glow">KEPEMIMPINAN</div>
+                    <span class="text-xs text-amber-200 mt-2">Orkestrator Nilai & Visi</span>
+                </div>
+            </div>
+
+            <!-- Synthesis Statement Box -->
+            <div class="anim-element delay-3 glass-card p-5 rounded-2xl border-l-4 border-amber-400 mt-6 max-w-4xl">
+                <p class="text-base sm:text-xl font-light text-gray-200 leading-relaxed">
+                    "Transformasi digital berubah menjadi <strong class="text-white font-bold">problematika kepemimpinan serius</strong> saat teknologi berbenturan langsung dengan kesiapan manusia, budaya kelembagaan, dan nilai-nilai luhur pesantren/madrasah."
+                </p>
+                <div class="mt-3 text-xs font-mono text-gray-400 flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
+                    <span>Rujukan: Mukti (2026); Biladina & Qadriah (2026); Bakr dkk. (2026)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: DISPARITAS ORGANISASIONAL & TEKANAN REGULASI -->
+        <div id="slide-2" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Dinamika Ketegangan Organisasi
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-6">
+                DISPARITAS: TRANSFORMASI CEPAT VS <span class="text-amber-400 loop-shimmer">DAYA SERAP LEMBAGA</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 anim-element delay-2">
+                <!-- Bar Disparity Metric 1 -->
+                <div class="glass-card p-6 rounded-2xl border border-white/10 space-y-4">
+                    <div class="flex justify-between items-center text-sm font-mono">
+                        <span class="text-gray-300 font-bold">Laju Tuntutan Regulasi & Akuntabilitas Data</span>
+                        <span class="text-amber-400 font-black" data-count="85">0%</span>
+                    </div>
+                    <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full transition-all duration-1000 w-0" data-width="85%"></div>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed">EMIS, RDM, dan digitalisasi pelaporan Kementerian Agama menuntut respons instan.</p>
+                </div>
+
+                <!-- Bar Disparity Metric 2 -->
+                <div class="glass-card p-6 rounded-2xl border border-white/10 space-y-4">
+                    <div class="flex justify-between items-center text-sm font-mono">
+                        <span class="text-gray-300 font-bold">Kapasitas Nyata Penyerapan Organisasi SDM</span>
+                        <span class="text-red-400 font-black" data-count="38.8">0%</span>
+                    </div>
+                    <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-red-500 to-rose-400 rounded-full transition-all duration-1000 w-0" data-width="38.8%"></div>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed">Kesenjangan kompetensi guru senior dan keterbatasan perangkat menghambat penyerapan.</p>
+                </div>
+            </div>
+
+            <div class="anim-element delay-3 glass-card-gold p-5 rounded-2xl border border-amber-400/30 flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-amber-400/20 flex items-center justify-center text-amber-300 font-black text-xl shrink-0">!</div>
+                <p class="text-sm sm:text-base text-gray-200">
+                    <strong class="text-white font-bold">Temuan Kunci Biladina & Qadriah (2026):</strong> Sebagian besar lembaga mengalami laju transformasi yang jauh lebih cepat daripada kesiapan struktur internal mereka, melahirkan kegagalan adopsi sistematis.
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: TREN PUBLIKASI 2023-2026 (VERTICAL BAR CHART) -->
+        <div id="slide-3" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Eksplorasi Korpus Literatur
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-2">
+                RISET MELESAT CEPAT,<br/>
+                <span class="text-gray-400 font-bold">NAMUN BIDANG KAJIAN</span> <span class="text-amber-400 loop-shimmer">TERFRAGMENTASI.</span>
+            </h2>
+            <p class="anim-element delay-1 text-sm text-gray-400 mb-6">Distribusi 49 artikel terpilih memperlihatkan lonjakan tajam pada kurun waktu 2025–2026 (77.6% korpus).</p>
+
+            <div class="anim-element delay-2 glass-card p-6 rounded-2xl border border-white/10 flex flex-col my-2">
+                <div class="flex items-end gap-4 sm:gap-8 h-48 sm:h-56 md:h-64 border-b border-white/15 pb-2 relative">
+                    <!-- Sumbu Y Benchmarks -->
+                    <div class="flex flex-col justify-between h-full font-mono text-[10px] text-gray-400 border-r border-white/10 pr-2">
+                        <span>24 st</span>
+                        <span>16 st</span>
+                        <span>08 st</span>
+                        <span>00 st</span>
+                    </div>
+
+                    <!-- 2023 Bar -->
+                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
+                        <span class="font-mono text-xs text-gray-300 font-bold mb-1.5" data-count="3">0</span>
+                        <div class="w-full max-w-[56px] bg-white/10 rounded-t-lg transition-all duration-1000 h-0 group-hover:bg-white/20" data-height="12.5%"></div>
+                        <span class="font-mono text-xs text-gray-400 mt-2 font-bold">2023</span>
+                        <span class="text-[10px] text-gray-400">6.1%</span>
+                    </div>
+
+                    <!-- 2024 Bar -->
+                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
+                        <span class="font-mono text-xs text-gray-300 font-bold mb-1.5" data-count="8">0</span>
+                        <div class="w-full max-w-[56px] bg-white/20 rounded-t-lg transition-all duration-1000 h-0 group-hover:bg-white/30" data-height="33.3%"></div>
+                        <span class="font-mono text-xs text-gray-400 mt-2 font-bold">2024</span>
+                        <span class="text-[10px] text-gray-400">16.3%</span>
+                    </div>
+
+                    <!-- 2025 Bar -->
+                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
+                        <span class="font-mono text-xs text-amber-300 font-bold mb-1.5" data-count="14">0</span>
+                        <div class="w-full max-w-[56px] bg-amber-500/50 rounded-t-lg transition-all duration-1000 h-0 group-hover:bg-amber-500/70" data-height="58.3%"></div>
+                        <span class="font-mono text-xs text-gray-400 mt-2 font-bold">2025</span>
+                        <span class="text-[10px] text-gray-400">28.6%</span>
+                    </div>
+
+                    <!-- 2026 Bar (Hero) -->
+                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
+                        <span class="font-mono text-xs text-amber-300 font-black mb-1.5" data-count="24">0</span>
+                        <div class="w-full max-w-[56px] bg-gradient-to-t from-amber-500 to-yellow-300 rounded-t-lg shadow-[0_0_20px_rgba(251,191,36,0.5)] transition-all duration-1000 h-0" data-height="100%"></div>
+                        <span class="font-mono text-xs text-amber-400 mt-2 font-black">2026</span>
+                        <span class="text-[10px] text-amber-300 font-bold">49.0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="anim-element delay-3 text-xs sm:text-sm text-gray-400 font-mono mt-3 flex items-center justify-between">
+                <span>Total Korpus: 49 Studi Tervalidasi</span>
+                <span class="text-amber-400">Sumber: SLR Akbar Tausiur Rido (2026)</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: TIGA PERTANYAAN PENELITIAN (RESEARCH QUESTIONS) -->
+        <div id="slide-4" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Fokus & Arah Investigasi
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-3xl sm:text-5xl font-black tracking-tight leading-tight uppercase mb-8">
+                TIGA PERTANYAAN.<br/>
+                <span class="text-amber-400 loop-shimmer">SATU PETA PENELITIAN.</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 my-2 anim-element delay-2">
+                <div class="glass-card p-6 rounded-2xl border border-white/10 flex flex-col justify-between hover:border-amber-400/40 transition-all loop-float">
+                    <div>
+                        <span class="font-mono text-sm text-amber-400 font-black">RQ 01 / METODE</span>
+                        <h3 class="text-lg font-bold text-white mt-3 mb-2">Karakteristik & Latar</h3>
+                        <p class="text-xs text-gray-300 leading-relaxed">Bagaimana karakteristik metodologis dan distribusi latar penelitian kepemimpinan digital pada lembaga pendidikan Islam 2023–2026?</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/10 text-[11px] font-mono text-gray-400">Fokus: Membedah bias korpus</div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border border-white/10 flex flex-col justify-between hover:border-amber-400/40 transition-all loop-float" style="animation-delay: 0.6s;">
+                    <div>
+                        <span class="font-mono text-sm text-amber-400 font-black">RQ 02 / PROBLEMATIKA</span>
+                        <h3 class="text-lg font-bold text-white mt-3 mb-2">Klaster Masalah</h3>
+                        <p class="text-xs text-gray-300 leading-relaxed">Problematika apa saja yang dilaporkan di lapangan dan bagaimana pengelompokan taksonominya secara empiris?</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/10 text-[11px] font-mono text-gray-400">Fokus: Taksonomi 3 Klaster</div>
+                </div>
+
+                <div class="glass-card-gold p-6 rounded-2xl border border-amber-400/40 flex flex-col justify-between loop-float relative" style="animation-delay: 1.2s;">
+                    <div class="ripple-spread"></div>
+                    <div>
+                        <span class="font-mono text-sm text-amber-300 font-black">RQ 03 / GAP & AGENDA</span>
+                        <h3 class="text-lg font-bold text-white mt-3 mb-2">Celah & Masa Depan</h3>
+                        <p class="text-xs text-amber-100 leading-relaxed">Celah penelitian (research gaps) apa yang tersisa dan bagaimana prioritas agenda riset untuk pengembangan ke depan?</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-amber-400/30 text-[11px] font-mono text-amber-300">Fokus: 5 Agenda Strategis</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: METODOLOGI & ALUR SELEKSI PRISMA 2020 -->
+        <div id="slide-5" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Protokol Tinjauan Sistematis
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-6">
+                DARI 136 REKAMAN AWAL<br/>
+                <span class="text-gray-400 font-bold">MENGERUCUT KE</span> <span class="text-amber-400 loop-shimmer">49 STUDI TERPILIH</span>
+            </h2>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 my-2 anim-element delay-2">
+                <div class="glass-card p-5 rounded-2xl text-center border border-white/10">
+                    <span class="text-xs font-mono text-gray-400 uppercase">1. Identifikasi</span>
+                    <div class="text-3xl sm:text-4xl font-black text-white my-2" data-count="136">0</div>
+                    <span class="text-[11px] text-gray-400">Google Scholar via PoP</span>
+                </div>
+                <div class="glass-card p-5 rounded-2xl text-center border border-white/10">
+                    <span class="text-xs font-mono text-gray-400 uppercase">2. Skrining Awal</span>
+                    <div class="text-3xl sm:text-4xl font-black text-white my-2" data-count="82">0</div>
+                    <span class="text-[11px] text-rose-400">Eksklusi Non-Islam/Umum</span>
+                </div>
+                <div class="glass-card p-5 rounded-2xl text-center border border-white/10">
+                    <span class="text-xs font-mono text-gray-400 uppercase">3. Kelayakan Penuh</span>
+                    <div class="text-3xl sm:text-4xl font-black text-white my-2" data-count="54">0</div>
+                    <span class="text-[11px] text-gray-400">Penilaian Teks Penuh</span>
+                </div>
+                <div class="glass-card-gold p-5 rounded-2xl text-center border border-amber-400/50 relative">
+                    <div class="ripple-spread"></div>
+                    <span class="text-xs font-mono text-amber-300 uppercase font-bold">4. Korpus Akhir</span>
+                    <div class="text-3xl sm:text-4xl font-black text-amber-300 my-2" data-count="49">0</div>
+                    <span class="text-[11px] text-amber-200 font-bold">Inklusi & Ekstraksi Matriks</span>
+                </div>
+            </div>
+
+            <div class="anim-element delay-3 glass-card p-4 rounded-xl border border-white/10 mt-6 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-gray-300">
+                <span>Alat Riset: PRISMA 2020 | Publish or Perish | Zotero | SciSpace | VOSviewer | Excel</span>
+                <span class="text-amber-400">Kriteria PICOC Tervalidasi</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: DISTRIBUSI LATAR EMPIRIS (KETIMPANGAN MADRASAH VS PESANTREN) -->
+        <div id="slide-6" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Distribusi Latar Lapangan (n = 28)
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-2">
+                49 ARTIKEL.<br/>
+                <span class="text-gray-400 font-bold">SATU KORPUS YANG</span> <span class="text-amber-400 loop-shimmer">BIAS KE MADRASAH.</span>
+            </h2>
+            <p class="anim-element delay-1 text-sm text-gray-400 mb-6">Mayoritas riset lapangan berpusat di madrasah, sedangkan pesantren yang sarat ketegangan tradisi minim diteliti.</p>
+
+            <div class="space-y-4 my-2 anim-element delay-2">
+                <div class="glass-card p-4 rounded-xl border border-amber-400/40">
+                    <div class="flex justify-between text-xs sm:text-sm font-mono mb-2">
+                        <span class="font-bold text-white">Madrasah (MI, MTs, MA/MAN)</span>
+                        <span class="text-amber-400 font-black"><span data-count="64.3">0</span>% (18 Studi)</span>
+                    </div>
+                    <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-amber-400 to-yellow-300 rounded-full transition-all duration-1000 w-0" data-width="64.3%"></div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 rounded-xl border border-white/10">
+                    <div class="flex justify-between text-xs sm:text-sm font-mono mb-2">
+                        <span class="font-bold text-gray-300">Pondok Pesantren</span>
+                        <span class="text-gray-200 font-black"><span data-count="17.9">0</span>% (5 Studi)</span>
+                    </div>
+                    <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-white/40 rounded-full transition-all duration-1000 w-0" data-width="17.9%"></div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 rounded-xl border border-white/10">
+                    <div class="flex justify-between text-xs sm:text-sm font-mono mb-2">
+                        <span class="font-bold text-gray-400">Lainnya (Sekolah Islam / Swasta)</span>
+                        <span class="text-gray-300 font-black"><span data-count="10.7">0</span>% (3 Studi)</span>
+                    </div>
+                    <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-white/25 rounded-full transition-all duration-1000 w-0" data-width="10.7%"></div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 rounded-xl border border-white/10">
+                    <div class="flex justify-between text-xs sm:text-sm font-mono mb-2">
+                        <span class="font-bold text-gray-400">PTKI (IAIN / Universitas Islam)</span>
+                        <span class="text-gray-300 font-black"><span data-count="7.1">0</span>% (2 Studi)</span>
+                    </div>
+                    <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-white/20 rounded-full transition-all duration-1000 w-0" data-width="7.1%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="anim-element delay-3 text-xs text-gray-400 font-mono mt-4">
+                Catatan: 21 studi lainnya (42.9%) merupakan kajian literatur/konseptual tanpa latar spesifik.
+            </div>
+        </div>
+
+        <!-- SLIDE 7: KETIMPANGAN METODOLOGIS (DONUT CHART QUALITATIVE BIAS) -->
+        <div id="slide-7" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Ketimpangan Desain Riset (n = 49)
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-6">
+                BUKTI EMPIRIS DIDOMINASI<br/>
+                <span class="text-gray-400 font-bold">PENDEKATAN</span> <span class="text-amber-400 loop-shimmer">KUALITATIF DESKRIPTIF.</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center my-2 anim-element delay-2">
+                <!-- SVG Donut Chart -->
+                <div class="flex flex-col items-center justify-center relative">
+                    <svg class="w-48 h-48 sm:w-56 sm:h-56 transform -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" stroke-width="12" fill="transparent"></circle>
+                        <circle id="donut-segment" cx="50" cy="50" r="40" stroke="#FBBF24" stroke-width="12" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" class="transition-all duration-1000"></circle>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span class="text-3xl sm:text-4xl font-black text-amber-300" data-count="81.6">0%</span>
+                        <span class="text-[11px] font-mono text-gray-300 uppercase tracking-widest mt-1">Kualitatif</span>
+                    </div>
+                </div>
+
+                <!-- Methodological Breakdown Matrix -->
+                <div class="space-y-3 font-mono text-xs sm:text-sm">
+                    <div class="glass-card p-4 rounded-xl border border-amber-400/40 flex justify-between items-center">
+                        <span class="text-white font-bold">Kualitatif (Studi Kasus / Pustaka)</span>
+                        <span class="text-amber-300 font-black">81.6% (40 studi)</span>
+                    </div>
+                    <div class="glass-card p-3 rounded-xl border border-white/10 flex justify-between items-center text-gray-300">
+                        <span>Kuantitatif Korelasional</span>
+                        <span class="font-bold text-white">8.2% (4 studi)</span>
+                    </div>
+                    <div class="glass-card p-3 rounded-xl border border-white/10 flex justify-between items-center text-gray-300">
+                        <span>Metode Campuran (Mixed-Method)</span>
+                        <span class="font-bold text-white">6.1% (3 studi)</span>
+                    </div>
+                    <div class="glass-card p-3 rounded-xl border border-white/10 flex justify-between items-center text-gray-300">
+                        <span>Research & Development (R&D)</span>
+                        <span class="font-bold text-white">4.1% (2 studi)</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 pt-2 leading-relaxed">
+                        Implikasi: Bidang kajian ini kaya akan deskripsi naratif namun minim pembuktian generalisasi kuantitatif serta uji model kausal.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: TAKSONOMI PROBLEMATIKA (TIGA TITIK TEKANAN UTAMA) -->
+        <div id="slide-8" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Sintesis Temuan Kunci (n = 49)
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-8">
+                TIGA MASALAH BESAR.<br/>
+                <span class="text-amber-400 loop-shimmer">SATU TANTANGAN KEPEMIMPINAN.</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 my-2 anim-element delay-2">
+                <div class="glass-card p-6 rounded-2xl border border-white/10 flex flex-col justify-between loop-float">
+                    <div>
+                        <div class="font-mono text-xs text-gray-400 font-bold mb-2">KLASTER 01</div>
+                        <div class="text-4xl sm:text-5xl font-black text-white mb-2"><span data-count="67.3">0</span>%</div>
+                        <h3 class="text-base sm:text-lg font-bold text-amber-300 uppercase tracking-wide mb-3">Infrastruktur & Finansial</h3>
+                        <p class="text-xs text-gray-300 leading-relaxed">Jaringan internet tidak stabil, keterbatasan perangkat digital, anggaran operasional minim, serta disparitas fasilitas desa-kota.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-gray-400">Suratman (2024); Ersalmina (2026)</div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border border-white/10 flex flex-col justify-between loop-float" style="animation-delay: 0.6s;">
+                    <div>
+                        <div class="font-mono text-xs text-gray-400 font-bold mb-2">KLASTER 02</div>
+                        <div class="text-4xl sm:text-5xl font-black text-white mb-2"><span data-count="61.2">0</span>%</div>
+                        <h3 class="text-base sm:text-lg font-bold text-amber-300 uppercase tracking-wide mb-3">Kesenjangan Literasi SDM</h3>
+                        <p class="text-xs text-gray-300 leading-relaxed">Kompetensi digital guru rendah, guru senior kesulitan adaptasi, pelatihan sporadis tidak berkelanjutan, dan beban mengajar tinggi.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-gray-400">Ratnawati (2025); Ramadhan (2026)</div>
+                </div>
+
+                <div class="glass-card-gold p-6 rounded-2xl border border-amber-400/50 flex flex-col justify-between loop-float relative" style="animation-delay: 1.2s;">
+                    <div class="ripple-spread"></div>
+                    <div>
+                        <div class="font-mono text-xs text-amber-300 font-bold mb-2">KLASTER 03 (KHAS)</div>
+                        <div class="text-4xl sm:text-5xl font-black text-amber-300 mb-2"><span data-count="67.3">0</span>%</div>
+                        <h3 class="text-base sm:text-lg font-bold text-white uppercase tracking-wide mb-3">Resistensi Kultural</h3>
+                        <p class="text-xs text-amber-100 leading-relaxed">Dual challenge antara tuntutan modernisasi dan pelestarian otoritas kiai, kekhawatiran erosi karakter santri, dan proteksi sanad keilmuan.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-amber-400/30 text-[11px] font-mono text-amber-200">Manaf (2026); Riyadi (2025); Sulfiani (2025)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: DUAL CHALLENGE (MODERNISASI VS OTORITAS KIAI) -->
+        <div id="slide-9" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Dilema Kultural Lembaga Pendidikan Islam
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-8">
+                MODERNISASI TEKNOLOGI<br/>
+                <span class="text-gray-400 font-bold">BERHADAPAN DENGAN</span> <span class="text-amber-400 loop-shimmer">TRADISI KEKIAIAN.</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center my-4 anim-element delay-2">
+                <div class="glass-card p-6 rounded-2xl border border-white/10 text-center space-y-2">
+                    <span class="text-xs font-mono text-gray-400 uppercase">Kutub Pertama</span>
+                    <h3 class="text-xl font-black text-white">Modernisasi Digital</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">Efisiensi operasional, big data, transparansi, kecepatan algoritma, dan otomatisasi pembelajaran.</p>
+                </div>
+
+                <div class="glass-card-gold p-6 rounded-2xl border border-amber-400/40 text-center space-y-2 relative">
+                    <div class="ripple-spread"></div>
+                    <span class="text-xs font-mono text-amber-300 uppercase font-bold">Titik Titian Kepemimpinan</span>
+                    <h3 class="text-xl font-black text-amber-300 loop-pulse-glow">Negosiator Budaya</h3>
+                    <p class="text-xs text-gray-200 leading-relaxed">Menghubungkan dua kutub: menjadikan teknologi alat pelestari nilai, bukan substitusi nilai.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border border-white/10 text-center space-y-2">
+                    <span class="text-xs font-mono text-gray-400 uppercase">Kutub Kedua</span>
+                    <h3 class="text-xl font-black text-white">Otoritas Tradisi Kiai</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">Rantai sanad keilmuan, keteladanan tatap muka, pembentukan adab, dan kepatuhan kultural.</p>
+                </div>
+            </div>
+
+            <div class="anim-element delay-3 glass-card p-5 rounded-2xl border-l-4 border-amber-400 mt-6 text-xs sm:text-sm text-gray-200">
+                <strong class="text-white font-bold">Insight Krusial:</strong> Resistensi kultural di pesantren bukan keengganan teknis personal, melainkan tindakan protektif rasional untuk menjaga transmisi keilmuan dan otoritas moral dari disrupsi informasi liar.
+            </div>
+        </div>
+
+        <!-- SLIDE 10: PANDANGAN SISTEMIK (TRANSFORMASI ORGANISASIONAL) -->
+        <div id="slide-10" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Pandangan Sistemik Organisasi
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-4">
+                TRANSFORMASI DIGITAL<br/>
+                <span class="text-gray-400 font-bold">ADALAH PROSES</span> <span class="text-amber-400 loop-shimmer">ORGANISASIONAL UTUH.</span>
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 my-4 anim-element delay-2">
+                <div class="glass-card p-5 rounded-xl border border-white/10 space-y-2">
+                    <span class="text-xs font-mono text-gray-400">Tahap 1</span>
+                    <h4 class="text-sm font-bold text-white">Infrastruktur & Akses</h4>
+                    <p class="text-xs text-gray-400">Perangkat keras, listrik, dan bandwidth internet yang stabil.</p>
+                </div>
+                <div class="glass-card p-5 rounded-xl border border-white/10 space-y-2">
+                    <span class="text-xs font-mono text-gray-400">Tahap 2</span>
+                    <h4 class="text-sm font-bold text-white">Literasi & Kompetensi</h4>
+                    <p class="text-xs text-gray-400">Keterampilan pedagogis digital guru dan kepala lembaga.</p>
+                </div>
+                <div class="glass-card p-5 rounded-xl border border-white/10 space-y-2">
+                    <span class="text-xs font-mono text-gray-400">Tahap 3</span>
+                    <h4 class="text-sm font-bold text-white">Negosiasi Nilai</h4>
+                    <p class="text-xs text-gray-400">Musyawarah dan legitimasi kultural berbasis maqasid.</p>
+                </div>
+                <div class="glass-card-gold p-5 rounded-xl border border-amber-400/40 space-y-2">
+                    <span class="text-xs font-mono text-amber-300 font-bold">Tahap 4</span>
+                    <h4 class="text-sm font-bold text-amber-300">Tata Kelola Berkelanjutan</h4>
+                    <p class="text-xs text-amber-100">Supervisi berkala dan integrasi sistem mutu terpadu.</p>
+                </div>
+            </div>
+
+            <div class="anim-element delay-3 glass-card p-5 rounded-2xl border-l-4 border-amber-400 mt-4 text-sm text-gray-200">
+                <span class="text-amber-400 font-bold">Prinsip Aksi:</span> Menggelontorkan dana untuk infrastruktur saja tanpa investasi simultan pada kompetensi guru dan negosiasi budaya hanya akan menghasilkan teknologi yang mengendap tanpa dampak mutu pembelajaran.
+            </div>
+        </div>
+
+        <!-- SLIDE 11: TAKSONOMI TIGA LAPIS (CONCENTRIC SYSTEM TAXONOMY) -->
+        <div id="slide-11" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Sintesis Konseptual Korpus
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-6">
+                TIGA LAPISAN.<br/>
+                <span class="text-gray-400 font-bold">SATU KESATUAN</span> <span class="text-amber-400 loop-shimmer">SISTEM KEPEMIMPINAN.</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center my-2 anim-element delay-2">
+                <!-- Planetary Orbit System Graphic -->
+                <div class="flex items-center justify-center relative h-72 sm:h-80 w-full overflow-visible">
+                    <!-- Ambient Solar Glow behind Core -->
+                    <div class="absolute w-44 h-44 rounded-full bg-amber-400/10 filter blur-xl pointer-events-none"></div>
+
+                    <!-- Orbit Ring 1: Lapis 1 (Outer Orbit - Infrastruktur & Finansial) -->
+                    <div class="orbit-track-1 w-[240px] h-[240px] sm:w-[270px] sm:h-[270px] border border-dashed border-amber-400/40 bg-amber-400/[0.02]">
+                        <!-- Exact Planet 1 Anchor -->
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center pointer-events-auto z-30">
+                            <span class="absolute w-7 h-7 rounded-full bg-amber-400/35 animate-ping pointer-events-none"></span>
+                            <span class="relative w-4 h-4 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-300 to-white border-2 border-amber-300 shadow-[0_0_18px_#fbbf24] z-10"></span>
+                            <div class="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none z-20">
+                                <div class="counter-rotate-p1 pointer-events-auto">
+                                    <div class="px-2.5 py-1 rounded-full bg-black/90 border border-amber-400/80 text-[9px] font-mono font-bold text-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.35)] flex items-center gap-1 whitespace-nowrap backdrop-blur-md">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                                        <span>Lapis 1: Infrastruktur (67.3%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orbit Ring 2: Lapis 2 (Inner Orbit - SDM & Literasi Digital) -->
+                    <div class="orbit-track-2 w-[160px] h-[160px] sm:w-[185px] sm:h-[185px] border border-dashed border-cyan-400/45 bg-cyan-400/[0.02]">
+                        <!-- Exact Planet 2 Anchor -->
+                        <div class="absolute top-full left-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 flex items-center justify-center pointer-events-auto z-30">
+                            <span class="absolute w-6 h-6 rounded-full bg-cyan-400/35 animate-ping pointer-events-none"></span>
+                            <span class="relative w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-cyan-400 via-sky-200 to-white border-2 border-cyan-300 shadow-[0_0_15px_#38bdf8] z-10"></span>
+                            <div class="absolute left-5 top-1/2 -translate-y-1/2 pointer-events-none z-20">
+                                <div class="counter-rotate-p2 pointer-events-auto">
+                                    <div class="px-2 py-0.5 rounded-full bg-black/90 border border-cyan-400/80 text-[9px] font-mono font-bold text-cyan-300 shadow-[0_0_12px_rgba(56,189,248,0.35)] flex items-center gap-1 whitespace-nowrap backdrop-blur-md">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                                        <span>Lapis 2: Literasi SDM (61.2%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Central Core Sun: Lapis 3 (Digital Leadership / Core Values) -->
+                    <div class="relative z-20 w-24 h-24 sm:w-28 sm:h-28 rounded-full glass-card-gold border-2 border-amber-400 flex flex-col items-center justify-center text-center p-2 shadow-[0_0_35px_rgba(251,191,36,0.65)] loop-pulse-glow">
+                        <div class="ripple-spread"></div>
+                        <span class="text-[11px] sm:text-xs font-black text-amber-300 uppercase leading-tight">Digital<br/>Leadership</span>
+                        <span class="text-[8px] font-mono text-amber-200 mt-1 uppercase font-bold tracking-wider">Lapis 3: Nilai</span>
+                    </div>
+                </div>
+
+                <!-- Layer Explanations -->
+                <div class="space-y-3 font-mono text-xs sm:text-sm">
+                    <div class="glass-card p-4 rounded-xl border border-amber-400/40 hover:border-amber-400 transition-all">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span>
+                            <span class="text-amber-400 font-bold">Lapis 1 : Ekosistem Fisik Terluar</span>
+                        </div>
+                        <h4 class="text-white font-bold my-1">Infrastruktur & Finansial (67.3%)</h4>
+                        <p class="text-xs text-gray-400">Pondasi fisik, perangkat, anggaran, dan konektivitas.</p>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl border border-cyan-400/40 hover:border-cyan-400 transition-all">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#38bdf8]"></span>
+                            <span class="text-cyan-300 font-bold">Lapis 2 : Ekosistem Aktor</span>
+                        </div>
+                        <h4 class="text-white font-bold my-1">Literasi Digital SDM (61.2%)</h4>
+                        <p class="text-xs text-gray-400">Kompetensi guru, kepala lembaga, dan budaya kolaboratif.</p>
+                    </div>
+
+                    <div class="glass-card-gold p-4 rounded-xl border border-amber-400/60 relative">
+                        <div class="ripple-spread"></div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-300 shadow-[0_0_10px_#fde047] animate-pulse"></span>
+                            <span class="text-amber-300 font-bold">Lapis 3 : Inti Nilai (Core Values)</span>
+                        </div>
+                        <h4 class="text-white font-bold my-1">Kultur, Otoritas & Etika (67.3%)</h4>
+                        <p class="text-xs text-amber-100">Kepatuhan pada otoritas kiai, transmisi adab, dan etika Islam.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: LIMA CELAH PENELITIAN (FIVE RESEARCH GAPS) -->
+        <div id="slide-12" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Pemetaan Research Gap
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-6">
+                APA YANG MASIH<br/>
+                <span class="text-gray-400 font-bold">TERLEWATKAN DALAM</span> <span class="text-amber-400 loop-shimmer">LITERATUR?</span>
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 my-2 anim-element delay-2">
+                <div class="glass-card p-4 rounded-xl border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <span class="font-mono text-xs text-amber-400 font-bold">GAP 01</span>
+                        <h4 class="text-sm font-bold text-white mt-1 mb-2">Metodologis</h4>
+                        <p class="text-xs text-gray-400">Dominasi kualitatif (81.6%). Perlu studi longitudinal & kuasi-eksperimen.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 rounded-xl border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <span class="font-mono text-xs text-amber-400 font-bold">GAP 02</span>
+                        <h4 class="text-sm font-bold text-white mt-1 mb-2">Kontekstual</h4>
+                        <p class="text-xs text-gray-400">Pesantren hanya 17.9%. Perlu riset multisitus pesantren kecil luar Jawa.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 rounded-xl border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <span class="font-mono text-xs text-amber-400 font-bold">GAP 03</span>
+                        <h4 class="text-sm font-bold text-white mt-1 mb-2">Instrumentasi</h4>
+                        <p class="text-xs text-gray-400">Belum ada alat ukur baku kepemimpinan digital berbasis maqasid & tradisi.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 rounded-xl border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <span class="font-mono text-xs text-amber-400 font-bold">GAP 04</span>
+                        <h4 class="text-sm font-bold text-white mt-1 mb-2">Uji Model</h4>
+                        <p class="text-xs text-gray-400">Model normatif (Tauhidik/Profetik) belum diuji efektivitas empirisnya.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card-gold p-4 rounded-xl border border-amber-400/40 flex flex-col justify-between">
+                    <div>
+                        <span class="font-mono text-xs text-amber-300 font-bold">GAP 05</span>
+                        <h4 class="text-sm font-bold text-white mt-1 mb-2">Evaluasi</h4>
+                        <p class="text-xs text-amber-100">Ketiadaan indikator kematangan digital & sistem cadangan berkelanjutan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: DARI GAP KE AGENDA RISET (RESEARCH ROADMAP) -->
+        <div id="slide-13" class="slide justify-center max-w-6xl mx-auto">
+            <div class="anim-element">
+                <span class="citation-tag mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Agenda Riset Masa Depan
+                </span>
+            </div>
+
+            <h2 class="anim-element delay-1 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-4">
+                DARI DESKRIPSI KASUS<br/>
+                <span class="text-gray-400 font-bold">MENUJU PEMBUKTIAN</span> <span class="text-amber-400 loop-shimmer">EVIDENSI KUMULATIF.</span>
+            </h2>
+
+            <div class="loop-beam-container p-1 rounded-2xl my-3 anim-element delay-2">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+                    <div class="glass-card p-4 rounded-xl border border-white/10">
+                        <span class="font-mono text-[11px] text-amber-400 font-bold">FASE 01</span>
+                        <h4 class="text-sm font-bold text-white mt-1">Studi Longitudinal</h4>
+                        <p class="text-[11px] text-gray-400 mt-2">Mengukur dampak jangka panjang kepemimpinan digital pada mutu madrasah.</p>
+                    </div>
+                    <div class="glass-card p-4 rounded-xl border border-white/10">
+                        <span class="font-mono text-[11px] text-amber-400 font-bold">FASE 02</span>
+                        <h4 class="text-sm font-bold text-white mt-1">Multisitus Pesantren</h4>
+                        <p class="text-[11px] text-gray-400 mt-2">Melibatkan pesantren salaf dan wilayah luar Jawa untuk menghapus bias.</p>
+                    </div>
+                    <div class="glass-card p-4 rounded-xl border border-white/10">
+                        <span class="font-mono text-[11px] text-amber-400 font-bold">FASE 03</span>
+                        <h4 class="text-sm font-bold text-white mt-1">Validasi Alat Ukur</h4>
+                        <p class="text-[11px] text-gray-400 mt-2">Menyusun instrumen baku kepemimpinan digital berbasis maqasid syariah.</p>
+                    </div>
+                    <div class="glass-card p-4 rounded-xl border border-white/10">
+                        <span class="font-mono text-[11px] text-amber-400 font-bold">FASE 04</span>
+                        <h4 class="text-sm font-bold text-white mt-1">Uji Empiris Model</h4>
+                        <p class="text-[11px] text-gray-400 mt-2">Menguji efektivitas model profetik dan tauhidik secara kuantitatif.</p>
+                    </div>
+                    <div class="glass-card-gold p-4 rounded-xl border border-amber-400/40">
+                        <span class="font-mono text-[11px] text-amber-300 font-bold">FASE 05</span>
+                        <h4 class="text-sm font-bold text-white mt-1">Audit Kematangan</h4>
+                        <p class="text-[11px] text-amber-100 mt-2">Menetapkan standar indeks kesiapan dan mitigasi risiko digital.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="anim-element delay-3 text-center text-xs font-mono text-gray-400 mt-4">
+                Arah Strategis: Mengubah bidang kajian dari produksi model normatif menjadi pembuktian empiris berbasis data.
+            </div>
+        </div>
+
+        <!-- SLIDE 14: KESIMPULAN AKHIR (LAMPU MENYALA DENGAN SAKLAR PEMADAM) -->
+        <div id="slide-14" class="slide items-center justify-center text-center overflow-hidden">
+            <div class="lamp-light-cone"></div>
+
+            <div class="lamp-assembly">
+                <div class="lamp-wire"></div>
+                <div class="lamp-shade-housing">
+                    <div class="lamp-bulb" id="lamp-bulb-el-14"></div>
+                </div>
+            </div>
+
+            <!-- Interactive Pull-Cord Switch to Extinguish Lamp -->
+            <div id="lamp-cord-wrapper-14" class="pull-cord-wrapper idle-swaying cursor-pointer" onclick="turnOffLampToSlide15()" title="Tarik atau klik saklar untuk memadamkan lampu">
+                <div id="lamp-cord-chain-14" class="cord-chain"></div>
+                <div class="cord-handle" id="lamp-cord-handle-14">
+                    <div class="w-1.5 h-1.5 rounded-full bg-yellow-200 shadow-sm"></div>
+                </div>
+
+                <div class="cord-pull-hint">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                    <span class="text-[11px] font-mono tracking-wider font-extrabold uppercase text-amber-300">Tarik / Klik Saklar Lampu</span>
+                    <svg class="w-3.5 h-3.5 text-amber-400 animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                </div>
+            </div>
+
+            <!-- Illuminated Synthesis Content -->
+            <div class="max-w-4xl mx-auto flex flex-col items-center pt-24 sm:pt-28 pb-4 relative z-20 px-4">
+                <div class="anim-element">
+                    <span class="citation-tag mb-4">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                        Kesimpulan Sintesis Akhir
+                    </span>
+                </div>
+
+                <h2 class="anim-element delay-1 text-2xl sm:text-3xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-4">
+                    KEPEMIMPINAN DIGITAL<br/>
+                    <span class="text-gray-400 font-bold">TIDAK BOLEH MENGGANTIKAN</span><br/>
+                    <span class="loop-shimmer underline decoration-amber-400 decoration-2 underline-offset-8">NILAI-NILAI ISLAM.</span>
+                </h2>
+
+                <div class="anim-element delay-2 glass-card-gold px-8 py-3.5 rounded-2xl border border-amber-400/50 mb-5 loop-float relative">
+                    <div class="ripple-spread"></div>
+                    <p class="text-base sm:text-xl font-black text-white tracking-wider uppercase">
+                        IA HARUS BEKERJA <span class="text-amber-400 loop-pulse-glow">MELALUINYA.</span>
+                    </p>
+                </div>
+
+                <div class="anim-element delay-3 flex flex-col items-center gap-1.5">
+                    <p class="text-base font-black text-white uppercase tracking-wider">Akbar Tausiur Rido</p>
+                    <p class="text-xs text-gray-400 font-semibold tracking-wider uppercase">Magister Manajemen Pendidikan Islam | UIN Sunan Gunung Djati Bandung</p>
+                    
+                    <div class="mt-2 p-2 rounded-xl glass-card border border-white/10 shadow-lg inline-flex items-center justify-center">
+                        <img src="logo uin.png" alt="Logo UIN SGD" class="h-12 md:h-14 object-contain drop-shadow" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/UIN_Sunan_Gunung_Djati_Bandung_logo.png/600px-UIN_Sunan_Gunung_Djati_Bandung_logo.png';"/>
+                    </div>
+                </div>
+
+                <div class="pt-4 anim-element delay-4 relative z-30">
+                    <button onclick="turnOffLampToSlide15()" class="pointer-events-auto cursor-pointer px-7 py-3 bg-gradient-to-r from-amber-400/20 via-amber-400/30 to-amber-400/20 hover:bg-amber-400/40 border border-amber-400/50 text-amber-200 hover:text-white font-black text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2.5 mx-auto shadow-xl">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        <span>Padamkan Lampu & Selesaikan</span>
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 15: OUTRO FINALE (LAMPU PADAM SEPERTI SLIDE AWAL) -->
+        <div id="slide-15" class="slide items-center justify-center text-center overflow-hidden">
+            <div class="lamp-light-cone" id="lamp-cone-15"></div>
+
+            <div class="lamp-assembly">
+                <div class="lamp-wire"></div>
+                <div class="lamp-shade-housing">
+                    <div class="lamp-bulb" id="lamp-bulb-el-15"></div>
+                </div>
+            </div>
+
+            <!-- Interactive Hanging Pull-Cord / Chain -->
+            <div id="lamp-cord-wrapper-15" class="pull-cord-wrapper idle-swaying cursor-pointer" onclick="toggleLampSlide15()" title="Tarik atau klik saklar untuk menyalakan/mematikan lampu">
+                <div id="lamp-cord-chain-15" class="cord-chain"></div>
+                <div class="cord-handle" id="lamp-cord-handle-15">
+                    <div class="w-1.5 h-1.5 rounded-full bg-yellow-200 shadow-sm"></div>
+                </div>
+
+                <div class="cord-pull-hint !opacity-85">
+                    <span class="w-2 h-2 rounded-full bg-amber-400/70 animate-pulse"></span>
+                    <span class="text-[11px] font-mono tracking-wider font-extrabold uppercase text-gray-300">Tarik / Klik Saklar Lampu</span>
+                </div>
+            </div>
+
+            <!-- Dark Studio Outro Content -->
+            <div class="max-w-3xl mx-auto flex flex-col items-center pt-24 sm:pt-28 pb-4 relative z-20 px-4">
+                <div class="anim-element inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs font-bold tracking-widest uppercase mb-4">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+                    Sesi Presentasi Selesai
+                </div>
+
+                <h2 class="anim-element delay-1 text-3xl sm:text-5xl md:text-6xl font-black tracking-tight uppercase text-white/95 mb-2 loop-shimmer">
+                    TERIMA KASIH
+                </h2>
+                <p class="anim-element delay-2 text-amber-300 font-serif italic text-base sm:text-lg mb-6 loop-pulse-glow">
+                    "Alhamdulillahirobbil 'Alamin"
+                </p>
+
+                <div class="anim-element delay-3 w-12 h-0.5 bg-white/10 rounded-full mb-6"></div>
+
+                <div class="anim-element delay-3 space-y-1 text-center mb-8">
+                    <p class="text-base sm:text-lg font-black text-white tracking-wide uppercase">Akbar Tausiur Rido</p>
+                    <p class="text-xs text-gray-400 font-semibold tracking-wider uppercase">Magister Manajemen Pendidikan Islam | NIM 2269100087</p>
+                    <p class="text-[11px] text-gray-500 uppercase tracking-wider">UIN Sunan Gunung Djati Bandung</p>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="anim-element delay-4 flex flex-wrap items-center justify-center gap-4 relative z-30">
+                    <button onclick="restartPresentationToSlide0()" class="pointer-events-auto cursor-pointer px-7 py-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs text-gray-200 hover:text-white font-black uppercase tracking-wider transition-all duration-300 active:scale-95 shadow-lg flex items-center gap-2">
+                        <svg class="w-4 h-4 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        <span>Mulai Ulang (Slide 0)</span>
+                    </button>
+                    <button onclick="returnToSlide14()" class="pointer-events-auto cursor-pointer px-7 py-3 rounded-full bg-gradient-to-r from-amber-400/20 to-amber-500/20 hover:from-amber-400/30 hover:to-amber-500/30 border border-amber-400/40 text-xs text-amber-300 font-black uppercase tracking-wider transition-all duration-300 active:scale-95 shadow-lg flex items-center gap-2">
+                        <svg class="w-4 h-4 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        <span>Kembali ke Slide 14</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SECRET SPEAKER NOTES MODAL (TRIGGERED ONLY VIA 'N' KEYBOARD SHORTCUT) -->
+    <div id="secret-notes-modal" class="notes-modal-panel opacity-0 pointer-events-none transition-all duration-300">
+        <div class="flex items-center justify-between border-b border-amber-400/30 pb-3 mb-3">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span class="font-mono text-xs font-bold uppercase tracking-wider text-amber-300">Panduan Skrip Presenter (Ferry Irwandi Style + S.O.C.I.A.L)</span>
+            </div>
+            <button onclick="toggleSecretNotes()" class="p-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div id="secret-notes-body" class="max-h-64 sm:max-h-80 overflow-y-auto custom-scroll text-sm sm:text-base text-gray-200 font-light leading-relaxed pr-2 space-y-3 whitespace-pre-line">
+            <!-- Dynamic notes content will be injected by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        const totalSlides = 16;
+        let currentSlide = 0;
+        let isPresentationStarted = false;
+        let isLampTurnedOn = false;
+        let presentationStartTime = null;
+        let timerInterval = null;
+        let isSecretNotesOpen = false;
+
+        const liveTimerEl = document.getElementById('live-timer');
+        const slideNumCurrentEl = document.getElementById('slide-num-current');
+        const slideProgressBar = document.getElementById('slide-progress-bar');
+        const hudLayer = document.getElementById('hud-layer');
+        const secretNotesModal = document.getElementById('secret-notes-modal');
+        const secretNotesBody = document.getElementById('secret-notes-body');
+
+        // Web Audio API Mechanical Click Synthesizer
+        function playLampClickSound() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(140, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(35, ctx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.7, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.05);
+
+                const bufferSize = ctx.sampleRate * 0.03;
+                const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.007));
+                }
+                const whiteNoise = ctx.createBufferSource();
+                whiteNoise.buffer = noiseBuffer;
+                const noiseGain = ctx.createGain();
+                noiseGain.gain.setValueAtTime(0.35, ctx.currentTime + 0.015);
+                noiseGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.045);
+                whiteNoise.connect(noiseGain);
+                noiseGain.connect(ctx.destination);
+                whiteNoise.start(ctx.currentTime + 0.015);
+            } catch (e) {}
+        }
+
+        function updateLiveTimer() {
+            if (!presentationStartTime) return;
+            const elapsedMs = Date.now() - presentationStartTime;
+            const totalSec = Math.floor(elapsedMs / 1000);
+            const m = Math.floor(totalSec / 60).toString().padStart(2, '0');
+            const s = (totalSec % 60).toString().padStart(2, '0');
+            if (liveTimerEl) liveTimerEl.innerText = `LIVE ${m}:${s}`;
+        }
+
+        // Comprehensive Speaker Script (Ferry Irwandi Style + S.O.C.I.A.L Formula - Calibrated for ~10 Minutes)
+        const speakerNotesData = {
+            0: `[PEMBUKAAN INTERAKTIF - FORMULA S.O.C.I.A.L & GAYA ANALITIS FERRY IRWANDI]
+Target Waktu: 00:00 - 01:30 (Durasi ~1.5 Menit)
+
+• S (Story): "Bayangkan sebuah madrasah atau pondok pesantren di daerah. Suatu hari mereka menerima bantuan puluhan unit laptop canggih dari program pemerintah. Semua orang bertepuk tangan, difoto untuk laporan serah terima. Tapi saat kita berkunjung setahun kemudian, laptop-laptop itu tersimpan rapi di dalam lemari kaca berdebu, digembok rapat, tak pernah dinyalakan. Alasannya klasik: para guru takut merusaknya, dan kepala madrasahnya bingung bagaimana mengintegrasikan teknologi itu ke dalam kegiatan belajar harian."
+
+• O (Observation): "Ini adalah potret telanjang dari apa yang saya sebut sebagai 'fetisisme perangkat'. Di Indonesia, kita sering kali mengira bahwa dengan membeli komputer, memasang Wi-Fi, atau membuat akun media sosial, sebuah institusi otomatis telah bertransformasi secara digital. Kita lupa bahwa kita sedang membeli artefak masa depan dengan cara berpikir masa lalu."
+
+• C (Connection): "Bapak, Ibu Dewan Penguji, dan rekan-rekan sekalian. Pertanyaan mendasar yang harus kita jawab hari ini adalah: apakah problem digitalisasi pendidikan Islam kita benar-benar karena kita kekurangan alat canggih? Ataukah kita sedang menghadapi krisis kepemimpinan—sebuah kegagalan orkestrasi budaya, manusia, dan nilai?"
+
+• I (Insight): "Untuk mengurai persoalan ini secara objektif dan berbasis data empiris, saya menyusun Systematic Literature Review terhadap 49 studi ilmiah terakreditasi kurun waktu 2023 hingga 2026. Temuan utamanya sangat tegas: 67.3% persoalan terbesar di lapangan justru berakar pada resistensi kultural dan disorientasi kepemimpinan."
+
+• A (Agenda): "Dalam 10 menit ke depan, saya Akbar Tausiur Rido akan membedah anatomi data ini: dari ontologi masalah, disparitas regulasi, ketimpangan latar madrasah vs pesantren, bias metodologis, taksonomi tiga pilar masalah, hingga lima agenda riset strategis masa depan."
+
+• L (Lo-faen / Aksi): "Sekarang, perkenankan saya menarik bandul tali saklar lampu di atas layar ini untuk menyalakan sorotan dan memulai pemaparan ilmiah kita."
+[Aksi: Tarik atau klik tali saklar lampu hingga menyala terang. Lalu lanjutkan ke Slide 1].`,
+
+            1: `[SLIDE 1 - ONTOLOGI MASALAH: DIGITALISASI BUKAN SEKADAR TEKNOLOGI]
+Target Waktu: 01:30 - 02:15 (Durasi ~45 Detik)
+
+• Penjelasan Visual Layar:
+"Perhatikan layar di hadapan Bapak/Ibu sekalian. Judul besar di atas menegaskan premis ontologis riset ini: 'Digitalisasi tidak sama dengan sekadar pengadaan teknologi'. Di bawahnya, saya memetakan empat pilar struktural yang saling bertautan: Pilar 01 Teknologi (hardware dan jaringan); Pilar 02 Manusia (guru, santri, dan staf); Pilar 03 Budaya (otoritas tradisi dan nilai kekiaian); serta Pilar 04 yang saya beri bingkai emas menyala: Kepemimpinan sebagai sang dirigen sistem."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Mayoritas pengambil kebijakan kita terjebak pada asumsi sempit bahwa digitalisasi selesai di pilar pertama: beli laptop, pasang internet, urusan beres. Padahal, rujukan Mukti (2026) dan Bakr dkk. (2026) membuktikan bahwa transformasi digital justru berubah menjadi problematika kepemimpinan yang akut ketika teknologi tersebut dipaksakan masuk tanpa menyiapkan manusianya dan tanpa menegosiasikan nilai-nilai kelembagaannya. Kepemimpinan digital bukan perkara keterampilan teknis mengoperasikan software, melainkan seni mengorkestrasi nilai agar modernisasi memperkuat, bukan mereduksi ruh pesantren dan madrasah."
+
+• Jembatan Transisi ke Slide 2:
+"Lalu, mengapa benturan ini begitu masif terjadi di lapangan? Mari kita cermati ketegangan struktural antara laju regulasi pemerintah melawan daya serap riil lembaga pada diagram di slide 2."`,
+
+            2: `[SLIDE 2 - DISPARITAS ORGANISASIONAL: LAJU REGULASI VS DAYA SERAP NYATA]
+Target Waktu: 02:15 - 03:00 (Durasi ~45 Detik)
+
+• Penjelasan Visual Layar:
+"Pada Slide 2 ini, saya menyajikan diagram batang disparitas yang mengukur ketimpangan kecepatan. Batang gradasi emas di atas menunjukkan Laju Tuntutan Regulasi & Akuntabilitas Data yang melesat di angka 85%. Sementara batang merah di bawahnya menunjukkan Kapasitas Nyata Penyerapan Organisasi SDM yang tertinggal jauh di angka 38.8%."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Kementerian Agama terus meluncurkan instrumen digital: EMIS, Rapor Digital Madrasah (RDM), simpatika, hingga presensi berbasis biometrik. Tekanannya mencapai 85%—sangat agresif dan menuntut pelaporan instan. Namun di lapangan, kesiapan nyata SDM guru dan tenaga kependidikan kita hanya mampu menyerap 38.8%. Terjadi jurang pemisah yang menganga sebesar 46.2%! Temuan kunci Biladina & Qadriah (2026) menegaskan: ketika transformasi dipaksakan berjalan jauh lebih cepat daripada kesiapan struktur internal organisasi, yang lahir bukanlah efisiensi tata kelola, melainkan formalisme semu dan kepanikan administratif. Guru kelelahan mengisi data di aplikasi, sementara esensi pedagogis di ruang kelas terabaikan."
+
+• Jembatan Transisi ke Slide 3:
+"Melihat realitas ketimpangan yang sedemikian mencolok ini, bagaimana komunitas akademik meresponsnya dalam empat tahun terakhir? Mari kita bedah tren publikasi ilmiah pada grafik vertikal di slide 3."`,
+
+            3: `[SLIDE 3 - TREN PUBLIKASI 2023-2026: RISET MELEJIT TAPI TERFRAGMENTASI]
+Target Waktu: 03:00 - 03:45 (Durasi ~45 Detik)
+
+• Penjelasan Visual Layar:
+"Di hadapan Bapak/Ibu terpampang grafik batang vertikal dengan skala sumbu Y terkalibrasi dari 0 hingga 24 studi. Perhatikan eskalasi kolomnya: tahun 2023 hanya ada 3 artikel (6.1%), naik ke 8 artikel di 2024 (16.3%), melonjak ke 14 artikel di 2025 (28.6%), dan mencapai puncaknya pada tahun 2026 dengan 24 artikel atau mewakili 49.0% dari keseluruhan korpus."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Hampir setengah dari seluruh literatur yang kita miliki lahir di tahun 2026 saja. Isu kepemimpinan digital sedang berada pada kurva perhatian akademik tertinggi. Namun, di balik angka fantastis ini, ada paradoks besar: risetnya melesat eksponensial, namun bidang kajiannya sangat terfragmentasi! Sebagian besar peneliti menulis artikel secara terisolasi di lokusnya masing-masing tanpa ada jembatan konseptual yang menyatukan. Akibatnya, kita punya timbunan laporan studi kasus individual, tetapi defisit sintesis sistemik yang mampu memotret akar persoalan secara komprehensif."
+
+• Jembatan Transisi ke Slide 4:
+"Karena kajian yang ada masih berserakan itulah, riset SLR ini merumuskan tiga pertanyaan kunci sebagai kompas investigasi, sebagaimana saya paparkan pada slide 4."`,
+
+            4: `[SLIDE 4 - TIGA PERTANYAAN PENELITIAN (RESEARCH QUESTIONS)]
+Target Waktu: 03:45 - 04:20 (Durasi ~35 Detik)
+
+• Penjelasan Visual Layar:
+"Tiga kartu kaca modular di layar mengkristalisasikan fokus penyelidikan kita: RQ 01 berfokus pada Karakteristik Metodologis dan Distribusi Latar Penelitian; RQ 02 membedah Taksonomi Klaster Problematika Empiris; dan RQ 03 yang bercahaya emas memetakan Research Gap serta Agenda Riset Masa Depan."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Riset tesis ini tidak didesain sekadar untuk menyusun daftar pustaka. Saya ingin menjawab tiga hal mendasar: Pertama, di mana letak bias lokus dan metodologi dalam literatur yang ada? Kedua, apa sebenarnya tiga penyakit kronis yang dihadapi para kepala madrasah dan pimpinan pesantren saat mendigitalkan lembaganya? Dan ketiga, kekosongan ilmiah apa yang harus segera diisi agar riset di masa mendatang tidak mengulang-ulang hal yang sama?"
+
+• Jembatan Transisi ke Slide 5:
+"Untuk menjawab ketiga pertanyaan berbobot tersebut secara teruji, metodologi apa yang saya gunakan? Mari kita telusuri alur seleksi PRISMA 2020 pada slide 5."`,
+
+            5: `[SLIDE 5 - METODOLOGI & ALUR SELEKSI PRISMA 2020]
+Target Waktu: 04:20 - 05:00 (Durasi ~40 Detik)
+
+• Penjelasan Visual Layar:
+"Slide 5 memperlihatkan corong penapisan sistematis sesuai panduan baku PRISMA 2020: Dari 136 rekaman yang diidentifikasi dari Google Scholar melalui Publish or Perish, disaring menjadi 82 rekaman setelah mengeluarkan artikel non-pendidikan Islam, dikerucutkan ke 54 artikel teks penuh yang dinilai kelayakannya, hingga menghasilkan 49 studi terpilih yang tervalidasi memenuhi kriteria PICOC."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Seluruh proses penelusuran dikelola secara ketat menggunakan Publish or Perish, Zotero untuk validasi sitasi, SciSpace untuk ekstraksi matriks temuan, serta Microsoft Excel untuk tabulasi data bibliometrik. Kami mengecualikan opini populer tanpa metodologi, membuang sekolah umum sekuler, dan hanya mempertahankan studi ilmiah yang fokus pada lembaga pendidikan Islam. 49 artikel inilah yang menjadi korpus sahih untuk diekstraksi."
+
+• Jembatan Transisi ke Slide 6:
+"Dan ketika 49 artikel ini kita bedah lokus lapangannya, kita langsung menemukan anomali pertama yang sangat mencengangkan pada slide 6."`,
+
+            6: `[SLIDE 6 - DISTRIBUSI LATAR EMPIRIS: KETIMPANGAN MADRASAH VS PESANTREN]
+Target Waktu: 05:00 - 05:45 (Durasi ~45 Detik)
+
+• Penjelasan Visual Layar:
+"Perhatikan empat diagram batang horizontal di hadapan Bapak/Ibu sekalian. Batang emas paling dominan menunjukkan bahwa 64.3% atau 18 studi lapangan berpusat di Madrasah (MI, MTs, dan MA). Sementara Pondok Pesantren hanya menempati porsi 17.9% (5 studi), Sekolah Islam Swasta 10.7% (3 studi), dan PTKI hanya 7.1% (2 studi)."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Angka ini menyingkap tabir bias korpus yang sangat telanjang! Mengapa peneliti kita gemar meneliti madrasah? Jawabannya sederhana: madrasah memiliki struktur birokrasi Kementerian Agama yang terstandardisasi dan mudah diukur indikatornya. Sebaliknya, pondok pesantren ditinggalkan dan minim diteliti. Padahal, secara kultural dan sosiologis, ketegangan paling dinamis antara teknologi modern melawan tradisi justru terjadi di pesantren! Kita melewatkan lokus yang paling kaya masalah hanya karena mengejar kemudahan pengambilan data."
+
+• Jembatan Transisi ke Slide 7:
+"Ketimpangan ini ternyata bukan hanya terjadi pada lokus geografisnya saja, melainkan juga merambah ke dalam desain metodologi yang digunakan, seperti tampak pada diagram donat di slide 7."`,
+
+            7: `[SLIDE 7 - KETIMPANGAN METODOLOGIS: DOMINASI KUALITATIF DESKRIPTIF]
+Target Waktu: 05:45 - 06:30 (Durasi ~45 Detik)
+
+• Penjelasan Visual Layar:
+"Pada Slide 7, diagram donat emas di sisi kiri memperlihatkan angka mutlak 81.6% untuk pendekatan kualitatif dan studi pustaka deskriptif (40 studi). Di sisi kanan, matriks metode menunjukkan bahwa pendekatan kuantitatif korelasional hanya 8.2% (4 studi), mixed-method 6.1% (3 studi), dan riset pengembangan R&D hanya 4.1% (2 studi)."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Implikasi metodologis dari angka 81.6% ini sangat serius bagi perkembangan disiplin ilmu Manajemen Pendidikan Islam. Literatur kita saat ini mengalami apa yang saya sebut sebagai 'surplus narasi, tetapi defisit bukti empiris'. Kita kaya akan deskripsi wawancara tentang kepala madrasah yang visioner, namun kita sangat miskin pengujian model kausal berbasis data terukur, miskin analisis SEM-PLS, dan ketiadaan riset eksperimental longitudinal. Klaim-klaim keberhasilan transformasi digital selama ini baru sebatas persepsi administratif di atas kertas."
+
+• Jembatan Transisi ke Slide 8:
+"Pertanyaannya: dari 49 studi tersebut, masalah konkret apa yang paling sering dilaporkan di lapangan? Mari kita bedah taksonominya pada slide 8."`,
+
+            8: `[SLIDE 8 - TAKSONOMI PROBLEMATIKA: TIGA TITIK TEKANAN UTAMA]
+Target Waktu: 06:30 - 07:20 (Durasi ~50 Detik)
+
+• Penjelasan Visual Layar:
+"Di Slide 8, seluruh problematika lapangan mengkristal ke dalam Tiga Klaster Utama: Klaster 01 Infrastruktur & Finansial dengan prevalensi 67.3%; Klaster 02 Kesenjangan Literasi SDM sebesar 61.2%; dan Klaster 03 beraksen emas yang sangat khas: Resistensi Kultural yang juga bertengger di angka 67.3%."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Perhatikan data empiris ini: Klaster 01 (koneksi internet tidak stabil, keterbatasan komputer, anggaran minim) muncul di 67.3% studi menurut Suratman (2024) dan Ersalmina (2026). Klaster 02 (guru senior yang enggan beradaptasi dan pelatihan yang tidak berkelanjutan) mencapai 61.2% menurut Ratnawati (2025). Namun yang paling menarik adalah Klaster 03: Resistensi Kultural berbobot persis sama tingginya dengan problem infrastruktur finansial, yakni 67.3%! Ini membuktikan bahwa ketiadaan uang dan perangkat keras bukanlah satu-satunya musuh digitalisasi; resistensi budaya adalah tembok penghalang yang berbobot sama beratnya."
+
+• Jembatan Transisi ke Slide 9:
+"Mari kita selami lebih dalam: mengapa resistensi kultural ini bisa sekuat itu di lembaga pendidikan Islam? Slide 9 membedah dialektika ketegangan tersebut."`,
+
+            9: `[SLIDE 9 - DUAL CHALLENGE: MODERNISASI VS OTORITAS KEKIAIAN]
+Target Waktu: 07:20 - 08:10 (Durasi ~50 Detik)
+
+• Penjelasan Visual Layar:
+"Di Slide 9, terdapat visual dialektika dua kutub yang dihubungkan oleh kepemimpinan: Kutub Kiri Modernisasi Digital (efisiensi, big data, transparansi); Kutub Kanan Otoritas Tradisi Kiai (sanad keilmuan, keteladanan tatap muka, adab); dan di tengahnya berdiri kartu emas: Pemimpin sebagai Negosiator Budaya."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Saya ingin mengoreksi kekeliruan berpikir yang sering terjadi: resistensi di kalangan pesantren sering disalahpahami sebagai sikap anti-kemajuan. Pandangan itu keliru besar! Studi Manaf (2026) dan Riyadi (2025) membuktikan bahwa penolakan santri dan pengurus pesantren terhadap keterbukaan gawai adalah 'tindakan protektif yang sangat rasional'. Kiai khawatir kehadiran algoritma dan arus informasi liar merusak adab santri, melunturkan keberkahan musyafahah (belajar tatap muka), dan mengikis sanad keilmuan. Pemimpin digital di pesantren tidak bisa bertindak seperti teknokrat korporasi yang memaksakan aplikasi; ia harus tampil sebagai negosiator budaya yang mampu membuktikan bahwa teknologi hadir untuk memperkuat dakwah, bukan menggantikan otoritas moral sang kiai."
+
+• Jembatan Transisi ke Slide 10:
+"Oleh karena itu, cara pandang kita terhadap transformasi digital harus diubah dari parsial menjadi sistemik, sebagaimana dirumuskan pada slide 10."`,
+
+            10: `[SLIDE 10 - PANDANGAN SISTEMIK: TRANSFORMASI ORGANISASIONAL UTUH]
+Target Waktu: 08:10 - 08:50 (Durasi ~40 Detik)
+
+• Penjelasan Visual Layar:
+"Slide 10 memetakan transformasi ke dalam empat pilar sekuensial yang saling mengunci: Tahap 1 Infrastruktur & Akses; Tahap 2 Literasi & Kompetensi Pedagogis; Tahap 3 Negosiasi Nilai & Legitimasi Kultural; dan Tahap 4 Tata Kelola Berkelanjutan berbasis penjaminan mutu terpadu."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Transformasi digital bukanlah proyek pengadaan barang yang selesai saat berita acara ditandatangani. Ia adalah metamorfosis sistemik. Kesalahan fatal sebagian besar yayasan pendidikan Islam adalah menghabiskan 90% anggarannya hanya untuk Tahap 1 membeli laptop dan smart board, sementara anggaran untuk pelatihan guru di Tahap 2 dan forum musyawarah nilai di Tahap 3 bernilai nol rupiah. Hasilnya? Perangkat digital tersebut hanya menjadi monumen mati di sudut ruangan. Tanpa tata kelola yang terintegrasi pada Tahap 4, seluruh investasi teknologi akan sia-sia."
+
+• Jembatan Transisi ke Slide 11:
+"Bagaimana posisi sentral kepemimpinan di tengah tiga lapisan sistemik ini? Mari kita perhatikan model radar konsentris pada slide 11."`,
+
+            11: `[SLIDE 11 - MODEL TAKSONOMI TIGA LAPISAN KEPEMIMPINAN SISTEMIK]
+Target Waktu: 08:50 - 09:35 (Durasi ~45 Detik)
+
+• Penjelasan Visual Layar:
+"Di sisi kiri Slide 11, terdapat animasi sistem orbit tata surya berputar dengan titik planet penanda. Di inti matahari yang bercahaya emas tertera 'Digital Leadership'. Inti ini dikelilingi orbit Lapis 1 Ekosistem Fisik Terluar (Infrastruktur 67.3%) dan orbit Lapis 2 Ekosistem Aktor (Literasi SDM 61.2%), berpadu dengan Lapis 3 Inti Nilai (Kultur, Otoritas Kiai, dan Etika Islam 67.3%)."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Inilah model sintesis konseptual orisinal dari riset tesis saya. Pemimpin digital pada lembaga pendidikan Islam tidak boleh terperangkap di salah satu lapisan saja. Jika ia hanya berkutat di Lapis 1 fisik, ia turun kelas menjadi staf pengadaan barang. Jika ia hanya sibuk di Lapis 2 guru, ia sekadar menjadi instruktur pelatihan. Dan jika ia hanya diam di Lapis 3 tradisi, lembaganya akan tergilas zaman. Pemimpin sejati adalah orkestrator yang berdiri di pusat episentrum, mengintegrasikan instrumen fisik, kapasitas manusia, dan nilai-nilai luhur keislaman menjadi satu kesatuan visi yang utuh."
+
+• Jembatan Transisi ke Slide 12:
+"Setelah memetakan anatomi masalah ini, pertanyaan paling krusial bagi seorang akademisi adalah: celah ilmiah apa yang masih tersisa dalam literatur kita? Mari kita bedah lima research gaps pada slide 12."`,
+
+            12: `[SLIDE 12 - LIMA RESEARCH GAPS (CELAH PENELITIAN)]
+Target Waktu: 09:35 - 10:15 (Durasi ~40 Detik)
+
+• Penjelasan Visual Layar:
+"Slide 12 merinci lima celah ilmiah konkret yang berhasil diidentifikasi dari sintesis 49 studi: Gap 01 Metodologis (minimnya studi longitudinal); Gap 02 Kontekstual (pesantren luar Jawa tertinggal dari riset); Gap 03 Instrumentasi (ketiadaan alat ukur baku kepemimpinan digital Islami); Gap 04 Uji Model (model normatif kepemimpinan profetik belum pernah diuji secara empiris); dan Gap 05 Evaluasi (ketiadaan indikator kematangan tata kelola digital)."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Inilah sumbangsih teoretis terbesar dari kajian ini. Selama ini kita bangga mempublikasikan konsep-konsep kepemimpinan digital berbasis nilai profetik atau tauhidik. Namun jika ditelusuri secara metodologis, model-model tersebut baru sebatas anjuran moral normatif di atas kertas! Belum ada peneliti yang menurunkannya menjadi kuesioner skala Likert yang lolos uji validitas konstruk dan reliabilitas Cronbach's alpha, dan belum ada yang menguji dampaknya secara riil di lapangan."
+
+• Jembatan Transisi ke Slide 13:
+"Bagaimana cara kita menjembatani kelima celah riset ini ke depan? Slide 13 menyajikan peta jalan agenda riset masa depan."`,
+
+            13: `[SLIDE 13 - ROADMAP RISET MASA DEPAN: DARI DESKRIPSI KE EVIDENSI]
+Target Waktu: 10:15 - 10:55 (Durasi ~40 Detik)
+
+• Penjelasan Visual Layar:
+"Pada Slide 13, pipa alur strategis membelah lima fase aksi riset berkesinambungan: Fase 01 Desain Longitudinal; Fase 02 Perluasan Konteks Pesantren Salaf Luar Jawa; Fase 03 Konstruksi & Validasi Instrumen Berbasis Maqasid; Fase 04 Pengujian Kausal SEM-PLS atas Model Profetik; dan Fase 05 Audit Kematangan Tata Kelola Digital Berkelanjutan."
+
+• Narasi Kritis & Argumen Ilmiah:
+"Peta jalan ini adalah seruan aksi nyata bagi komunitas akademik Manajemen Pendidikan Islam. Kita harus berhenti mendaur ulang artikel studi kasus kualitatif deskriptif di satu madrasah yang sudah jenuh pembahasannya. Kita harus melangkah ke Fase 03 dan Fase 04: membuktikan efektivitas kepemimpinan digital secara kuantitatif dengan data empiris yang sahih, sehingga hasil riset kita mampu mempengaruhi kebijakan strategis di tingkat Kementerian Agama maupun yayasan pendidikan Islam."
+
+• Jembatan Transisi ke Slide 14:
+"Sebagai puncaknya, tiba saatnya kita menyimpulkan seluruh esensi filosofis riset ini pada slide 14."`,
+
+            14: `[SLIDE 14 - KESIMPULAN AKHIR & PEMADAMAN LAMPU]
+Target Waktu: 10:55 - 11:30 (Durasi ~35 Detik)
+
+• Penjelasan Visual Layar:
+"Lampu gantung di atas layar menyala terang menyinari kalimat sintesis pamungkas: 'Kepemimpinan digital tidak boleh menggantikan nilai-nilai Islam. Ia harus bekerja melaluinya.' Di bawahnya tertera identitas saya Akbar Tausiur Rido, Magister MPI UIN Sunan Gunung Djati Bandung, beserta tombol dan tali saklar pemadam lampu."
+
+• Narasi Penutup & Refleksi Filosofis:
+"Bapak, Ibu Dewan Penguji yang saya hormati. Gelombang teknologi akan terus berganti; hari ini kecerdasan buatan, esok komputasi kuantum. Namun di lembaga pendidikan Islam, kepemimpinan digital tidak pernah didesain untuk menggantikan ruh keteladanan, keikhlasan kiai, dan keberkahan transmisi adab. Kepemimpinan digital hadir sebagai instrumen strategis untuk membawa nilai-nilai luhur tersebut menembus batas-batas zaman. Kini, dengan penuh takzim, saya mohon izin untuk memadamkan lampu sesi paparan ini."
+[Aksi: Tarik atau klik tali saklar di Slide 14 untuk mematikan lampu dan beralih ke Slide 15].`,
+
+            15: `[SLIDE 15 - OUTRO FINALE: LAMPU PADAM & RASA SYUKUR]
+Target Waktu: 11:30 - 12:00 (Durasi ~30 Detik)
+
+• Penjelasan Visual Layar:
+"Panggung presentasi kembali hening dan gelap gulita dengan lampu belajar dalam kondisi padam (mati), mengembalikan suasana tenang ruang sidang setelah pemaparan intensif. Terpampang tulisan bersahaja: 'TERIMA KASIH' dan kalimat hamdalah 'Alhamdulillahirobbil 'Alamin', diiringi identitas saya dan almamater tercinta UIN Sunan Gunung Djati Bandung."
+
+• Narasi Pamungkas:
+"Alhamdulillahi Robbil 'Alamin. Seluruh rangkaian pertanggungjawaban akademik Systematic Literature Review ini telah saya sampaikan secara utuh. Terima kasih setinggi-tingginya saya haturkan kepada Dosen Pengampu Bapak Dr. H. Mulyawan Safwandy Nugraha, M.Ag., M.Pd., serta seluruh Dewan Penguji yang terhormat atas bimbingan dan masukannya. Waktu dan kesempatan selanjutnya saya kembalikan kepada pimpinan sidang untuk sesi tanya jawab dan pendalaman materi."`
+        };
+
+        // Pull-Cord Physics & Switch Drag Engine
+        const baseChainHeight = 85;
+        const PULL_TRIGGER_THRESHOLD = 28;
+
+        function setupPullCord(wrapperId, chainId, onTriggerCallback) {
+            const wrapperEl = document.getElementById(wrapperId);
+            const chainEl = document.getElementById(chainId);
+            if (!wrapperEl || !chainEl) return;
+
+            let isPulling = false;
+            let startY = 0;
+            let pullDist = 0;
+            let didDrag = false;
+
+            function snapAndTrigger() {
+                chainEl.style.transition = 'height 0.08s ease-out';
+                chainEl.style.height = `${baseChainHeight + 35}px`;
+                wrapperEl.style.setProperty('--pull-y', '35px');
+                setTimeout(() => {
+                    chainEl.style.transition = 'height 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    chainEl.style.height = `${baseChainHeight}px`;
+                    wrapperEl.classList.remove('idle-swaying');
+                    wrapperEl.classList.add('snapping');
+                    setTimeout(() => {
+                        wrapperEl.classList.remove('snapping');
+                        wrapperEl.classList.add('idle-swaying');
+                        chainEl.style.transition = '';
+                    }, 450);
+                    onTriggerCallback();
+                }, 90);
+            }
+
+            wrapperEl.addEventListener('click', (e) => {
+                if (didDrag) { didDrag = false; return; }
+                snapAndTrigger();
+            });
+
+            function onPointerDown(e) {
+                isPulling = true;
+                didDrag = false;
+                startY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
+                pullDist = 0;
+                wrapperEl.classList.remove('idle-swaying', 'snapping');
+                window.addEventListener('mousemove', onPointerMove);
+                window.addEventListener('mouseup', onPointerUp);
+                window.addEventListener('touchmove', onPointerMove, { passive: false });
+                window.addEventListener('touchend', onPointerUp);
+            }
+
+            function onPointerMove(e) {
+                if (!isPulling) return;
+                if (e.cancelable && e.type === 'touchmove') e.preventDefault();
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
+                const deltaY = Math.max(0, clientY - startY);
+                pullDist = Math.min(deltaY * 0.75, 65);
+                if (pullDist > 6) didDrag = true;
+                chainEl.style.height = `${baseChainHeight + pullDist}px`;
+                wrapperEl.style.setProperty('--pull-y', `${pullDist}px`);
+            }
+
+            function onPointerUp() {
+                if (!isPulling) return;
+                isPulling = false;
+                window.removeEventListener('mousemove', onPointerMove);
+                window.removeEventListener('mouseup', onPointerUp);
+                window.removeEventListener('touchmove', onPointerMove);
+                window.removeEventListener('touchend', onPointerUp);
+
+                if (pullDist > PULL_TRIGGER_THRESHOLD) {
+                    chainEl.style.height = `${baseChainHeight}px`;
+                    wrapperEl.classList.add('snapping');
+                    onTriggerCallback();
+                } else if (!didDrag) {
+                    // Handled by click
+                } else {
+                    chainEl.style.height = `${baseChainHeight}px`;
+                    wrapperEl.classList.add('idle-swaying');
+                }
+            }
+
+            wrapperEl.addEventListener('mousedown', onPointerDown);
+            wrapperEl.addEventListener('touchstart', onPointerDown, { passive: true });
+        }
+
+        // Slide 0 Switch Handler
+        const slide0El = document.getElementById('slide-0');
+        function activateLampOpening() {
+            if (isLampTurnedOn) return;
+            isLampTurnedOn = true;
+            playLampClickSound();
+            slide0El.classList.add('lamp-active');
+
+            try {
+                const docEl = document.documentElement;
+                if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                    if (docEl.requestFullscreen) {
+                        docEl.requestFullscreen().catch(() => {});
+                    } else if (docEl.webkitRequestFullscreen) {
+                        docEl.webkitRequestFullscreen();
+                    } else if (docEl.msRequestFullscreen) {
+                        docEl.msRequestFullscreen();
+                    }
+                }
+            } catch (err) {}
+
+            if (!isPresentationStarted) {
+                isPresentationStarted = true;
+                presentationStartTime = Date.now();
+                hudLayer.classList.remove('opacity-0');
+                hudLayer.classList.add('opacity-100');
+                timerInterval = setInterval(updateLiveTimer, 1000);
+            }
+        }
+        setupPullCord('lamp-cord-wrapper', 'lamp-cord-chain', activateLampOpening);
+
+        // Slide 14 Switch Handler
+        const slide14El = document.getElementById('slide-14');
+        function turnOffLampToSlide15() {
+            playLampClickSound();
+            if (slide14El) slide14El.classList.remove('lamp-active');
+            goToSlide(15);
+        }
+        setupPullCord('lamp-cord-wrapper-14', 'lamp-cord-chain-14', turnOffLampToSlide15);
+
+        // Slide 15 Switch Handler
+        const slide15El = document.getElementById('slide-15');
+        function toggleLampSlide15() {
+            playLampClickSound();
+            if (slide15El) slide15El.classList.toggle('lamp-active');
+        }
+        setupPullCord('lamp-cord-wrapper-15', 'lamp-cord-chain-15', toggleLampSlide15);
+
+        function restartPresentationToSlide0() {
+            playLampClickSound();
+            if (slide0El) slide0El.classList.remove('lamp-active');
+            if (slide14El) slide14El.classList.remove('lamp-active');
+            if (slide15El) slide15El.classList.remove('lamp-active');
+            
+            isLampTurnedOn = false;
+            isPresentationStarted = false;
+            if (timerInterval) clearInterval(timerInterval);
+            presentationStartTime = null;
+            if (liveTimerEl) liveTimerEl.innerText = "LIVE 00:00";
+            if (hudLayer) {
+                hudLayer.classList.remove('opacity-100');
+                hudLayer.classList.add('opacity-0');
+            }
+            goToSlide(0);
+        }
+
+        function returnToSlide14() {
+            playLampClickSound();
+            if (slide14El) slide14El.classList.add('lamp-active');
+            goToSlide(14);
+        }
+
+        function toggleSecretNotes() {
+            isSecretNotesOpen = !isSecretNotesOpen;
+            if (secretNotesModal) {
+                if (isSecretNotesOpen) {
+                    secretNotesModal.classList.remove('opacity-0', 'pointer-events-none');
+                    secretNotesModal.classList.add('opacity-100');
+                } else {
+                    secretNotesModal.classList.remove('opacity-100');
+                    secretNotesModal.classList.add('opacity-0', 'pointer-events-none');
+                }
+            }
+        }
+
+        // Data Counter & Visual Charts Trigger
+        function triggerSlideVisuals(slideEl) {
+            const countEls = slideEl.querySelectorAll('[data-count]');
+            countEls.forEach(el => {
+                const target = parseFloat(el.getAttribute('data-count'));
+                const isFloat = el.getAttribute('data-count').includes('.');
+                const duration = 1200;
+                const start = 0;
+                const startTime = performance.now();
+
+                function updateCount(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const currentVal = start + (target - start) * easeOut;
+                    el.innerText = isFloat ? currentVal.toFixed(1) : Math.round(currentVal);
+                    if (progress < 1) requestAnimationFrame(updateCount);
+                    else el.innerText = isFloat ? target.toFixed(1) : target;
+                }
+                requestAnimationFrame(updateCount);
+            });
+
+            slideEl.querySelectorAll('[data-width]').forEach(el => {
+                setTimeout(() => { el.style.width = el.getAttribute('data-width'); }, 120);
+            });
+            slideEl.querySelectorAll('[data-height]').forEach(el => {
+                setTimeout(() => { el.style.height = el.getAttribute('data-height'); }, 120);
+            });
+
+            const donutSegment = slideEl.querySelector('#donut-segment');
+            if (donutSegment) {
+                setTimeout(() => {
+                    const circumference = 2 * Math.PI * 40;
+                    const offset = circumference - (0.816 * circumference);
+                    donutSegment.style.strokeDashoffset = offset;
+                }, 150);
+            }
+        }
+
+        function resetSlideVisuals(slideEl) {
+            slideEl.querySelectorAll('[data-width]').forEach(el => { el.style.width = '0%'; });
+            slideEl.querySelectorAll('[data-height]').forEach(el => { el.style.height = '0%'; });
+            const donutSegment = slideEl.querySelector('#donut-segment');
+            if (donutSegment) donutSegment.style.strokeDashoffset = '251.2';
+        }
+
+        function goToSlide(targetIndex) {
+            if (targetIndex < 0 || targetIndex >= totalSlides) return;
+            const prevSlideEl = document.getElementById(`slide-${currentSlide}`);
+            const nextSlideEl = document.getElementById(`slide-${targetIndex}`);
+
+            if (prevSlideEl) {
+                prevSlideEl.classList.remove('active');
+                prevSlideEl.classList.add('exiting');
+                setTimeout(() => {
+                    prevSlideEl.classList.remove('exiting');
+                    resetSlideVisuals(prevSlideEl);
+                }, 380);
+            }
+
+            if (nextSlideEl) {
+                nextSlideEl.classList.add('active');
+                setTimeout(() => { triggerSlideVisuals(nextSlideEl); }, 60);
+                if (targetIndex === 14) nextSlideEl.classList.add('lamp-active');
+            }
+
+            currentSlide = targetIndex;
+            if (slideNumCurrentEl) slideNumCurrentEl.innerText = currentSlide.toString().padStart(2, '0');
+            if (slideProgressBar) slideProgressBar.style.width = `${(currentSlide / (totalSlides - 1)) * 100}%`;
+            if (secretNotesBody) secretNotesBody.innerText = speakerNotesData[currentSlide] || "Tidak ada catatan.";
+        }
+
+        function nextSlide() {
+            if (currentSlide === 0 && !isLampTurnedOn) {
+                activateLampOpening();
+                setTimeout(() => goToSlide(1), 350);
+            } else if (currentSlide === 14) {
+                turnOffLampToSlide15();
+            } else {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 0) goToSlide(currentSlide - 1);
+        }
+
+        // Keyboard Controls
+        window.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowRight':
+                case ' ':
+                    e.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    previousSlide();
+                    break;
+                case 'n':
+                case 'N':
+                    toggleSecretNotes();
+                    break;
+                case 'f':
+                case 'F':
+                    try {
+                        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+                        else document.exitFullscreen();
+                    } catch (err) {}
+                    break;
+            }
+        });
+
+        // Touch Swipe Navigation for iOS / Android
+        let touchStartX = 0;
+        let touchStartY = 0;
+        window.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        window.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+
+            if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+                if (deltaX < 0) nextSlide();
+                else previousSlide();
+            }
+        }, { passive: true });
+
+        if (secretNotesBody) secretNotesBody.innerText = speakerNotesData[0];
+    </script>
+</body>
+</html>
