@@ -21,6 +21,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;800&family=Playfair+Display:ital,wght@1,600;1,800&display=swap" rel="stylesheet">
     
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -42,6 +43,15 @@
             }
         };
     </script>
+
+    <!-- PptxGenJS CDN for Client-Side PowerPoint (.pptx) Generation -->
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+
+    <!-- html2canvas CDN for Pixel-Perfect DOM Snapshot Capture -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <!-- jsPDF CDN for Direct Client-Side 16:9 PDF Compilation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         /* Base Viewport Resets & Safe Area Constraints */
@@ -251,7 +261,6 @@
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
-            /* CRITICAL: transform: none unlocks WebKit/Android compositing layer so touch scroll flows natively */
             transform: none !important;
             z-index: 20;
         }
@@ -550,6 +559,63 @@
                 font-size: 0.6875rem;
             }
         }
+
+        /* High-Definition Print Stylesheet for PDF Export */
+        @media print {
+            @page {
+                size: 16in 9in landscape;
+                margin: 0;
+            }
+            body, html {
+                overflow: visible !important;
+                height: auto !important;
+                background-color: #050505 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            #hud-layer,
+            #secret-notes-modal,
+            #export-modal,
+            #export-progress-modal,
+            .pull-cord-wrapper,
+            .cord-pull-hint,
+            #lamp-dormant-curtain,
+            button {
+                display: none !important;
+            }
+            #presentation-viewport {
+                overflow: visible !important;
+                height: auto !important;
+                position: static !important;
+                display: block !important;
+            }
+            .slide {
+                position: relative !important;
+                display: flex !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                page-break-after: always !important;
+                break-after: page !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                width: 16in !important;
+                height: 9in !important;
+                min-height: 9in !important;
+                max-height: 9in !important;
+                box-sizing: border-box !important;
+                padding: 2.5rem 3.5rem !important;
+                overflow: hidden !important;
+                transform: none !important;
+            }
+            .anim-element,
+            .slide h1,
+            .slide h2,
+            .anim-title,
+            .citation-tag {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-[#050505] text-white selection:bg-amber-400 selection:text-black">
@@ -563,8 +629,14 @@
             </div>
             
             <div class="flex items-center gap-2">
-                <!-- Tap-friendly slide counter with secret double-tap for notes on mobile -->
-                <div id="hud-slide-counter" class="px-3.5 py-1.5 rounded-full bg-black/70 border border-white/10 backdrop-blur-md font-mono text-[11px] sm:text-xs font-bold text-gray-300 cursor-pointer select-none active:scale-95 transition-transform" title="Ketuk 2x untuk membuka/menutup catatan presenter">
+                <!-- Export PPT / PDF Button -->
+                <button onclick="openExportModal()" class="px-3 py-1.5 rounded-full bg-black/70 hover:bg-amber-400/20 border border-white/10 hover:border-amber-400/40 backdrop-blur-md font-mono text-[11px] sm:text-xs font-bold text-amber-300 flex items-center gap-1.5 active:scale-95 transition-all shadow-md" title="Unduh Paparan Riset (PPTX atau PDF)">
+                    <svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    <span>Unduh PPT</span>
+                </button>
+
+                <!-- Tap-friendly slide counter with secret double-tap for presenter notes -->
+                <div id="hud-slide-counter" class="px-3.5 py-1.5 rounded-full bg-black/70 border border-white/10 backdrop-blur-md font-mono text-[11px] sm:text-xs font-bold text-gray-300 cursor-pointer select-none active:scale-95 transition-transform" title="Ketuk 2x untuk membuka catatan presenter rahasia">
                     <span id="slide-num-current" class="text-amber-400">00</span> / <span id="slide-num-total">15</span>
                 </div>
             </div>
@@ -593,6 +665,7 @@
         </div>
     </div>
 
+    <!-- Presentation Viewport Container -->
     <div id="presentation-viewport" class="relative w-full h-full overflow-hidden">
 
         <!-- SLIDE 0: OPENING INTERAKTIF LAMPU BELAJAR BERTALI SAKLAR -->
@@ -866,47 +939,121 @@
             </div>
         </div>
 
-        <!-- SLIDE 5: METODOLOGI & ALUR SELEKSI PRISMA 2020 -->
+        <!-- SLIDE 5: METODOLOGI, ALUR SELEKSI PRISMA 2020 & MATRIKS PICOC -->
         <div id="slide-5" class="slide max-w-6xl mx-auto my-auto w-full">
-            <div class="anim-element">
-                <span class="citation-tag mb-3 sm:mb-4">
+            <div class="anim-element flex items-center justify-between">
+                <span class="citation-tag mb-2 sm:mb-3">
                     <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                    Protokol Tinjauan Sistematis
+                    Protokol Tinjauan Sistematis PRISMA 2020 & Kriteria PICOC
+                </span>
+                <span class="text-[10px] sm:text-xs font-mono text-amber-300 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/30">
+                    Kriteria Kelayakan Baku
                 </span>
             </div>
 
-            <h2 class="anim-element delay-1 text-xl sm:text-3xl md:text-5xl font-black tracking-tight leading-snug uppercase mb-4 sm:mb-6">
+            <h2 class="anim-element delay-1 text-xl sm:text-2xl md:text-4xl font-black tracking-tight leading-snug uppercase mb-3 sm:mb-4">
                 DARI 136 REKAMAN AWAL<br/>
-                <span class="text-gray-400 font-bold">MENGERUCUT KE</span> <span class="text-amber-400 loop-shimmer">49 STUDI TERPILIH</span>
+                <span class="text-gray-400 font-bold">TERVALIDASI KE</span> <span class="text-amber-400 loop-shimmer">49 STUDI TERPILIH</span>
             </h2>
 
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 my-1 sm:my-2 anim-element delay-2">
-                <div class="glass-card p-3.5 sm:p-5 rounded-xl sm:rounded-2xl text-center border border-white/10">
-                    <span class="text-[10px] sm:text-xs font-mono text-gray-400 uppercase">1. Identifikasi</span>
-                    <div class="text-2xl sm:text-4xl font-black text-white my-1 sm:my-2" data-count="136">0</div>
-                    <span class="text-[10px] sm:text-[11px] text-gray-400">Google Scholar via PoP</span>
+            <!-- PRISMA 2020 4-Stage Funnel Metrics -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3.5 my-1 anim-element delay-2">
+                <div class="glass-card p-2.5 sm:p-3.5 rounded-xl text-center border border-white/10">
+                    <span class="text-[9px] sm:text-[11px] font-mono text-gray-400 uppercase">1. Identifikasi</span>
+                    <div class="text-xl sm:text-3xl font-black text-white my-0.5 sm:my-1" data-count="136">0</div>
+                    <span class="text-[9px] sm:text-[10px] text-gray-400">Google Scholar via PoP</span>
                 </div>
-                <div class="glass-card p-3.5 sm:p-5 rounded-xl sm:rounded-2xl text-center border border-white/10">
-                    <span class="text-[10px] sm:text-xs font-mono text-gray-400 uppercase">2. Skrining Awal</span>
-                    <div class="text-2xl sm:text-4xl font-black text-white my-1 sm:my-2" data-count="82">0</div>
-                    <span class="text-[10px] sm:text-[11px] text-rose-400">Eksklusi Non-Islam/Umum</span>
+                <div class="glass-card p-2.5 sm:p-3.5 rounded-xl text-center border border-white/10">
+                    <span class="text-[9px] sm:text-[11px] font-mono text-gray-400 uppercase">2. Skrining Awal</span>
+                    <div class="text-xl sm:text-3xl font-black text-white my-0.5 sm:my-1" data-count="82">0</div>
+                    <span class="text-[9px] sm:text-[10px] text-rose-400">Eksklusi Non-Islam/Umum</span>
                 </div>
-                <div class="glass-card p-3.5 sm:p-5 rounded-xl sm:rounded-2xl text-center border border-white/10">
-                    <span class="text-[10px] sm:text-xs font-mono text-gray-400 uppercase">3. Kelayakan</span>
-                    <div class="text-2xl sm:text-4xl font-black text-white my-1 sm:my-2" data-count="54">0</div>
-                    <span class="text-[10px] sm:text-[11px] text-gray-400">Penilaian Teks Penuh</span>
+                <div class="glass-card p-2.5 sm:p-3.5 rounded-xl text-center border border-white/10">
+                    <span class="text-[9px] sm:text-[11px] font-mono text-gray-400 uppercase">3. Kelayakan</span>
+                    <div class="text-xl sm:text-3xl font-black text-white my-0.5 sm:my-1" data-count="54">0</div>
+                    <span class="text-[9px] sm:text-[10px] text-gray-400">Penilaian Teks Penuh</span>
                 </div>
-                <div class="glass-card-gold p-3.5 sm:p-5 rounded-xl sm:rounded-2xl text-center border border-amber-400/50 relative">
+                <div class="glass-card-gold p-2.5 sm:p-3.5 rounded-xl text-center border border-amber-400/50 relative">
                     <div class="ripple-spread"></div>
-                    <span class="text-[10px] sm:text-xs font-mono text-amber-300 uppercase font-bold">4. Korpus Akhir</span>
-                    <div class="text-2xl sm:text-4xl font-black text-amber-300 my-1 sm:my-2" data-count="49">0</div>
-                    <span class="text-[10px] sm:text-[11px] text-amber-200 font-bold">Inklusi Tervalidasi</span>
+                    <span class="text-[9px] sm:text-[11px] font-mono text-amber-300 uppercase font-bold">4. Korpus Akhir</span>
+                    <div class="text-xl sm:text-3xl font-black text-amber-300 my-0.5 sm:my-1" data-count="49">0</div>
+                    <span class="text-[9px] sm:text-[10px] text-amber-200 font-bold">Inklusi Tervalidasi</span>
                 </div>
             </div>
 
-            <div class="anim-element delay-3 glass-card p-3 sm:p-4 rounded-xl border border-white/10 mt-3 sm:mt-6 flex flex-wrap items-center justify-between gap-2 sm:gap-3 text-[10px] sm:text-xs font-mono text-gray-300">
-                <span>Alat: PRISMA 2020 | PoP | Zotero | SciSpace | Excel</span>
-                <span class="text-amber-400">Kriteria PICOC Tervalidasi</span>
+            <!-- Matriks Kerangka PICOC (Population, Intervention, Comparison, Outcome, Context) -->
+            <div class="anim-element delay-3 mt-3 sm:mt-4">
+                <div class="text-[10px] sm:text-xs font-mono font-bold text-amber-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    <span>Kerangka Protokol PICOC (Operasionalisasi Kriteria Kelayakan)</span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-2.5">
+                    <!-- P: Population -->
+                    <div class="glass-card p-2.5 sm:p-3 rounded-xl border border-amber-400/30 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 font-mono font-black text-[9px] sm:text-[10px]">P</span>
+                                <span class="text-[9px] font-mono text-gray-400">POPULATION</span>
+                            </div>
+                            <h4 class="text-xs sm:text-sm font-bold text-white mb-1">Pemimpin Pend. Islam</h4>
+                            <p class="text-[10px] sm:text-[11px] text-gray-300 leading-snug">Kepala madrasah, kiai dan pengasuh pesantren, serta pimpinan PTKI.</p>
+                        </div>
+                    </div>
+
+                    <!-- I: Intervention -->
+                    <div class="glass-card p-2.5 sm:p-3 rounded-xl border border-white/10 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono font-black text-[9px] sm:text-[10px]">I</span>
+                                <span class="text-[9px] font-mono text-gray-400">INTERVENTION</span>
+                            </div>
+                            <h4 class="text-xs sm:text-sm font-bold text-white mb-1">Praktik Kepemimpinan</h4>
+                            <p class="text-[10px] sm:text-[11px] text-gray-300 leading-snug">Digital leadership, e-leadership, dan kepemimpinan adaptif berbasis teknologi.</p>
+                        </div>
+                    </div>
+
+                    <!-- C: Comparison -->
+                    <div class="glass-card p-2.5 sm:p-3 rounded-xl border border-white/10 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono font-black text-[9px] sm:text-[10px]">C</span>
+                                <span class="text-[9px] font-mono text-gray-400">COMPARISON</span>
+                            </div>
+                            <h4 class="text-xs sm:text-sm font-bold text-white mb-1">Tidak Ada Pembanding</h4>
+                            <p class="text-[10px] sm:text-[11px] text-gray-300 leading-snug">No comparator, karena tinjauan bersifat eksploratif-sintetik.</p>
+                        </div>
+                    </div>
+
+                    <!-- O: Outcome -->
+                    <div class="glass-card p-2.5 sm:p-3 rounded-xl border border-white/10 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono font-black text-[9px] sm:text-[10px]">O</span>
+                                <span class="text-[9px] font-mono text-gray-400">OUTCOME</span>
+                            </div>
+                            <h4 class="text-xs sm:text-sm font-bold text-white mb-1">Problematika & Celah</h4>
+                            <p class="text-[10px] sm:text-[11px] text-gray-300 leading-snug">Problematika, tantangan, hambatan implementasi, serta celah penelitian yang dilaporkan.</p>
+                        </div>
+                    </div>
+
+                    <!-- C: Context -->
+                    <div class="glass-card-gold p-2.5 sm:p-3 rounded-xl border border-amber-400/40 flex flex-col justify-between col-span-2 sm:col-span-1">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="px-1.5 py-0.5 rounded bg-amber-400/30 text-amber-200 font-mono font-black text-[9px] sm:text-[10px]">C</span>
+                                <span class="text-[9px] font-mono text-amber-300">CONTEXT</span>
+                            </div>
+                            <h4 class="text-xs sm:text-sm font-bold text-white mb-1">Lembaga 2023–2026</h4>
+                            <p class="text-[10px] sm:text-[11px] text-amber-100 leading-snug">Pesantren, madrasah, dan PTKI pada periode 2023–2026.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="anim-element delay-4 glass-card p-2.5 sm:p-3 rounded-xl border border-white/10 mt-2.5 sm:mt-3 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-[11px] font-mono text-gray-300">
+                <span>Alat Analisis: PRISMA 2020 | PoP | Zotero | SciSpace | VOSviewer | Excel</span>
+                <span class="text-amber-400">Kriteria Penapisan Terstandarisasi Internasional</span>
             </div>
         </div>
 
@@ -1323,7 +1470,6 @@
                 <span class="text-gray-400 font-bold">MENUJU PEMBUKTIAN</span> <span class="text-amber-400 loop-shimmer">EVIDENSI KUMULATIF.</span>
             </h2>
 
-            <!-- Responsive 2-Column Mobile & 5-Column Desktop Grid -->
             <div class="loop-beam-container p-1 rounded-2xl my-1 sm:my-2 anim-element delay-2">
                 <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
                     <div class="glass-card p-3 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-between">
@@ -1368,7 +1514,6 @@
                 Arah Strategis: Mengubah bidang kajian dari produksi model normatif menjadi pembuktian empiris berbasis data.
             </div>
 
-            <!-- Essential Bottom Spacer: Guarantees 100% Clearance Above Mobile HUD Buttons -->
             <div class="h-28 sm:h-8 shrink-0 w-full pointer-events-none"></div>
         </div>
 
@@ -1448,7 +1593,6 @@
                 </div>
             </div>
 
-            <!-- Interactive Hanging Pull-Cord / Chain -->
             <div id="lamp-cord-wrapper-15" class="pull-cord-wrapper idle-swaying cursor-pointer" onclick="toggleLampSlide15()" title="Tarik atau klik saklar untuk menyalakan/mematikan lampu">
                 <div id="lamp-cord-chain-15" class="cord-chain"></div>
                 <div class="cord-handle" id="lamp-cord-handle-15">
@@ -1497,18 +1641,86 @@
 
     </div>
 
-    <!-- SECRET SPEAKER NOTES MODAL (TRIGGERED VIA 'N' KEYBOARD OR DOUBLE-TAP ON SLIDE COUNTER) -->
+    <!-- SECRET SPEAKER NOTES MODAL -->
     <div id="secret-notes-modal" class="notes-modal-panel opacity-0 pointer-events-none transition-all duration-300">
         <div class="flex items-center justify-between border-b border-amber-400/30 pb-2.5 mb-2.5">
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-                <span class="font-mono text-xs font-bold uppercase tracking-wider text-amber-300">Panduan Skrip Presenter</span>
+                <span class="font-mono text-xs font-bold uppercase tracking-wider text-amber-300">Panduan Orasi & Skrip Ilmiah</span>
             </div>
-            <button onclick="toggleSecretNotes()" class="p-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
+            <button onclick="toggleSecretNotes()" class="p-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors" aria-label="Tutup Skrip">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
         </div>
         <div id="secret-notes-body" class="max-h-56 sm:max-h-80 overflow-y-auto custom-scroll text-xs sm:text-base text-gray-200 font-light leading-relaxed pr-2 space-y-3 whitespace-pre-line">
+        </div>
+    </div>
+
+    <!-- EXPORT MODAL (POWERPOINT PPTX & PRINT PDF) -->
+    <div id="export-modal" class="notes-modal-panel opacity-0 pointer-events-none transition-all duration-300 !max-w-lg">
+        <div class="flex items-center justify-between border-b border-amber-400/30 pb-2.5 mb-3">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span class="font-mono text-xs font-bold uppercase tracking-wider text-amber-300">Unduh & Ekspor Materi Paparan</span>
+            </div>
+            <button onclick="closeExportModal()" class="p-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <p class="text-xs sm:text-sm text-gray-300 font-light mb-4">
+            Dokumen yang diunduh memiliki tata letak visual, kartu, dan diagram data yang <strong>100% identik dengan versi presentasi</strong> (Widescreen 16:9 Full HD):
+        </p>
+
+        <div class="space-y-3">
+            <!-- Option 1: Native Editable PPTX Download -->
+            <button id="btn-export-pptx" onclick="generatePPTX()" class="w-full p-3.5 rounded-xl glass-card border border-amber-400/40 hover:border-amber-400 hover:bg-amber-400/10 transition-all flex items-start gap-3.5 text-left group">
+                <div class="w-9 h-9 rounded-lg bg-amber-400/20 text-amber-300 flex items-center justify-center font-bold text-sm shrink-0 group-hover:scale-105 transition-transform">
+                    PPT
+                </div>
+                <div class="flex-1">
+                    <div class="text-xs sm:text-sm font-bold text-white group-hover:text-amber-300 transition-colors flex items-center justify-between">
+                        <span>Microsoft PowerPoint Asli (.pptx)</span>
+                        <span class="text-[10px] font-mono text-amber-400 font-bold">16:9 Native Editable</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 mt-0.5 leading-relaxed">
+                        Teks, bentuk kartu, angka statistik, dan warna terpisah secara native — 100% dapat diedit langsung di PowerPoint.
+                    </p>
+                </div>
+            </button>
+
+            <!-- Option 2: PDF Export -->
+            <button id="btn-export-pdf" onclick="generatePDF()" class="w-full p-3.5 rounded-xl glass-card border border-white/10 hover:border-amber-400/40 hover:bg-white/5 transition-all flex items-start gap-3.5 text-left group">
+                <div class="w-9 h-9 rounded-lg bg-rose-500/20 text-rose-300 flex items-center justify-center font-bold text-sm shrink-0 group-hover:scale-105 transition-transform">
+                    PDF
+                </div>
+                <div class="flex-1">
+                    <div class="text-xs sm:text-sm font-bold text-white group-hover:text-amber-200 transition-colors flex items-center justify-between">
+                        <span>Dokumen PDF Lanskap (.pdf)</span>
+                        <span class="text-[10px] font-mono text-rose-300 font-bold">16:9 Full HD Presisi</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 mt-0.5 leading-relaxed">
+                        Dokumen PDF Full HD 16 slide berorientasi lanskap proporsional, bersih dan terstruktur identik dengan format presentasi.
+                    </p>
+                </div>
+            </button>
+        </div>
+
+        <div class="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-gray-400">
+            <span>Kualitas: 1920 × 1080 (Full HD)</span>
+            <button onclick="window.print()" class="text-gray-400 hover:text-white underline">Cetak manual (Ctrl+P)</button>
+        </div>
+    </div>
+
+    <!-- EXPORT PROGRESS MODAL -->
+    <div id="export-progress-modal" class="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="glass-card-gold p-6 rounded-2xl max-w-sm w-full border border-amber-400/50 shadow-2xl flex flex-col items-center text-center">
+            <div class="w-10 h-10 rounded-full border-2 border-amber-400 border-t-transparent animate-spin mb-4"></div>
+            <div class="text-sm font-bold text-white mb-2" id="export-progress-status">Menyiapkan penyusunan...</div>
+            <div class="w-full bg-white/10 rounded-full h-2 overflow-hidden mb-2">
+                <div id="export-progress-bar-fill" class="bg-gradient-to-r from-amber-400 to-yellow-300 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div class="text-[10px] font-mono text-gray-400">Mohon tunggu hingga proses selesai</div>
         </div>
     </div>
 
@@ -1527,27 +1739,16 @@
         const hudLayer = document.getElementById('hud-layer');
         const secretNotesModal = document.getElementById('secret-notes-modal');
         const secretNotesBody = document.getElementById('secret-notes-body');
-        const hudSlideCounter = document.getElementById('hud-slide-counter');
 
-        // Secret double-tap listener for mobile presenter notes
-        let lastCounterTap = 0;
-        if (hudSlideCounter) {
-            hudSlideCounter.addEventListener('click', () => {
-                const now = Date.now();
-                if (now - lastCounterTap < 350) {
-                    toggleSecretNotes();
-                }
-                lastCounterTap = now;
-            });
-        }
-
-        // Web Audio API Mechanical Click Synthesizer
+        // Web Audio API Synthesizer for Authentic Mechanical Switch Click
         function playLampClickSound() {
             try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 if (!AudioContext) return;
                 const ctx = new AudioContext();
+                if (ctx.state === 'suspended') ctx.resume();
                 
+                // Mechanical Transient Click
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'triangle';
@@ -1560,6 +1761,7 @@
                 osc.start();
                 osc.stop(ctx.currentTime + 0.05);
 
+                // Spring Rebound Noise Burst
                 const bufferSize = ctx.sampleRate * 0.03;
                 const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
                 const output = noiseBuffer.getChannelData(0);
@@ -1577,6 +1779,7 @@
             } catch (e) {}
         }
 
+        // Live Elapsed Presentation Timer
         function updateLiveTimer() {
             if (!presentationStartTime) return;
             const elapsedMs = Date.now() - presentationStartTime;
@@ -1587,200 +1790,175 @@
         }
 
         const speakerNotesData = {
-            0: `[PEMBUKAAN INTERAKTIF - FORMULA S.O.C.I.A.L & GAYA ANALITIS FERRY IRWANDI]
-Target Waktu: 00:00 - 01:30 (Durasi ~1.5 Menit)
+            0: `[PEMBUKAAN SISTEMIK & HOOK ANALITIS]
+Selamat pagi kepada yang terhormat Bapak Dosen Pengampu Dr. H. Mulyawan Safwandy Nugraha, M.Ag., M.Pd., serta rekan-rekan civitas akademika Magister MPI UIN Sunan Gunung Djati Bandung.
 
-• S (Story): "Bayangkan sebuah madrasah atau pondok pesantren di daerah. Suatu hari mereka menerima bantuan puluhan unit laptop canggih dari program pemerintah. Semua orang bertepuk tangan, difoto untuk laporan serah terima. Tapi saat kita berkunjung setahun kemudian, laptop-laptop itu tersimpan rapi di dalam lemari kaca berdebu, digembok rapat, tak pernah dinyalakan. Alasannya klasik: para guru takut merusaknya, dan kepala madrasahnya bingung bagaimana mengintegrasikan teknologi itu ke dalam kegiatan belajar harian."
+Coba kita bayangkan satu skenario yang sangat sering terjadi di sekitar kita. Sebuah madrasah atau pondok pesantren di daerah menerima bantuan puluhan laptop dan smartboard layar sentuh dari program pemerintah. Ada seremoni potong pita, semua orang tersenyum, berfoto bersama, dan masuk berita. Tapi ketika kita berkunjung kembali setahun kemudian, perangkat-perangkat canggih itu tersimpan rapi di dalam lemari kaca berdebu, digembok rapat, dan hampir tidak pernah dinyalakan. Para guru cemas akan merusaknya, sementara pimpinan lembaga bingung bagaimana memadukan gawai tersebut ke dalam kurikulum harian.
 
-• O (Observation): "Ini adalah potret telanjang dari apa yang saya sebut sebagai 'fetisisme perangkat'. Di Indonesia, kita sering kali mengira bahwa dengan membeli komputer, memasang Wi-Fi, atau membuat akun media sosial, sebuah institusi otomatis telah bertransformasi secara digital. Kita lupa bahwa kita sedang membeli artefak masa depan dengan cara berpikir masa lalu."
+Fenomena ini memperlihatkan apa yang sering disebut sebagai ilusi pengadaan teknologi—sebuah pola pikir di mana kita merasa bahwa begitu membeli komputer atau memasang WiFi kencang, institusi kita otomatis telah bertransformasi secara digital. Kita membeli teknologi masa depan, namun mengelolanya dengan pola pikir masa lalu.
 
-• C (Connection): "Bapak, Ibu Dewan Penguji, dan rekan-rekan sekalian. Pertanyaan mendasar yang harus kita jawab hari ini adalah: apakah problem digitalisasi pendidikan Islam kita benar-benar karena kita kekurangan alat canggih? Ataukah kita sedang menghadapi krisis kepemimpinan—sebuah kegagalan orkestrasi budaya, manusia, dan nilai?"
+Pertanyaan mendasar yang kita bedah hari ini adalah: apakah masalah digitalisasi pendidikan Islam kita benar-benar karena kita kekurangan alat canggih? Ataukah kita sedang menghadapi krisis kepemimpinan—sebuah kegagalan dalam menyelaraskan manusia, budaya, dan nilai-nilai kelembagaan?
 
-• I (Insight): "Untuk mengurai persoalan ini secara objektif dan berbasis data empiris, saya menyusun Systematic Literature Review terhadap 49 studi ilmiah terakreditasi kurun waktu 2023 hingga 2026. Temuan utamanya sangat tegas: 67.3% persoalan terbesar di lapangan justru berakar pada resistensi kultural dan disorientasi kepemimpinan."
+Untuk membuktikannya secara objektif berdasarkan data empiris, saya menyusun kajian Systematic Literature Review—sebuah metode penelitian terstandarisasi untuk menapis dan menyaring puluhan riset ilmiah secara ketat dan transparan—terhadap 49 studi terakreditasi kurun waktu 2023 hingga 2026. 
 
-• A (Agenda): "Dalam 10 menit ke depan, saya Akbar Tausiur Rido akan membedah anatomi data ini: dari ontologi masalah, disparitas regulasi, ketimpangan latar madrasah vs pesantren, bias metodologis, taksonomi tiga pilar masalah, hingga lima agenda riset strategis masa depan."
+Dalam 10 menit ke depan, saya Akbar Tausiur Rido akan mengajak Bapak dan rekan-rekan menelusuri anatomi masalah ini: dari hakikat ontologisnya, jurang disparitas regulasi, ketimpangan latar madrasah versus pesantren, bias metodologis, taksonomi tiga pilar masalah, hingga peta jalan riset masa depan.
 
-• L (Lo-faen / Aksi): "Sekarang, perkenankan saya menarik bandul tali saklar lampu di atas layar ini untuk menyalakan sorotan dan memulai pemaparan ilmiah kita."
-[Aksi: Tarik atau klik tali saklar lampu hingga menyala terang. Lalu lanjutkan ke Slide 1].`,
+Perkenankan saya menarik bandul tali saklar lampu di atas layar ini untuk menyalakan sorotan dan memulai diseminasi riset kita.`,
 
-            1: `[SLIDE 1 - ONTOLOGI MASALAH: DIGITALISASI BUKAN SEKADAR TEKNOLOGI]
-Target Waktu: 01:30 - 02:15 (Durasi ~45 Detik)
+            1: `Begitu lampu ini menyala, sorotan pertama kita langsung tertuju pada akar pemikiran riset ini.
 
-• Penjelasan Visual Layar:
-"Perhatikan layar di hadapan Bapak/Ibu sekalian. Judul besar di atas menegaskan premis ontologis riset ini: 'Digitalisasi tidak sama dengan sekadar pengadaan teknologi'. Di bawahnya, saya memetakan empat pilar struktural yang saling bertautan: Pilar 01 Teknologi (hardware dan jaringan); Pilar 02 Manusia (guru, santri, dan staf); Pilar 03 Budaya (otoritas tradisi dan nilai kekiaian); serta Pilar 04 yang saya beri bingkai emas menyala: Kepemimpinan sebagai sang dirigen sistem."
+Di dunia filsafat ilmu ada istilah ontologis. Istilah ini terdengar berat, namun secara sederhana 'ontologis' bermakna mencari hakikat terdalam dari suatu hal: sebenarnya apa esensi sejati dari digitalisasi itu?
 
-• Narasi Kritis & Argumen Ilmiah:
-"Mayoritas pengambil kebijakan kita terjebak pada asumsi sempit bahwa digitalisasi selesai di pilar pertama: beli laptop, pasang internet, urusan beres. Padahal, rujukan Mukti (2026) dan Bakr dkk. (2026) membuktikan bahwa transformasi digital justru berubah menjadi problematika kepemimpinan yang akut ketika teknologi tersebut dipaksakan masuk tanpa menyiapkan manusianya dan tanpa menegosiasikan nilai-nilai kelembagaannya. Kepemimpinan digital bukan perkara keterampilan teknis mengoperasikan software, melainkan seni mengorkestrasi nilai agar modernisasi memperkuat, bukan mereduksi ruh pesantren dan madrasah."
+Digitalisasi bukanlah sekadar urusan belanja perkakas teknis. Di layar ini, kita melihat ada empat pilar struktural yang saling bertaut: Pilar 01 Teknologi mencakup hardware dan jaringan; Pilar 02 Manusia mencakup guru, santri, dan staf; Pilar 03 Budaya mencakup tradisi kekiaian dan adab pesantren; serta Pilar 04 yang saya beri bingkai emas: Kepemimpinan sebagai sang dirigen sistem.
 
-• Jembatan Transisi ke Slide 2:
-"Lalu, mengapa benturan ini begitu masif terjadi di lapangan? Mari kita cermati ketegangan struktural antara laju regulasi pemerintah melawan daya serap riil lembaga pada diagram di slide 2."`,
+Berdasarkan kajian Mukti (2026) dan Bakr dkk. (2026), transformasi digital justru berubah menjadi problematika kepemimpinan yang pelik ketika teknologi dipaksakan masuk tanpa menyiapkan kapasitas manusianya dan tanpa menegosiasikan budayanya. Kepemimpinan digital bukanlah keterampilan teknis membagikan tablet atau mengoperasikan aplikasi, melainkan seni mengorkestrasi nilai agar teknologi memperkuat, bukan mereduksi ruh keislaman.
 
-            2: `[SLIDE 2 - DISPARITAS ORGANISASIONAL: LAJU REGULASI VS DAYA SERAP NYATA]
-Target Waktu: 02:15 - 03:00 (Durasi ~45 Detik)
+Lalu, mengapa benturan ini begitu masif terjadi di lapangan? Ketegangan ini berakar langsung pada jurang ketimpangan antara laju aturan pemerintah berhadapan dengan daya serap nyata para guru di sekolah.`,
 
-• Penjelasan Visual Layar:
-"Pada Slide 2 ini, saya menyajikan diagram batang disparitas yang mengukur ketimpangan kecepatan. Batang gradasi emas di atas menunjukkan Laju Tuntutan Regulasi & Akuntabilitas Data yang melesat di angka 85%. Sementara batang merah di bawahnya menunjukkan Kapasitas Nyata Penyerapan Organisasi SDM yang tertinggal jauh di angka 38.8%."
+            2: `Menyambung benturan tadi, jurang ketimpangan ini dalam bahasa akademik kita sebut sebagai disparitas organisasional—yaitu jarak pemisah yang sangat curam antara apa yang dituntut dari atas melawan apa yang sanggup dijalankan di bawah.
 
-• Narasi Kritis & Argumen Ilmiah:
-"Kementerian Agama terus meluncurkan instrumen digital: EMIS, Rapor Digital Madrasah (RDM), simpatika, hingga presensi berbasis biometrik. Tekanannya mencapai 85%—sangat agresif dan menuntut pelaporan instan. Namun di lapangan, kesiapan nyata SDM guru dan tenaga kependidikan kita hanya mampu menyerap 38.8%. Terjadi jurang pemisah yang menganga sebesar 46.2%! Temuan kunci Biladina & Qadriah (2026) menegaskan: ketika transformasi dipaksakan berjalan jauh lebih cepat daripada kesiapan struktur internal organisasi, yang lahir bukanlah efisiensi tata kelola, melainkan formalisme semu dan kepanikan administratif. Guru kelelahan mengisi data di aplikasi, sementara esensi pedagogis di ruang kelas terabaikan."
+Di satu sisi, Kementerian Agama secara agresif menuntut akuntabilitas data melalui EMIS, Rapor Digital Madrasah (RDM), simpatika, dan presensi biometrik yang intensitas tuntutannya mencapai 85%. Namun di sisi lain, kapasitas nyata penyerapan SDM guru di lapangan hanya berada di angka 38.8%. 
 
-• Jembatan Transisi ke Slide 3:
-"Melihat realitas ketimpangan yang sedemikian mencolok ini, bagaimana komunitas akademik meresponsnya dalam empat tahun terakhir? Mari kita bedah tren publikasi ilmiah pada grafik vertikal di slide 3."`,
+Artinya, ada kesenjangan struktural sebesar 46.2%!
 
-            3: `[SLIDE 3 - TREN PUBLIKASI 2023-2026: RISET MELEJIT TAPI TERFRAGMENTASI]
-Target Waktu: 03:00 - 03:45 (Durasi ~45 Detik)
+Sebagaimana dibuktikan oleh Biladina & Qadriah (2026), ketika regulasi memaksa lembaga berlari dengan kecepatan tinggi sementara kesiapan internal guru baru sanggup berjalan santai, yang lahir bukanlah kemajuan substantif, melainkan kepanikan administratif. Para guru menghabiskan energi berjam-jam di depan layar mengisi form aplikasi demi memenuhi laporan formalitas, sementara esensi mendidik dan mendampingi karakter santri di kelas justru terpinggirkan.
 
-• Penjelasan Visual Layar:
-"Di hadapan Bapak/Ibu terpampang grafik batang vertikal dengan skala sumbu Y terkalibrasi dari 0 hingga 24 studi. Perhatikan eskalasi kolomnya: tahun 2023 hanya ada 3 artikel (6.1%), naik ke 8 artikel di 2024 (16.3%), melonjak ke 14 artikel di 2025 (28.6%), dan mencapai puncaknya pada tahun 2026 dengan 24 artikel atau mewakili 49.0% dari keseluruhan korpus."
+Melihat kondisi yang sedemikian menekan di lapangan, timbul pertanyaan wajar: bagaimana komunitas akademisi kita merespons kegelisahan ini dalam empat tahun terakhir?`,
 
-• Narasi Kritis & Argumen Ilmiah:
-"Hampir setengah dari seluruh literatur yang kita miliki lahir di tahun 2026 saja. Isu kepemimpinan digital sedang berada pada kurva perhatian akademik tertinggi. Namun, di balik angka fantastis ini, ada paradoks besar: risetnya melesat eksponensial, namun bidang kajiannya sangat terfragmentasi! Sebagian besar peneliti menulis artikel secara terisolasi di lokusnya masing-masing tanpa ada jembatan konseptual yang menyatukan. Akibatnya, kita punya timbunan laporan studi kasus individual, tetapi defisit sintesis sistemik yang mampu memotret akar persoalan secara komprehensif."
+            3: `Jawabannya: perhatian akademisi melonjak sangat drastis, namun menyimpan sebuah paradoks besar.
 
-• Jembatan Transisi ke Slide 4:
-"Karena kajian yang ada masih berserakan itulah, riset SLR ini merumuskan tiga pertanyaan kunci sebagai kompas investigasi, sebagaimana saya paparkan pada slide 4."`,
+Perhatikan eskalasi data pada grafik: tahun 2023 hanya tercatat 3 publikasi terakreditasi, naik menjadi 8 artikel pada 2024, 14 artikel pada 2025, dan melonjak tajam mencapai 24 artikel di tahun 2026. Artinya, hampir separuh atau 49% dari seluruh literatur yang kita miliki diproduksi hanya dalam kurun waktu satu tahun terakhir saja.
 
-            4: `[SLIDE 4 - TIGA PERTANYAAN PENELITIAN (RESEARCH QUESTIONS)]
-Target Waktu: 03:45 - 04:20 (Durasi ~35 Detik)
+Namun ada paradoks di balik angka ini. Publikasi ilmiah memang melesat cepat, tetapi bidang kajiannya sangat terfragmentasi—maksudnya terpecah-pecah dan berdiri sendiri secara terisolasi. 
 
-• Penjelasan Visual Layar:
-"Tiga kartu kaca modular di layar mengkristalisasikan fokus penyelidikan kita: RQ 01 berfokus pada Karakteristik Metodologis dan Distribusi Latar Penelitian; RQ 02 membedah Taksonomi Klaster Problematika Empiris; dan RQ 03 yang bercahaya emas memetakan Research Gap serta Agenda Riset Masa Depan."
+Sebagian besar peneliti menulis laporan kasus di satu madrasah kecil tanpa jembatan konseptual yang menghubungkan temuannya dengan teori besar. Akibatnya, korpus kita—istilah akademik untuk menyebut seluruh kumpulan dokumen riset yang kita telaah—sangat kaya akan cerita pengalaman individual, namun sangat miskin sintesis yang membedah akar persoalannya secara utuh.
 
-• Narasi Kritis & Argumen Ilmiah:
-"Riset tesis ini tidak didesain sekadar untuk menyusun daftar pustaka. Saya ingin menjawab tiga hal mendasar: Pertama, di mana letak bias lokus dan metodologi dalam literatur yang ada? Kedua, apa sebenarnya tiga penyakit kronis yang dihadapi para kepala madrasah dan pimpinan pesantren saat mendigitalkan lembaganya? Dan ketiga, kekosongan ilmiah apa yang harus segera diisi agar riset di masa mendatang tidak mengulang-ulang hal yang sama?"
+Karena literatur yang ada masih berserakan itulah, tinjauan sistematis ini hadir dengan merumuskan tiga pertanyaan kompas agar penyelidikan kita terarah dan berbobot.`,
 
-• Jembatan Transisi ke Slide 5:
-"Untuk menjawab ketiga pertanyaan berbobot tersebut secara teruji, metodologi apa yang saya gunakan? Mari kita telusuri alur seleksi PRISMA 2020 pada slide 5."`,
+            4: `Ketiga pertanyaan penelitian atau Research Questions ini dirancang sebagai peta investigasi agar riset ini bukan sekadar membuat rangkuman bacaan, melainkan membangun kejelasan ilmiah.
 
-            5: `[SLIDE 5 - METODOLOGI & ALUR SELEKSI PRISMA 2020]
-Target Waktu: 04:20 - 05:00 (Durasi ~40 Detik)
+Pertanyaan pertama, RQ 01, membedah karakteristik metodologis dan distribusi latar penelitian. Tujuannya adalah menelusuri di mana para peneliti selama ini mengambil data, dan cara apa yang mereka gunakan. Kita ingin membongkar apakah ada bias tersembunyi dalam korpus literatur kita.
 
-• Penjelasan Visual Layar:
-"Slide 5 memperlihatkan corong penapisan sistematis sesuai panduan baku PRISMA 2020: Dari 136 rekaman yang diidentifikasi dari Google Scholar melalui Publish or Perish, disaring menjadi 82 rekaman setelah mengeluarkan artikel non-pendidikan Islam, dikerucutkan ke 54 artikel teks penuh yang dinilai kelayakannya, hingga menghasilkan 49 studi terpilih yang tervalidasi memenuhi kriteria PICOC."
+Pertanyaan kedua, RQ 02, berfokus mengidentifikasi seluruh problematika yang dilaporkan di lapangan lalu menyusun taksonominya. Taksonomi di sini berarti klasifikasi ilmiah yang mengelompokkan ragam masalah menjadi rumpun-rumpun yang teratur, sehingga kita paham mana masalah perangkat keras dan mana masalah benturan budaya.
 
-• Narasi Kritis & Argumen Ilmiah:
-"Seluruh proses penelusuran dikelola secara ketat menggunakan Publish or Perish, Zotero untuk validasi sitasi, SciSpace untuk ekstraksi matriks temuan, serta Microsoft Excel untuk tabulasi data bibliometrik. Kami mengecualikan opini populer tanpa metodologi, membuang sekolah umum sekuler, dan hanya mempertahankan studi ilmiah yang fokus pada lembaga pendidikan Islam. 49 artikel inilah yang menjadi korpus sahih untuk diekstraksi."
+Dan pertanyaan ketiga, RQ 03, memetakan research gaps—yaitu celah-celah kosong dalam khazanah ilmu pengetahuan yang selama ini terlewatkan dan belum pernah dijawab oleh peneliti sebelumnya—sekaligus merumuskan prioritas agenda riset masa depan.
 
-• Jembatan Transisi ke Slide 6:
-"Dan ketika 49 artikel ini kita bedah lokus lapangannya, kita langsung menemukan anomali pertama yang sangat mencengangkan pada slide 6."`,
+Lalu, bagaimana protokol ilmiah yang saya tempuh untuk menjawab ketiga pertanyaan ini secara teruji tanpa bias subjektif?`,
 
-            6: `[SLIDE 6 - DISTRIBUSI LATAR EMPIRIS: KETIMPANGAN MADRASAH VS PESANTREN]
-Target Waktu: 05:00 - 05:45 (Durasi ~45 Detik)
+            5: `Untuk memastikan setiap data yang diambil benar-benar sahih dan dapat dipertanggungjawabkan, riset ini menerapkan protokol PRISMA 2020 serta kerangka kerja PICOC.
 
-• Penjelasan Visual Layar:
-"Perhatikan empat diagram batang horizontal di hadapan Bapak/Ibu sekalian. Batang emas paling dominan menunjukkan bahwa 64.3% atau 18 studi lapangan berpusat di Madrasah (MI, MTs, dan MA). Sementara Pondok Pesantren hanya menempati porsi 17.9% (5 studi), Sekolah Islam Swasta 10.7% (3 studi), dan PTKI hanya 7.1% (2 studi)."
+PRISMA 2020 adalah standar panduan internasional yang memastikan proses seleksi literatur berjalan objektif seperti corong penyaring: dari 136 artikel awal yang dijaring dari Google Scholar via Publish or Perish, disaring menjadi 82 artikel setelah mengeluarkan kajian non-pendidikan Islam, dikerucutkan ke 54 artikel teks penuh yang dinilai kelayakannya, hingga menghasilkan 49 studi terpilih yang lolos kriteria inklusi.
 
-• Narasi Kritis & Argumen Ilmiah:
-"Angka ini menyingkap tabir bias korpus yang sangat telanjang! Mengapa peneliti kita gemar meneliti madrasah? Jawabannya sederhana: madrasah memiliki struktur birokrasi Kementerian Agama yang terstandardisasi dan mudah diukur indikatornya. Sebaliknya, pondok pesantren ditinggalkan dan minim diteliti. Padahal, secara kultural dan sosiologis, ketegangan paling dinamis antara teknologi modern melawan tradisi justru terjadi di pesantren! Kita melewatkan lokus yang paling kaya masalah hanya karena mengejar kemudahan pengambilan data."
+Penyaringan ini dioperasionalkan secara ketat melalui kerangka PICOC. 
+Populasi-nya difokuskan pada para pemimpin lembaga pendidikan Islam, mencakup kepala madrasah, kiai pengasuh pesantren, dan pimpinan PTKI. 
+Intervensi-nya adalah praktik kepemimpinan digital yang mereka terapkan. 
+Elemen Comparison atau pembandingnya ditetapkan 'No Comparator'—artinya tanpa kelompok pembanding. Mengapa? Karena tinjauan ini bertujuan mengeksplorasi dan menyintesis seluruh ragam dinamika lapangan yang ada, bukan eksperimen laboratorium yang membutuhkan kelompok kontrol plasebo. 
+Outcome atau luaran yang diukur adalah problematika, tantangan, serta celah riset yang dilaporkan. 
+Dan Konteks-nya adalah ekosistem pesantren, madrasah, dan PTKI di Indonesia kurun waktu 2023 hingga 2026.
 
-• Jembatan Transisi ke Slide 7:
-"Ketimpangan ini ternyata bukan hanya terjadi pada lokus geografisnya saja, melainkan juga merambah ke dalam desain metodologi yang digunakan, seperti tampak pada diagram donat di slide 7."`,
+Ketika ke-49 studi yang lolos saringan baku ini kita bedah lokus lapangannya, kita langsung menemukan satu fakta bias yang sangat mencolok.`,
 
-            7: `[SLIDE 7 - KETIMPANGAN METODOLOGIS: DOMINASI KUALITATIF DESKRIPTIF]
-Target Waktu: 05:45 - 06:30 (Durasi ~45 Detik)
+            6: `Fakta bias itu tampak sangat jelas pada diagram di hadapan kita: korpus riset kita ternyata sangat berat sebelah.
 
-• Penjelasan Visual Layar:
-"Pada Slide 7, diagram donat emas di sisi kiri memperlihatkan angka mutlak 81.6% untuk pendekatan kualitatif dan studi pustaka deskriptif (40 studi). Di sisi kanan, matriks metode menunjukkan bahwa pendekatan kuantitatif korelasional hanya 8.2% (4 studi), mixed-method 6.1% (3 studi), dan riset pengembangan R&D hanya 4.1% (2 studi)."
+Dari studi yang berbasis lapangan empiris, sebanyak 64.3% atau 18 studi menumpuk di jenjang Madrasah—mulai dari MI, MTs, hingga MA. Sebaliknya, Pondok Pesantren yang menyimpan dinamika tradisi dan otoritas keilmuan paling unik justru hanya mencakup 17.9% atau 5 studi, disusul sekolah Islam swasta 10.7%, dan PTKI sebesar 7.1%.
 
-• Narasi Kritis & Argumen Ilmiah:
-"Implikasi metodologis dari angka 81.6% ini sangat serius bagi perkembangan disiplin ilmu Manajemen Pendidikan Islam. Literatur kita saat ini mengalami apa yang saya sebut sebagai 'surplus narasi, tetapi defisit bukti empiris'. Kita kaya akan deskripsi wawancara tentang kepala madrasah yang visioner, namun kita sangat miskin pengujian model kausal berbasis data terukur, miskin analisis SEM-PLS, dan ketiadaan riset eksperimental longitudinal. Klaim-klaim keberhasilan transformasi digital selama ini baru sebatas persepsi administratif di atas kertas."
+Coba kita cermati secara kritis: mengapa para peneliti kita gemar sekali meneliti madrasah dan menganaktirikan pesantren? 
 
-• Jembatan Transisi ke Slide 8:
-"Pertanyaannya: dari 49 studi tersebut, masalah konkret apa yang paling sering dilaporkan di lapangan? Mari kita bedah taksonominya pada slide 8."`,
+Jawabannya adalah kepatuhan administratif. Madrasah memiliki struktur birokrasi Kementerian Agama yang baku, instrumennya seragam, dan datanya mudah diambil melalui angket. Sementara pesantren memiliki otoritas kiai yang mandiri dan tradisi yang berlapis. Peneliti kita cenderung memilih jalan pintas yang nyaman, sehingga pesantren yang sarat pergulatan nilai justru terabaikan dari peta riset intensif.
 
-            8: `[SLIDE 8 - TAKSONOMI PROBLEMATIKA: TIGA TITIK TEKANAN UTAMA]
-Target Waktu: 06:30 - 07:20 (Durasi ~50 Detik)
+Ketimpangan ini ternyata bukan hanya terjadi pada tempat penelitiannya, melainkan merembet langsung ke dalam cara para peneliti mengambil kesimpulan ilmiah.`,
 
-• Penjelasan Visual Layar:
-"Di Slide 8, seluruh problematika lapangan mengkristal ke dalam Tiga Klaster Utama: Klaster 01 Infrastruktur & Finansial dengan prevalensi 67.3%; Klaster 02 Kesenjangan Literasi SDM sebesar 61.2%; dan Klaster 03 beraksen emas yang sangat khas: Resistensi Kultural yang juga bertengger di angka 67.3%."
+            7: `Jika tadi tempat penelitiannya bias ke madrasah, pada aspek metodologi risetnya bias ke narasi permukaan.
 
-• Narasi Kritis & Argumen Ilmiah:
-"Perhatikan data empiris ini: Klaster 01 (koneksi internet tidak stabil, keterbatasan komputer, anggaran minim) muncul di 67.3% studi menurut Suratman (2024) dan Ersalmina (2026). Klaster 02 (guru senior yang enggan beradaptasi dan pelatihan yang tidak berkelanjutan) mencapai 61.2% menurut Ratnawati (2025). Namun yang paling menarik adalah Klaster 03: Resistensi Kultural berbobot persis sama tingginya dengan problem infrastruktur finansial, yakni 67.3%! Ini membuktikan bahwa ketiadaan uang dan perangkat keras bukanlah satu-satunya musuh digitalisasi; resistensi budaya adalah tembok penghalang yang berbobot sama beratnya."
+Sebanyak 81.6% atau 40 artikel bertumpu pada pendekatan kualitatif deskriptif dan telaah pustaka. Sementara pendekatan kuantitatif korelasional hanya 8.2%, metode campuran 6.1%, dan riset pengembangan R&D sebesar 4.1%.
 
-• Jembatan Transisi ke Slide 9:
-"Mari kita selami lebih dalam: mengapa resistensi kultural ini bisa sekuat itu di lembaga pendidikan Islam? Slide 9 membedah dialektika ketegangan tersebut."`,
+Kualitatif deskriptif tentu bernilai tinggi untuk menggali cerita dan persepsi kepala sekolah melalui wawancara mendalam. Namun masalahnya, disiplin ilmu Manajemen Pendidikan Islam saat ini berada pada kondisi surplus narasi, tetapi defisit pembuktian empiris.
 
-            9: `[SLIDE 9 - DUAL CHALLENGE: MODERNISASI VS OTORITAS KEKIAIAN]
-Target Waktu: 07:20 - 08:10 (Durasi ~50 Detik)
+Kita dibanjiri ratusan lembar kutipan wawancara tentang betapa visionernya kepemimpinan digital seorang kepala madrasah, namun kita hampir tidak memiliki uji kausalitas terukur. Uji kausalitas adalah pembuktian ilmiah berbasis angka statistik yang menguji apakah gaya kepemimpinan digital itu benar-benar menjadi penyebab langsung naiknya efektivitas guru dan mutu madrasah, ataukah klaim keberhasilan itu hanya persepsi formalitas di atas kertas.
 
-• Penjelasan Visual Layar:
-"Di Slide 9, terdapat visual dialektika dua kutub yang dihubungkan oleh kepemimpinan: Kutub Kiri Modernisasi Digital (efisiensi, big data, transparansi); Kutub Kanan Otoritas Tradisi Kiai (sanad keilmuan, keteladanan tatap muka, adab); dan di tengahnya berdiri kartu emas: Pemimpin sebagai Negosiator Budaya."
+Kendati mayoritas riset bertumpu pada cerita kualitatif, ketika temuan dari 49 studi tersebut disintesis secara utuh, seluruh persoalan lapangan mengerucut pada tiga klaster tekanan utama.`,
 
-• Narasi Kritis & Argumen Ilmiah:
-"Saya ingin mengoreksi kekeliruan berpikir yang sering terjadi: resistensi di kalangan pesantren sering disalahpahami sebagai sikap anti-kemajuan. Pandangan itu keliru besar! Studi Manaf (2026) dan Riyadi (2025) membuktikan bahwa penolakan santri dan pengurus pesantren terhadap keterbukaan gawai adalah 'tindakan protektif yang sangat rasional'. Kiai khawatir kehadiran algoritma dan arus informasi liar merusak adab santri, melunturkan keberkahan musyafahah (belajar tatap muka), dan mengikis sanad keilmuan. Pemimpin digital di pesantren tidak bisa bertindak seperti teknokrat korporasi yang memaksakan aplikasi; ia harus tampil sebagai negosiator budaya yang mampu membuktikan bahwa teknologi hadir untuk memperkuat dakwah, bukan menggantikan otoritas moral sang kiai."
+            8: `Ketiga klaster tekanan inilah yang menjadi taksonomi utama atau pengelompokan inti dari problematika kepemimpinan digital kita saat ini.
 
-• Jembatan Transisi ke Slide 10:
-"Oleh karena itu, cara pandang kita terhadap transformasi digital harus diubah dari parsial menjadi sistemik, sebagaimana dirumuskan pada slide 10."`,
+Klaster 01 adalah Infrastruktur & Finansial dengan tingkat laporan mencapai 67.3%. Masalahnya berupa jaringan internet yang tidak stabil, keterbatasan perangkat laptop, dan anggaran minim sebagaimana dipetakan oleh Suratman (2024).
 
-            10: `[SLIDE 10 - PANDANGAN SISTEMIK: TRANSFORMASI ORGANISASIONAL UTUH]
-Target Waktu: 08:10 - 08:50 (Durasi ~40 Detik)
+Klaster 02 adalah Kesenjangan Literasi SDM sebesar 61.2%. Kendalanya berpusat pada adaptasi guru senior yang lambat serta pelatihan yang bersifat sporadis atau sekadar webinar sekali jalan tanpa tindak lanjut, seperti dicatat Ratnawati (2025).
 
-• Penjelasan Visual Layar:
-"Slide 10 memetakan transformasi ke dalam empat pilar sekuensial yang saling mengunci: Tahap 1 Infrastruktur & Akses; Tahap 2 Literasi & Kompetensi Pedagogis; Tahap 3 Negosiasi Nilai & Legitimasi Kultural; dan Tahap 4 Tata Kelola Berkelanjutan berbasis penjaminan mutu terpadu."
+Namun yang paling menyita perhatian adalah Klaster 03: Resistensi Kultural, yang mencatat angka keterjadian persis sama tingginya dengan masalah infrastruktur finansial, yakni 67.3%, sebagaimana diungkap oleh Manaf (2026) dan Riyadi (2025).
 
-• Narasi Kritis & Argumen Ilmiah:
-"Transformasi digital bukanlah proyek pengadaan barang yang selesai saat berita acara ditandatangani. Ia adalah metamorfosis sistemik. Kesalahan fatal sebagian besar yayasan pendidikan Islam adalah menghabiskan 90% anggarannya hanya untuk Tahap 1 membeli laptop dan smart board, sementara anggaran untuk pelatihan guru di Tahap 2 dan forum musyawarah nilai di Tahap 3 bernilai nol rupiah. Hasilnya? Perangkat digital tersebut hanya menjadi monumen mati di sudut ruangan. Tanpa tata kelola yang terintegrasi pada Tahap 4, seluruh investasi teknologi akan sia-sia."
+Data ini membongkar mitos yang selama ini dipercaya banyak orang. Kegagalan digitalisasi lembaga pendidikan Islam bukan semata-mata karena ketiadaan komputer atau minimnya dana; tembok resistensi budaya memiliki bobot rintangan yang sama beratnya.
 
-• Jembatan Transisi ke Slide 11:
-"Bagaimana posisi sentral kepemimpinan di tengah tiga lapisan sistemik ini? Mari kita perhatikan model radar konsentris pada slide 11."`,
+Mengapa benturan budaya ini bisa begitu kuat di lembaga pendidikan Islam? Mari kita bedah ketegangan dialektika yang terjadi di baliknya.`,
 
-            11: `[SLIDE 11 - MODEL TAKSONOMI TIGA LAPISAN KEPEMIMPINAN SISTEMIK]
-Target Waktu: 08:50 - 09:35 (Durasi ~45 Detik)
+            9: `Banyak pengamat luar mengira bahwa resistensi atau keengganan santri dan pengasuh pesantren mengadopsi teknologi digital adalah sikap kolot yang anti-kemajuan. Pandangan itu sangat keliru.
 
-• Penjelasan Visual Layar:
-"Di sisi kiri Slide 11, terdapat animasi sistem orbit tata surya berputar dengan titik planet penanda. Di inti matahari yang bercahaya emas tertera 'Digital Leadership'. Inti ini dikelilingi orbit Lapis 1 Ekosistem Fisik Terluar (Infrastruktur 67.3%) dan orbit Lapis 2 Ekosistem Aktor (Literasi SDM 61.2%), berpadu dengan Lapis 3 Inti Nilai (Kultur, Otoritas Kiai, dan Etika Islam 67.3%)."
+Di pesantren, terjadi apa yang kita sebut sebagai dual challenge atau dialektika dua kutub yang saling menarik. Di kutub pertama ada tuntutan modernisasi digital: efisiensi data, otomatisasi, dan transparansi. Namun di kutub kedua berdiri kokoh tradisi otoritas kekiaian.
 
-• Narasi Kritis & Argumen Ilmiah:
-"Inilah model sintesis konseptual orisinal dari riset tesis saya. Pemimpin digital pada lembaga pendidikan Islam tidak boleh terperangkap di salah satu lapisan saja. Jika ia hanya berkutat di Lapis 1 fisik, ia turun kelas menjadi staf pengadaan barang. Jika ia hanya sibuk di Lapis 2 guru, ia sekadar menjadi instruktur pelatihan. Dan jika ia hanya diam di Lapis 3 tradisi, lembaganya akan tergilas zaman. Pemimpin sejati adalah orkestrator yang berdiri di pusat episentrum, mengintegrasikan instrumen fisik, kapasitas manusia, dan nilai-nilai luhur keislaman menjadi satu kesatuan visi yang utuh."
+Bagi pesantren, belajar agama bukan sekadar mentransfer file PDF atau menonton video ceramah. Ada yang namanya sanad keilmuan—sebuah rantai transmisi ilmu dan berkah yang bersambung langsung dari guru ke murid melalui tatap muka langsung, keteladanan akhlak, dan pembentukan adab. 
 
-• Jembatan Transisi ke Slide 12:
-"Setelah memetakan anatomi masalah ini, pertanyaan paling krusial bagi seorang akademisi adalah: celah ilmiah apa yang masih tersisa dalam literatur kita? Mari kita bedah lima research gaps pada slide 12."`,
+Ketika gawai pintar masuk tanpa filter, para kiai mengkhawatirkan santri akan belajar agama secara instan dari algoritma media sosial yang tidak jelas sanadnya, sehingga melunturkan adab dan takzim kepada guru. Penolakan di kalangan pesantren sesungguhnya adalah tindakan protektif yang sangat rasional untuk menjaga kemurnian transmisi keilmuan dari disrupsi informasi liar.
 
-            12: `[SLIDE 12 - LIMA RESEARCH GAPS (CELAH PENELITIAN)]
-Target Waktu: 09:35 - 10:15 (Durasi ~40 Detik)
+Di sinilah letak ujian sesungguhnya bagi seorang pemimpin: ia tidak bisa bersikap arogan seperti teknokrat korporasi yang memaksakan aplikasi, melainkan harus tampil sebagai negosiator budaya yang membuktikan bahwa teknologi hadir untuk memperluas dakwah, bukan menggusur otoritas kiai.
 
-• Penjelasan Visual Layar:
-"Slide 12 merinci lima celah ilmiah konkret yang berhasil diidentifikasi dari sintesis 49 studi: Gap 01 Metodologis (minimnya studi longitudinal); Gap 02 Kontekstual (pesantren luar Jawa tertinggal dari riset); Gap 03 Instrumentasi (ketiadaan alat ukur baku kepemimpinan digital Islami); Gap 04 Uji Model (model normatif kepemimpinan profetik belum pernah diuji secara empiris); dan Gap 05 Evaluasi (ketiadaan indikator kematangan tata kelola digital)."
+Dari benturan nilai ini, kita sampai pada pemahaman bahwa transformasi digital tidak akan pernah bisa diselesaikan secara sepotong-sepotong.`,
 
-• Narasi Kritis & Argumen Ilmiah:
-"Inilah sumbangsih teoretis terbesar dari kajian ini. Selama ini kita bangga mempublikasikan konsep-konsep kepemimpinan digital berbasis nilai profetik atau tauhidik. Namun jika ditelusuri secara metodologis, model-model tersebut baru sebatas anjuran moral normatif di atas kertas! Belum ada peneliti yang menurunkannya menjadi kuesioner skala Likert yang lolos uji validitas konstruk dan reliabilitas Cronbach's alpha, dan belum ada yang menguji dampaknya secara riil di lapangan."
+            10: `Transformasi digital bukanlah proyek pengadaan barang yang tuntas begitu dokumen serah terima laptop ditandatangani. Ia adalah sebuah metamorfosis organisasional yang utuh dan harus dilalui dalam empat tahapan sekuensial yang saling mengunci.
 
-• Jembatan Transisi ke Slide 13:
-"Bagaimana cara kita menjembatani kelima celah riset ini ke depan? Slide 13 menyajikan peta jalan agenda riset masa depan."`,
+Tahap 1 adalah Infrastruktur & Akses fisik: perangkat keras, kestabilan listrik, dan konektivitas internet.
+Tahap 2 adalah Literasi & Kompetensi SDM: melatih guru agar memiliki kematangan pedagogis digital.
+Tahap 3 adalah Negosiasi Nilai & Legitimasi Kultural: membuka ruang musyawarah agar pemanfaatan teknologi selaras dengan maqasid atau prinsip kemaslahatan pesantren.
+Dan Tahap 4 adalah Tata Kelola Mutu Berkelanjutan: sistem supervisi berkala dan penjaminan mutu terpadu.
 
-            13: `[SLIDE 13 - ROADMAP RISET MASA DEPAN: DARI DESKRIPSI KE EVIDENSI]
-Target Waktu: 10:15 - 10:55 (Durasi ~40 Detik)
+Penyakit kronis sebagian besar yayasan pendidikan Islam kita adalah menghabiskan seluruh anggarannya di Tahap 1 untuk membeli layar pintar, namun menyisakan nol rupiah untuk Tahap 2 melatih guru dan Tahap 3 berdialog budaya. Akibatnya, teknologi itu membeku di sudut ruangan tanpa dampak mutu nyata.
 
-• Penjelasan Visual Layar:
-"Pada Slide 13, pipa alur strategis membelah lima fase aksi riset berkesinambungan: Fase 01 Desain Longitudinal; Fase 02 Perluasan Konteks Pesantren Salaf Luar Jawa; Fase 03 Konstruksi & Validasi Instrumen Berbasis Maqasid; Fase 04 Pengujian Kausal SEM-PLS atas Model Profetik; dan Fase 05 Audit Kematangan Tata Kelola Digital Berkelanjutan."
+Seluruh dinamika multi-dimensi ini berhasil saya formulasikan ke dalam sebuah model sintesis konseptual yang utuh.`,
 
-• Narasi Kritis & Argumen Ilmiah:
-"Peta jalan ini adalah seruan aksi nyata bagi komunitas akademik Manajemen Pendidikan Islam. Kita harus berhenti mendaur ulang artikel studi kasus kualitatif deskriptif di satu madrasah yang sudah jenuh pembahasannya. Kita harus melangkah ke Fase 03 dan Fase 04: membuktikan efektivitas kepemimpinan digital secara kuantitatif dengan data empiris yang sahih, sehingga hasil riset kita mampu mempengaruhi kebijakan strategis di tingkat Kementerian Agama maupun yayasan pendidikan Islam."
+            11: `Model konseptual ini saya visualisasikan dalam analogi sistem tata surya kepemimpinan.
 
-• Jembatan Transisi ke Slide 14:
-"Sebagai puncaknya, tiba saatnya kita menyimpulkan seluruh esensi filosofis riset ini pada slide 14."`,
+Di orbit terluar, ditandai oleh planet emas berputar, terdapat Lapis 1 Ekosistem Fisik yang menaungi infrastruktur dan permodalan (67.3%). Bergerak ke orbit kedua, ditandai oleh planet cyan, terdapat Lapis 2 Ekosistem Aktor yang menaungi literasi dan budaya kolaboratif para guru (61.2%). Dan di orbit terdalam terdapat Lapis 3 Inti Nilai Luhur yang memelihara kultur, transmisi adab, dan etika Islam (67.3%).
 
-            14: `[SLIDE 14 - KESIMPULAN AKHIR & PEMADAMAN LAMPU]
-Target Waktu: 10:55 - 11:30 (Durasi ~35 Detik)
+Digital Leadership atau kepemimpinan digital berkedudukan sebagai sang matahari utama di pusat gravitasi.
 
-• Penjelasan Visual Layar:
-"Lampu gantung di atas layar menyala terang menyinari kalimat sintesis pamungkas: 'Kepemimpinan digital tidak boleh menggantikan nilai-nilai Islam. Ia harus bekerja melaluinya.' Di bawahnya tertera identitas saya Akbar Tausiur Rido, Magister MPI UIN Sunan Gunung Djati Bandung, beserta tombol dan tali saklar pemadam lampu."
+Seorang pemimpin lembaga pendidikan Islam tidak boleh hanya sibuk di Lapis 1 fisik, karena ia akan terdegradasi menjadi staf logistik pengadaan barang. Ia juga tidak boleh hanya terkurung di Lapis 2 pelatihan teknis. Pemimpin sejati adalah sang pusat gravitasi yang berdiri di episentrum, mengorkestrasi orbit infrastruktur dan kapasitas manusia agar berputar selaras mengelilingi inti nilai keislaman, tanpa membuat lembaga terlempar keluar jalur tradisinya.
 
-• Narasi Penutup & Refleksi Filosofis:
-"Bapak, Ibu Dewan Penguji yang saya hormati. Gelombang teknologi akan terus berganti; hari ini kecerdasan buatan, esok komputasi kuantum. Namun di lembaga pendidikan Islam, kepemimpinan digital tidak pernah didesain untuk menggantikan ruh keteladanan, keikhlasan kiai, dan keberkahan transmisi adab. Kepemimpinan digital hadir sebagai instrumen strategis untuk membawa nilai-nilai luhur tersebut menembus batas-batas zaman. Kini, dengan penuh takzim, saya mohon izin untuk memadamkan lampu sesi paparan ini."
-[Aksi: Tarik atau klik tali saklar di Slide 14 untuk mematikan lampu dan beralih ke Slide 15].`,
+Setelah membedah model anatomi ini, pertanyaan paling esensial bagi seorang peneliti adalah: celah ilmiah apa yang masih bolong dan belum terjawab dalam literatur kita?`,
 
-            15: `[SLIDE 15 - OUTRO FINALE: LAMPU PADAM & RASA SYUKUR]
-Target Waktu: 11:30 - 12:00 (Durasi ~30 Detik)
+            12: `Berdasarkan sintesis terhadap 49 studi tersebut, teridentifikasi lima celah penelitian konkret atau research gaps yang selama ini luput dari perhatian akademisi.
 
-• Penjelasan Visual Layar:
-"Panggung presentasi kembali hening dan gelap gulita dengan lampu belajar dalam kondisi padam (mati), mengembalikan suasana tenang ruang sidang setelah pemaparan intensif. Terpampang tulisan bersahaja: 'TERIMA KASIH' dan kalimat hamdalah 'Alhamdulillahirobbil 'Alamin', diiringi identitas saya dan almamater tercinta UIN Sunan Gunung Djati Bandung."
+Celah 01 Metodologis: Kita mengalami defisit studi longitudinal—yaitu penelitian jangka panjang yang mengamati dampak kepemimpinan digital selama bertahun-tahun, bukan sekadar wawancara kilat beberapa hari.
+Celah 02 Kontekstual: Lokus pesantren salaf tradisional dan wilayah di luar Pulau Jawa masih sangat minim dieksplorasi.
+Celah 03 Instrumentasi: Belum ada alat ukur atau instrumen kuesioner baku kepemimpinan digital yang dirancang khusus berlandaskan nilai-nilai keislaman.
+Celah 04 Uji Model: Kita memiliki banyak tulisan konseptual mengenai model kepemimpinan profetik atau tauhidik, namun model-model tersebut baru sebatas anjuran moral normatif di atas kertas dan belum pernah diuji efektivitas empirisnya secara statistik.
+Serta Celah 05 Evaluasi: Belum tersedianya indikator baku untuk mengukur tingkat kematangan digital pada madrasah dan pesantren.
 
-• Narasi Pamungkas:
-"Alhamdulillahi Robbil 'Alamin. Seluruh rangkaian pertanggungjawaban akademik Systematic Literature Review ini telah saya sampaikan secara utuh. Terima kasih setinggi-tingginya saya haturkan kepada Dosen Pengampu Bapak Dr. H. Mulyawan Safwandy Nugraha, M.Ag., M.Pd., serta seluruh Dewan Penguji yang terhormat atas bimbingan dan masukannya. Waktu dan kesempatan selanjutnya saya kembalikan kepada pimpinan sidang untuk sesi tanya jawab dan pendalaman materi."`
+Kelima celah riset inilah yang kemudian saya konversi menjadi peta jalan agenda strategis masa depan.`,
+
+            13: `Peta jalan lima fase ini merupakan seruan aksi nyata bagi komunitas akademik Manajemen Pendidikan Islam.
+
+Fase 01 menginisiasi studi longitudinal untuk mengukur dampak jangka panjang kepemimpinan digital terhadap mutu lulusan madrasah.
+Fase 02 memperluas lokus penelitian multisitus ke pesantren-pesantren salaf di luar Pulau Jawa guna mengikis bias perkotaan.
+Fase 03 mengonstruksi dan memvalidasi alat ukur kepemimpinan digital berbasis maqasid syariah—yaitu kerangka tujuan luhur syariat demi menjaga kemaslahatan agama, akal, dan moral generasi muda.
+Fase 04 menguji hubungan kausalitas model kepemimpinan secara kuantitatif dengan sampel yang luas.
+Dan Fase 05 menetapkan standar audit kematangan tata kelola dan mitigasi risiko siber.
+
+Arah strategis ini bertujuan membawa disiplin ilmu kita naik kelas: bergeser dari sekadar memproduksi narasi studi kasus di satu sekolah, menuju pembuktian data berbasis bukti ilmiah kumulatif yang berdampak nyata bagi pengambil kebijakan.
+
+Dan pada puncaknya, seluruh rangkaian kajian ini mengerucut pada sebuah kesimpulan filosofis yang sangat mendalam.`,
+
+            14: `Sebagai kristalisasi penutup dari Systematic Literature Review ini:
+
+Kepemimpinan digital pada lembaga pendidikan Islam tidak boleh dan tidak akan pernah menggantikan nilai-nilai Islam, keikhlasan keteladanan kiai, maupun keberkahan transmisi adab. Kepemimpinan digital harus bekerja melaluinya.
+
+Gelombang teknologi akan terus berganti; hari ini kecerdasan buatan, esok komputasi kuantum. Namun di lembaga pendidikan Islam, kepemimpinan digital hadir bukan untuk mendewakan teknologi modern, melainkan sebagai instrumen dakwah strategis yang membawa nilai-nilai luhur keislaman melintasi zaman tanpa kehilangan identitas spiritualnya.
+
+Dengan memanjatkan rasa syukur atas terlaksananya seluruh paparan ini, perkenankan saya menarik saklar lampu ini untuk memadamkan sesi presentasi diseminasi tesis saya.`,
+
+            15: `Alhamdulillahi Robbil 'Alamin. Sesi pemaparan Systematic Literature Review telah selesai secara paripurna.
+
+Rasa hormat dan terima kasih setinggi-tingginya saya haturkan kepada Bapak Dosen Pengampu Dr. H. Mulyawan Safwandy Nugraha, M.Ag., M.Pd., serta rekan-rekan civitas akademika Magister Manajemen Pendidikan Islam UIN Sunan Gunung Djati Bandung atas perhatian dan diskusinya.
+
+Waktu dan kesempatan sepenuhnya saya kembalikan kepada forum untuk sesi pendalaman materi, tanya jawab, dan masukan konstruktif.`
         };
-
-        const baseChainHeight = 85;
-        const PULL_TRIGGER_THRESHOLD = 28;
 
         function setupPullCord(wrapperId, chainId, onTriggerCallback) {
             const wrapperEl = document.getElementById(wrapperId);
@@ -1793,35 +1971,38 @@ Target Waktu: 11:30 - 12:00 (Durasi ~30 Detik)
             let didDrag = false;
 
             function snapAndTrigger() {
+                const baseH = window.innerWidth >= 640 ? 85 : 70;
                 chainEl.style.transition = 'height 0.08s ease-out';
-                chainEl.style.height = `${baseChainHeight + 35}px`;
-                wrapperEl.style.setProperty('--pull-y', '35px');
+                chainEl.style.height = `${baseH + 34}px`;
+                wrapperEl.style.setProperty('--pull-y', '34px');
+
                 setTimeout(() => {
                     chainEl.style.transition = 'height 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                    chainEl.style.height = `${baseChainHeight}px`;
+                    chainEl.style.height = `${baseH}px`;
                     wrapperEl.classList.remove('idle-swaying');
                     wrapperEl.classList.add('snapping');
+
                     setTimeout(() => {
                         wrapperEl.classList.remove('snapping');
                         wrapperEl.classList.add('idle-swaying');
                         chainEl.style.transition = '';
                     }, 450);
-                    onTriggerCallback();
+
+                    if (typeof onTriggerCallback === 'function') {
+                        onTriggerCallback();
+                    }
                 }, 90);
             }
 
-            wrapperEl.addEventListener('click', (e) => {
-                if (didDrag) { didDrag = false; return; }
-                snapAndTrigger();
-            });
-
             function onPointerDown(e) {
+                if (e.button !== undefined && e.button !== 0) return;
                 isPulling = true;
                 didDrag = false;
                 startY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
                 pullDist = 0;
                 wrapperEl.classList.remove('idle-swaying', 'snapping');
-                window.addEventListener('mousemove', onPointerMove);
+
+                window.addEventListener('mousemove', onPointerMove, { passive: false });
                 window.addEventListener('mouseup', onPointerUp);
                 window.addEventListener('touchmove', onPointerMove, { passive: false });
                 window.addEventListener('touchend', onPointerUp);
@@ -1829,12 +2010,14 @@ Target Waktu: 11:30 - 12:00 (Durasi ~30 Detik)
 
             function onPointerMove(e) {
                 if (!isPulling) return;
-                if (e.cancelable && e.type === 'touchmove') e.preventDefault();
+                if (e.cancelable) e.preventDefault();
                 const clientY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
                 const deltaY = Math.max(0, clientY - startY);
-                pullDist = Math.min(deltaY * 0.75, 65);
+                pullDist = Math.min(deltaY * 0.85, 65);
                 if (pullDist > 6) didDrag = true;
-                chainEl.style.height = `${baseChainHeight + pullDist}px`;
+
+                const baseH = window.innerWidth >= 640 ? 85 : 70;
+                chainEl.style.height = `${baseH + pullDist}px`;
                 wrapperEl.style.setProperty('--pull-y', `${pullDist}px`);
             }
 
@@ -1846,69 +2029,85 @@ Target Waktu: 11:30 - 12:00 (Durasi ~30 Detik)
                 window.removeEventListener('touchmove', onPointerMove);
                 window.removeEventListener('touchend', onPointerUp);
 
-                if (pullDist > PULL_TRIGGER_THRESHOLD) {
-                    chainEl.style.height = `${baseChainHeight}px`;
+                const baseH = window.innerWidth >= 640 ? 85 : 70;
+                if (pullDist > 20) {
+                    chainEl.style.transition = 'height 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    chainEl.style.height = `${baseH}px`;
                     wrapperEl.classList.add('snapping');
-                    onTriggerCallback();
+                    setTimeout(() => {
+                        wrapperEl.classList.remove('snapping');
+                        wrapperEl.classList.add('idle-swaying');
+                        chainEl.style.transition = '';
+                    }, 450);
+                    if (typeof onTriggerCallback === 'function') {
+                        onTriggerCallback();
+                    }
                 } else if (!didDrag) {
-                    // Handled by click
+                    snapAndTrigger();
                 } else {
-                    chainEl.style.height = `${baseChainHeight}px`;
-                    wrapperEl.classList.add('idle-swaying');
+                    chainEl.style.transition = 'height 0.2s ease-out';
+                    chainEl.style.height = `${baseH}px`;
+                    setTimeout(() => {
+                        chainEl.style.transition = '';
+                        wrapperEl.classList.add('idle-swaying');
+                    }, 200);
                 }
             }
 
             wrapperEl.addEventListener('mousedown', onPointerDown);
-            wrapperEl.addEventListener('touchstart', onPointerDown, { passive: true });
+            wrapperEl.addEventListener('touchstart', onPointerDown, { passive: false });
         }
 
-        const slide0El = document.getElementById('slide-0');
+        // Slide 0 Switch Handler
         function activateLampOpening() {
             if (isLampTurnedOn) return;
             isLampTurnedOn = true;
             playLampClickSound();
-            slide0El.classList.add('lamp-active');
+            const slide0El = document.getElementById('slide-0');
+            if (slide0El) slide0El.classList.add('lamp-active');
 
+            // Automatic Fullscreen Request
             try {
                 const docEl = document.documentElement;
                 if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-                    if (docEl.requestFullscreen) {
-                        docEl.requestFullscreen().catch(() => {});
-                    } else if (docEl.webkitRequestFullscreen) {
-                        docEl.webkitRequestFullscreen();
-                    } else if (docEl.msRequestFullscreen) {
-                        docEl.msRequestFullscreen();
-                    }
+                    if (docEl.requestFullscreen) docEl.requestFullscreen().catch(() => {});
+                    else if (docEl.webkitRequestFullscreen) docEl.webkitRequestFullscreen();
                 }
             } catch (err) {}
 
             if (!isPresentationStarted) {
                 isPresentationStarted = true;
                 presentationStartTime = Date.now();
-                hudLayer.classList.remove('opacity-0');
-                hudLayer.classList.add('opacity-100');
+                if (hudLayer) {
+                    hudLayer.classList.remove('opacity-0');
+                    hudLayer.classList.add('opacity-100');
+                }
+                if (timerInterval) clearInterval(timerInterval);
                 timerInterval = setInterval(updateLiveTimer, 1000);
             }
         }
-        setupPullCord('lamp-cord-wrapper', 'lamp-cord-chain', activateLampOpening);
 
-        const slide14El = document.getElementById('slide-14');
+        // Slide 14 Switch Handler
         function turnOffLampToSlide15() {
             playLampClickSound();
+            const slide14El = document.getElementById('slide-14');
             if (slide14El) slide14El.classList.remove('lamp-active');
             goToSlide(15);
         }
-        setupPullCord('lamp-cord-wrapper-14', 'lamp-cord-chain-14', turnOffLampToSlide15);
 
-        const slide15El = document.getElementById('slide-15');
+        // Slide 15 Switch Handler
         function toggleLampSlide15() {
             playLampClickSound();
+            const slide15El = document.getElementById('slide-15');
             if (slide15El) slide15El.classList.toggle('lamp-active');
         }
-        setupPullCord('lamp-cord-wrapper-15', 'lamp-cord-chain-15', toggleLampSlide15);
 
+        // Slide 15 Outro Navigation Buttons
         function restartPresentationToSlide0() {
             playLampClickSound();
+            const slide0El = document.getElementById('slide-0');
+            const slide14El = document.getElementById('slide-14');
+            const slide15El = document.getElementById('slide-15');
             if (slide0El) slide0El.classList.remove('lamp-active');
             if (slide14El) slide14El.classList.remove('lamp-active');
             if (slide15El) slide15El.classList.remove('lamp-active');
@@ -1927,10 +2126,12 @@ Target Waktu: 11:30 - 12:00 (Durasi ~30 Detik)
 
         function returnToSlide14() {
             playLampClickSound();
+            const slide14El = document.getElementById('slide-14');
             if (slide14El) slide14El.classList.add('lamp-active');
             goToSlide(14);
         }
 
+        // Secret Speaker Notes Modal Handler
         function toggleSecretNotes() {
             isSecretNotesOpen = !isSecretNotesOpen;
             if (secretNotesModal) {
@@ -1941,6 +2142,1229 @@ Target Waktu: 11:30 - 12:00 (Durasi ~30 Detik)
                     secretNotesModal.classList.remove('opacity-100');
                     secretNotesModal.classList.add('opacity-0', 'pointer-events-none');
                 }
+            }
+        }
+
+        // Export Modal Handlers
+        function openExportModal() {
+            const modal = document.getElementById('export-modal');
+            if (modal) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.classList.add('opacity-100');
+            }
+        }
+
+        function closeExportModal() {
+            const modal = document.getElementById('export-modal');
+            if (modal) {
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        async function captureSlideCanvas(slideIndex) {
+            const originalSlide = document.getElementById(`slide-${slideIndex}`);
+            if (!originalSlide) return null;
+
+            const stage = document.createElement('div');
+            stage.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 1920px;
+                height: 1080px;
+                background-color: #050505;
+                color: #FFFFFF;
+                z-index: 99990;
+                overflow: hidden;
+                pointer-events: none;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                box-sizing: border-box;
+            `;
+
+            const clone = originalSlide.cloneNode(true);
+            clone.id = `export-clone-${slideIndex}`;
+            clone.classList.remove('exiting');
+            clone.classList.add('active');
+            clone.style.cssText = `
+                position: relative !important;
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 1920px !important;
+                max-height: 1080px !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                display: flex !important;
+                transform: none !important;
+                overflow: hidden !important;
+                padding: 3.5rem 5rem !important;
+                box-sizing: border-box !important;
+                justify-content: center !important;
+            `;
+
+            clone.querySelectorAll('.anim-element, h1, h2, .anim-title, .citation-tag').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+                el.style.transition = 'none';
+            });
+
+            clone.querySelectorAll('[data-count]').forEach(el => {
+                const val = el.getAttribute('data-count');
+                if (el.textContent.trim().endsWith('%') && !val.endsWith('%')) {
+                    el.textContent = val + '%';
+                } else {
+                    el.textContent = val;
+                }
+            });
+
+            clone.querySelectorAll('[data-width]').forEach(el => {
+                el.style.width = el.getAttribute('data-width');
+                el.style.transition = 'none';
+            });
+
+            clone.querySelectorAll('[data-height]').forEach(el => {
+                el.style.height = el.getAttribute('data-height');
+                el.style.transition = 'none';
+            });
+
+            const donut = clone.querySelector('#donut-segment');
+            if (donut) {
+                donut.style.strokeDashoffset = '46.2';
+                donut.style.transition = 'none';
+            }
+
+            if (slideIndex === 0 || slideIndex === 14) {
+                clone.classList.add('lamp-active');
+                const cone = clone.querySelector('.lamp-light-cone');
+                if (cone) cone.style.opacity = '1';
+                const bulb = clone.querySelector('.lamp-bulb');
+                if (bulb) {
+                    bulb.style.background = '#FFFBEB';
+                    bulb.style.boxShadow = '0 0 35px #FBBF24';
+                }
+                const lit = clone.querySelector('#lamp-lit-content');
+                if (lit) {
+                    lit.style.opacity = '1';
+                    lit.style.transform = 'none';
+                }
+                const curtain = clone.querySelector('#lamp-dormant-curtain');
+                if (curtain) curtain.remove();
+            }
+
+            clone.querySelectorAll('.pull-cord-wrapper, .cord-pull-hint, button, [class*="h-28"]').forEach(el => {
+                el.remove();
+            });
+
+            stage.appendChild(clone);
+            document.body.appendChild(stage);
+
+            await new Promise(r => setTimeout(r, 45));
+
+            try {
+                const canvas = await html2canvas(stage, {
+                    backgroundColor: '#050505',
+                    scale: 1,
+                    width: 1920,
+                    height: 1080,
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false
+                });
+                return canvas.toDataURL('image/jpeg', 0.94);
+            } catch (err) {
+                console.error(`Gagal render canvas slide ${slideIndex}:`, err);
+                return null;
+            } finally {
+                stage.remove();
+            }
+        }
+
+        function updateExportProgress(current, total, message) {
+            const progressModal = document.getElementById('export-progress-modal');
+            const fill = document.getElementById('export-progress-bar-fill');
+            const status = document.getElementById('export-progress-status');
+            
+            if (progressModal) {
+                progressModal.classList.remove('hidden');
+                progressModal.classList.add('flex');
+            }
+            if (fill) {
+                const pct = Math.round((current / total) * 100);
+                fill.style.width = `${pct}%`;
+            }
+            if (status) {
+                status.innerText = message || `Memproses Slide ${current} dari ${total}...`;
+            }
+        }
+
+        function finishExportProgress(msg) {
+            const status = document.getElementById('export-progress-status');
+            if (status) status.innerText = msg || "Selesai! File sedang diunduh.";
+            setTimeout(() => {
+                const progressModal = document.getElementById('export-progress-modal');
+                if (progressModal) {
+                    progressModal.classList.remove('flex');
+                    progressModal.classList.add('hidden');
+                }
+            }, 1400);
+        }
+
+        async function generatePPTX() {
+            closeExportModal();
+            updateExportProgress(0, totalSlides, "Menyiapkan penyusunan PPTX Native Editable...");
+
+            try {
+                if (typeof PptxGenJS === 'undefined') {
+                    throw new Error("Library PptxGenJS belum siap.");
+                }
+
+                const pptx = new PptxGenJS();
+                pptx.layout = 'LAYOUT_16x9';
+                pptx.author = 'Akbar Tausiur Rido';
+                pptx.company = 'Magister MPI UIN Sunan Gunung Djati Bandung';
+                pptx.title = 'Problematika Kepemimpinan Digital pada Lembaga Pendidikan Islam';
+                pptx.subject = 'Systematic Literature Review 2023-2026';
+
+                const C_BG = '050505';
+                const C_CARD = '121216';
+                const C_BORDER = '27272A';
+                const C_GOLD = 'FBBF24';
+                const C_GOLD_BORDER = 'D97706';
+                const C_GOLD_BG = '1A1710';
+                const C_WHITE = 'FFFFFF';
+                const C_GRAY = '9CA3AF';
+                const C_DARK_GRAY = '4B5563';
+                const C_CYAN = '38BDF8';
+                const C_RED = 'F87171';
+
+                function addSlideHeader(slide, tag, title, subtitle) {
+                    slide.addShape(pptx.ShapeType.roundRect, {
+                        x: 0.8, y: 0.35, w: 3.4, h: 0.28,
+                        rectRadius: 0.14,
+                        fill: { color: '201C12' },
+                        line: { color: C_GOLD_BORDER, width: 1 }
+                    });
+                    slide.addText(tag.toUpperCase(), {
+                        x: 0.8, y: 0.35, w: 3.4, h: 0.28,
+                        fontFace: 'Arial', fontSize: 8, bold: true, color: C_GOLD,
+                        align: 'center', valign: 'middle'
+                    });
+
+                    slide.addText(title, {
+                        x: 0.8, y: 0.7, w: 8.4, h: 0.75,
+                        fontFace: 'Arial', fontSize: 20, bold: true, color: C_WHITE,
+                        valign: 'middle'
+                    });
+
+                    if (subtitle) {
+                        slide.addText(subtitle, {
+                            x: 0.8, y: 1.45, w: 8.4, h: 0.3,
+                            fontFace: 'Arial', fontSize: 10, color: C_GRAY,
+                            valign: 'top'
+                        });
+                    }
+                }
+
+                // Slide 0: Judul
+                updateExportProgress(1, totalSlides, "Menyusun Slide 1 (Judul & Identitas)...");
+                const s0 = pptx.addSlide();
+                s0.background = { color: C_BG };
+                s0.addShape(pptx.ShapeType.roundRect, { x: 3.2, y: 1.35, w: 3.6, h: 0.32, rectRadius: 0.16, fill: { color: '201C12' }, line: { color: C_GOLD_BORDER, width: 1 } });
+                s0.addText("DISEMINASI RISET TESIS PASCASARJANA", { x: 3.2, y: 1.35, w: 3.6, h: 0.32, fontFace: 'Arial', fontSize: 9, bold: true, color: C_GOLD, align: 'center', valign: 'middle' });
+                s0.addText("PROBLEMATIKA KEPEMIMPINAN DIGITAL\nPADA LEMBAGA PENDIDIKAN ISLAM", {
+                    x: 0.6, y: 1.8, w: 8.8, h: 1.1,
+                    fontFace: 'Arial', fontSize: 24, bold: true, color: C_WHITE, align: 'center', valign: 'middle'
+                });
+                s0.addText("Systematic Literature Review & Pemetaan Research Gap (2023–2026)", {
+                    x: 1.0, y: 2.95, w: 8.0, h: 0.35,
+                    fontFace: 'Arial', fontSize: 12, color: C_GRAY, align: 'center'
+                });
+                s0.addShape(pptx.ShapeType.roundRect, { x: 2.2, y: 3.45, w: 5.6, h: 1.45, rectRadius: 0.15, fill: { color: C_GOLD_BG }, line: { color: C_GOLD_BORDER, width: 1.5 } });
+                s0.addText([
+                    { text: "AKBAR TAUSIUR RIDO\n", options: { fontSize: 14, bold: true, color: C_WHITE } },
+                    { text: "NIM 2269100087 | Magister MPI UIN SGD Bandung\n", options: { fontSize: 10, bold: true, color: C_GOLD } },
+                    { text: "Dosen Pengampu: Dr. H. Mulyawan Safwandy Nugraha, M.Ag., M.Pd.", options: { fontSize: 10, color: C_GRAY } }
+                ], { x: 2.4, y: 3.55, w: 5.2, h: 1.25, fontFace: 'Arial', align: 'center', valign: 'middle' });
+
+                // Slide 1: Landasan Ontologis
+                updateExportProgress(2, totalSlides, "Menyusun Slide 2 (Landasan Ontologis)...");
+                const s1 = pptx.addSlide();
+                s1.background = { color: C_BG };
+                addSlideHeader(s1, "Landasan Ontologis Riset", "DIGITALISASI ≠ SEKADAR PENGADAAN TEKNOLOGI");
+                const s1Cards = [
+                    { num: "01 / PERANGKAT", title: "TEKNOLOGI", desc: "Hardware & Jaringan", gold: false },
+                    { num: "02 / AKTOR", title: "MANUSIA", desc: "Guru, Santri, Staf", gold: false },
+                    { num: "03 / NILAI", title: "BUDAYA", desc: "Otoritas Kiai & Tradisi", gold: false },
+                    { num: "04 / KUNCI", title: "KEPEMIMPINAN", desc: "Orkestrator Nilai", gold: true }
+                ];
+                s1Cards.forEach((c, idx) => {
+                    const cx = 0.8 + idx * 2.15;
+                    s1.addShape(pptx.ShapeType.roundRect, {
+                        x: cx, y: 1.85, w: 1.95, h: 1.6, rectRadius: 0.12,
+                        fill: { color: c.gold ? C_GOLD_BG : C_CARD },
+                        line: { color: c.gold ? C_GOLD_BORDER : C_BORDER, width: 1.5 }
+                    });
+                    s1.addText([
+                        { text: c.num + "\n\n", options: { fontSize: 8, bold: true, color: c.gold ? C_GOLD : C_DARK_GRAY } },
+                        { text: c.title + "\n\n", options: { fontSize: 14, bold: true, color: c.gold ? C_GOLD : C_WHITE } },
+                        { text: c.desc, options: { fontSize: 9, color: c.gold ? 'FDE68A' : C_GRAY } }
+                    ], { x: cx + 0.15, y: 2.0, w: 1.65, h: 1.3, fontFace: 'Arial' });
+                });
+                s1.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 3.7, w: 8.4, h: 1.25, rectRadius: 0.12, fill: { color: C_CARD }, line: { color: C_GOLD_BORDER, width: 2 } });
+                s1.addText([
+                    { text: '"Transformasi digital berubah menjadi problematika kepemimpinan serius saat teknologi berbenturan langsung dengan kesiapan manusia, budaya kelembagaan, dan nilai-nilai luhur pesantren/madrasah."\n', options: { fontSize: 11, italic: true, color: C_WHITE } },
+                    { text: "Rujukan: Mukti (2026); Biladina & Qadriah (2026); Bakr dkk. (2026)", options: { fontSize: 9, color: C_GOLD } }
+                ], { x: 1.1, y: 3.85, w: 7.8, h: 0.95, fontFace: 'Arial' });
+
+                // Slide 2: Disparitas
+                updateExportProgress(3, totalSlides, "Menyusun Slide 3 (Disparitas Organisasional)...");
+                const s2 = pptx.addSlide();
+                s2.background = { color: C_BG };
+                addSlideHeader(s2, "Dinamika Ketegangan Organisasi", "DISPARITAS: TRANSFORMASI CEPAT VS DAYA SERAP LEMBAGA");
+                s2.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 1.8, w: 4.05, h: 2.1, rectRadius: 0.12, fill: { color: C_CARD }, line: { color: C_BORDER, width: 1 } });
+                s2.addText("Laju Tuntutan Regulasi & Akuntabilitas", { x: 1.05, y: 2.0, w: 2.6, h: 0.35, fontFace: 'Arial', fontSize: 11, bold: true, color: C_WHITE });
+                s2.addText("85%", { x: 3.65, y: 2.0, w: 0.9, h: 0.35, fontFace: 'Arial', fontSize: 14, bold: true, color: C_GOLD, align: 'right' });
+                s2.addShape(pptx.ShapeType.roundRect, { x: 1.05, y: 2.5, w: 3.5, h: 0.18, rectRadius: 0.09, fill: { color: '27272A' } });
+                s2.addShape(pptx.ShapeType.roundRect, { x: 1.05, y: 2.5, w: 2.975, h: 0.18, rectRadius: 0.09, fill: { color: C_GOLD } });
+                s2.addText("EMIS, RDM, dan digitalisasi pelaporan Kementerian Agama menuntut respons instan.", { x: 1.05, y: 2.85, w: 3.5, h: 0.8, fontFace: 'Arial', fontSize: 9.5, color: C_GRAY });
+
+                s2.addShape(pptx.ShapeType.roundRect, { x: 5.15, y: 1.8, w: 4.05, h: 2.1, rectRadius: 0.12, fill: { color: C_CARD }, line: { color: C_BORDER, width: 1 } });
+                s2.addText("Kapasitas Nyata Penyerapan SDM", { x: 5.4, y: 2.0, w: 2.6, h: 0.35, fontFace: 'Arial', fontSize: 11, bold: true, color: C_WHITE });
+                s2.addText("38.8%", { x: 8.0, y: 2.0, w: 0.9, h: 0.35, fontFace: 'Arial', fontSize: 14, bold: true, color: C_RED, align: 'right' });
+                s2.addShape(pptx.ShapeType.roundRect, { x: 5.4, y: 2.5, w: 3.5, h: 0.18, rectRadius: 0.09, fill: { color: '27272A' } });
+                s2.addShape(pptx.ShapeType.roundRect, { x: 5.4, y: 2.5, w: 1.358, h: 0.18, rectRadius: 0.09, fill: { color: C_RED } });
+                s2.addText("Kesenjangan kompetensi guru senior dan keterbatasan perangkat menghambat penyerapan.", { x: 5.4, y: 2.85, w: 3.5, h: 0.8, fontFace: 'Arial', fontSize: 9.5, color: C_GRAY });
+
+                s2.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 4.15, w: 8.4, h: 0.95, rectRadius: 0.12, fill: { color: C_GOLD_BG }, line: { color: C_GOLD_BORDER, width: 1.5 } });
+                s2.addText([
+                    { text: "Temuan Kunci Biladina & Qadriah (2026): ", options: { bold: true, color: C_GOLD } },
+                    { text: "Sebagian besar lembaga mengalami laju transformasi yang jauh lebih cepat daripada kesiapan struktur internal mereka, melahirkan kegagalan adopsi sistematis.", options: { color: C_WHITE } }
+                ], { x: 1.1, y: 4.25, w: 7.8, h: 0.75, fontFace: 'Arial', fontSize: 10 });
+
+                // Slide 3: Tren
+                updateExportProgress(4, totalSlides, "Menyusun Slide 4 (Tren Publikasi)...");
+                const s3 = pptx.addSlide();
+                s3.background = { color: C_BG };
+                addSlideHeader(s3, "Eksplorasi Korpus Literatur", "RISET MELESAT CEPAT, NAMUN BIDANG KAJIAN TERFRAGMENTASI", "Distribusi 49 artikel terpilih memperlihatkan lonjakan tajam pada kurun waktu 2025–2026 (77.6% korpus).");
+                const barData = [
+                    { year: "2023", count: "3", pct: "6.1%", h: 0.45, gold: false },
+                    { year: "2024", count: "8", pct: "16.3%", h: 0.95, gold: false },
+                    { year: "2025", count: "14", pct: "28.6%", h: 1.55, gold: false },
+                    { year: "2026", count: "24", pct: "49.0%", h: 2.3, gold: true }
+                ];
+                barData.forEach((b, idx) => {
+                    const bx = 1.6 + idx * 1.85;
+                    const by = 4.3 - b.h;
+                    s3.addText(b.count, { x: bx, y: by - 0.35, w: 1.2, h: 0.3, fontFace: 'Arial', fontSize: 14, bold: true, color: b.gold ? C_GOLD : C_WHITE, align: 'center' });
+                    s3.addShape(pptx.ShapeType.roundRect, {
+                        x: bx + 0.1, y: by, w: 1.0, h: b.h, rectRadius: 0.08,
+                        fill: { color: b.gold ? C_GOLD : '27272A' },
+                        line: { color: b.gold ? C_GOLD_BORDER : C_DARK_GRAY, width: 1 }
+                    });
+                    s3.addText(b.year, { x: bx, y: 4.35, w: 1.2, h: 0.25, fontFace: 'Arial', fontSize: 11, bold: true, color: b.gold ? C_GOLD : C_WHITE, align: 'center' });
+                    s3.addText(b.pct, { x: bx, y: 4.6, w: 1.2, h: 0.2, fontFace: 'Arial', fontSize: 9, color: C_GRAY, align: 'center' });
+                });
+
+                // Slide 4: RQ
+                updateExportProgress(5, totalSlides, "Menyusun Slide 5 (Research Questions)...");
+                const s4 = pptx.addSlide();
+                s4.background = { color: C_BG };
+                addSlideHeader(s4, "Fokus & Arah Investigasi", "TIGA PERTANYAAN. SATU PETA PENELITIAN.");
+                const rqCards = [
+                    { rq: "RQ 01 / METODE", title: "Karakteristik & Latar", desc: "Bagaimana karakteristik metodologis dan distribusi latar penelitian kepemimpinan digital pada lembaga pendidikan Islam 2023–2026?", focus: "Fokus: Membedah bias korpus", gold: false },
+                    { rq: "RQ 02 / PROBLEMATIKA", title: "Klaster Masalah", desc: "Problematika apa saja yang dilaporkan di lapangan dan bagaimana pengelompokan taksonominya secara empiris?", focus: "Fokus: Taksonomi 3 Klaster", gold: false },
+                    { rq: "RQ 03 / GAP & AGENDA", title: "Celah & Masa Depan", desc: "Celah penelitian apa yang tersisa dan bagaimana prioritas agenda riset untuk pengembangan ke depan?", focus: "Fokus: 5 Agenda Strategis", gold: true }
+                ];
+                rqCards.forEach((r, idx) => {
+                    const rx = 0.8 + idx * 2.95;
+                    s4.addShape(pptx.ShapeType.roundRect, {
+                        x: rx, y: 1.85, w: 2.65, h: 3.1, rectRadius: 0.14,
+                        fill: { color: r.gold ? C_GOLD_BG : C_CARD },
+                        line: { color: r.gold ? C_GOLD_BORDER : C_BORDER, width: 1.5 }
+                    });
+                    s4.addText([
+                        { text: r.rq + "\n\n", options: { fontSize: 10, bold: true, color: C_GOLD } },
+                        { text: r.title + "\n\n", options: { fontSize: 15, bold: true, color: C_WHITE } },
+                        { text: r.desc + "\n\n\n", options: { fontSize: 10, color: C_GRAY } },
+                        { text: "— " + r.focus, options: { fontSize: 9, bold: true, color: r.gold ? C_GOLD : C_DARK_GRAY } }
+                    ], { x: rx + 0.2, y: 2.05, w: 2.25, h: 2.7, fontFace: 'Arial' });
+                });
+
+                // Slide 5: PRISMA & PICOC
+                updateExportProgress(6, totalSlides, "Menyusun Slide 6 (PRISMA & PICOC)...");
+                const s5 = pptx.addSlide();
+                s5.background = { color: C_BG };
+                addSlideHeader(s5, "Protokol PRISMA 2020 & Kriteria PICOC", "DARI 136 REKAMAN AWAL MENUJU 49 STUDI TERPILIH");
+                const picocData = [
+                    { l: "P", tag: "POPULATION", title: "Pemimpin Pend. Islam", desc: "Kepala madrasah, kiai dan pengasuh pesantren, serta pimpinan PTKI." },
+                    { l: "I", tag: "INTERVENTION", title: "Praktik Kepemimpinan", desc: "Digital leadership, e-leadership, dan kepemimpinan adaptif berbasis teknologi." },
+                    { l: "C", tag: "COMPARISON", title: "Tidak Ada Pembanding", desc: "No comparator, karena tinjauan bersifat eksploratif-sintetik." },
+                    { l: "O", tag: "OUTCOME", title: "Problematika & Celah", desc: "Problematika, tantangan, hambatan implementasi, serta celah penelitian." },
+                    { l: "C", tag: "CONTEXT", title: "Lembaga 2023–2026", desc: "Pesantren, madrasah, dan PTKI pada periode 2023–2026." }
+                ];
+                picocData.forEach((pc, idx) => {
+                    const pcx = 0.8 + idx * 1.72;
+                    s5.addShape(pptx.ShapeType.roundRect, {
+                        x: pcx, y: 2.2, w: 1.55, h: 2.7, rectRadius: 0.1,
+                        fill: { color: idx === 4 ? C_GOLD_BG : C_CARD },
+                        line: { color: idx === 4 ? C_GOLD_BORDER : C_BORDER, width: 1.2 }
+                    });
+                    s5.addText([
+                        { text: pc.l + " — " + pc.tag + "\n\n", options: { fontSize: 8, bold: true, color: C_GOLD } },
+                        { text: pc.title + "\n\n", options: { fontSize: 10, bold: true, color: C_WHITE } },
+                        { text: pc.desc, options: { fontSize: 8.5, color: C_GRAY } }
+                    ], { x: pcx + 0.1, y: 2.3, w: 1.35, h: 2.5, fontFace: 'Arial' });
+                });
+
+                // Slide 6: Latar
+                updateExportProgress(7, totalSlides, "Menyusun Slide 7 (Distribusi Latar)...");
+                const s6 = pptx.addSlide();
+                s6.background = { color: C_BG };
+                addSlideHeader(s6, "Distribusi Latar Lapangan (n = 28)", "49 ARTIKEL. SATU KORPUS YANG BIAS KE MADRASAH.", "Mayoritas riset lapangan berpusat di madrasah, sedangkan pesantren minim diteliti.");
+                const bgDist = [
+                    { name: "Madrasah (MI, MTs, MA)", pct: "64.3% (18 Studi)", fillW: 5.4, gold: true },
+                    { name: "Pondok Pesantren", pct: "17.9% (5 Studi)", fillW: 1.5, gold: false },
+                    { name: "Lainnya (Sekolah Islam / Swasta)", pct: "10.7% (3 Studi)", fillW: 0.9, gold: false },
+                    { name: "PTKI (IAIN / UIN)", pct: "7.1% (2 Studi)", fillW: 0.6, gold: false }
+                ];
+                bgDist.forEach((d, idx) => {
+                    const dy = 1.9 + idx * 0.72;
+                    s6.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: dy, w: 8.4, h: 0.6, rectRadius: 0.08, fill: { color: C_CARD }, line: { color: d.gold ? C_GOLD_BORDER : C_BORDER, width: 1 } });
+                    s6.addText(d.name, { x: 1.0, y: dy + 0.05, w: 4.5, h: 0.25, fontFace: 'Arial', fontSize: 10, bold: true, color: C_WHITE });
+                    s6.addText(d.pct, { x: 5.5, y: dy + 0.05, w: 3.5, h: 0.25, fontFace: 'Arial', fontSize: 10, bold: true, color: d.gold ? C_GOLD : C_WHITE, align: 'right' });
+                    s6.addShape(pptx.ShapeType.roundRect, { x: 1.0, y: dy + 0.35, w: 8.0, h: 0.12, rectRadius: 0.06, fill: { color: '27272A' } });
+                    s6.addShape(pptx.ShapeType.roundRect, { x: 1.0, y: dy + 0.35, w: d.fillW, h: 0.12, rectRadius: 0.06, fill: { color: d.gold ? C_GOLD : '9CA3AF' } });
+                });
+
+                // Slide 7: Metode
+                updateExportProgress(8, totalSlides, "Menyusun Slide 8 (Ketimpangan Metodologis)...");
+                const s7 = pptx.addSlide();
+                s7.background = { color: C_BG };
+                addSlideHeader(s7, "Ketimpangan Desain Riset (n = 49)", "BUKTI EMPIRIS DIDOMINASI PENDEKATAN KUALITATIF DESKRIPTIF");
+                s7.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 1.85, w: 3.8, h: 3.1, rectRadius: 0.15, fill: { color: C_GOLD_BG }, line: { color: C_GOLD_BORDER, width: 2 } });
+                s7.addText("81.6%", { x: 0.8, y: 2.2, w: 3.8, h: 0.9, fontFace: 'Arial', fontSize: 44, bold: true, color: C_GOLD, align: 'center' });
+                s7.addText("KUALITATIF (40 STUDI)\nStudi Kasus & Telaah Pustaka", { x: 1.0, y: 3.2, w: 3.4, h: 0.6, fontFace: 'Arial', fontSize: 12, bold: true, color: C_WHITE, align: 'center' });
+                const mCards = [
+                    { title: "Kuantitatif Korelasional", val: "8.2% (4 Studi)" },
+                    { title: "Metode Campuran (Mixed-Method)", val: "6.1% (3 Studi)" },
+                    { title: "Research & Development (R&D)", val: "4.1% (2 Studi)" }
+                ];
+                mCards.forEach((m, idx) => {
+                    const my = 1.85 + idx * 0.95;
+                    s7.addShape(pptx.ShapeType.roundRect, { x: 4.9, y: my, w: 4.3, h: 0.8, rectRadius: 0.1, fill: { color: C_CARD }, line: { color: C_BORDER, width: 1 } });
+                    s7.addText(m.title, { x: 5.1, y: my + 0.25, w: 2.7, h: 0.3, fontFace: 'Arial', fontSize: 11, bold: true, color: C_WHITE });
+                    s7.addText(m.val, { x: 7.7, y: my + 0.25, w: 1.3, h: 0.3, fontFace: 'Arial', fontSize: 11, bold: true, color: C_GOLD, align: 'right' });
+                });
+
+                // Slide 8: 3 Klaster
+                updateExportProgress(9, totalSlides, "Menyusun Slide 9 (Taksonomi Problematika)...");
+                const s8 = pptx.addSlide();
+                s8.background = { color: C_BG };
+                addSlideHeader(s8, "Sintesis Temuan Kunci (n = 49)", "TIGA MASALAH BESAR. SATU TANTANGAN KEPEMIMPINAN.");
+                const kCards = [
+                    { num: "KLASTER 01", pct: "67.3%", title: "Infrastruktur & Finansial", desc: "Jaringan tidak stabil, keterbatasan perangkat digital, anggaran minim, dan disparitas desa-kota.", ref: "Suratman (2024); Ersalmina (2026)", gold: false },
+                    { num: "KLASTER 02", pct: "61.2%", title: "Kesenjangan Literasi SDM", desc: "Kompetensi digital guru rendah, guru senior lambat adaptasi, dan pelatihan sporadis.", ref: "Ratnawati (2025); Ramadhan (2026)", gold: false },
+                    { num: "KLASTER 03 (KHAS)", pct: "67.3%", title: "Resistensi Kultural", desc: "Dual challenge antara modernisasi dan pelestarian otoritas kiai serta proteksi sanad ilmu.", ref: "Manaf (2026); Riyadi (2025)", gold: true }
+                ];
+                kCards.forEach((k, idx) => {
+                    const kx = 0.8 + idx * 2.95;
+                    s8.addShape(pptx.ShapeType.roundRect, {
+                        x: kx, y: 1.85, w: 2.65, h: 3.1, rectRadius: 0.14,
+                        fill: { color: k.gold ? C_GOLD_BG : C_CARD },
+                        line: { color: k.gold ? C_GOLD_BORDER : C_BORDER, width: 1.5 }
+                    });
+                    s8.addText([
+                        { text: k.num + "\n", options: { fontSize: 8.5, bold: true, color: k.gold ? C_GOLD : C_DARK_GRAY } },
+                        { text: k.pct + "\n\n", options: { fontSize: 26, bold: true, color: k.gold ? C_GOLD : C_WHITE } },
+                        { text: k.title + "\n\n", options: { fontSize: 13, bold: true, color: C_WHITE } },
+                        { text: k.desc + "\n\n", options: { fontSize: 9.5, color: C_GRAY } },
+                        { text: "Rujukan: " + k.ref, options: { fontSize: 8, color: k.gold ? C_GOLD : C_DARK_GRAY } }
+                    ], { x: kx + 0.15, y: 1.95, w: 2.35, h: 2.85, fontFace: 'Arial' });
+                });
+
+                // Slide 9: Dual Challenge
+                updateExportProgress(10, totalSlides, "Menyusun Slide 10 (Dual Challenge Kultural)...");
+                const s9 = pptx.addSlide();
+                s9.background = { color: C_BG };
+                addSlideHeader(s9, "Dilema Kultural Lembaga Pendidikan Islam", "MODERNISASI TEKNOLOGI BERHADAPAN DENGAN TRADISI KEKIAIAN");
+                const dcCards = [
+                    { tag: "Kutub Pertama", title: "Modernisasi Digital", desc: "Efisiensi operasional, big data, transparansi, dan otomatisasi pembelajaran.", gold: false },
+                    { tag: "Titik Temu", title: "Negosiator Budaya", desc: "Menjadikan teknologi sebagai alat pelestari nilai, bukan pengganti otoritas kiai.", gold: true },
+                    { tag: "Kutub Kedua", title: "Otoritas Tradisi Kiai", desc: "Rantai sanad keilmuan, keteladanan tatap muka langsung, dan adab pesantren.", gold: false }
+                ];
+                dcCards.forEach((c, idx) => {
+                    const cx = 0.8 + idx * 2.95;
+                    s9.addShape(pptx.ShapeType.roundRect, {
+                        x: cx, y: 1.85, w: 2.65, h: 2.1, rectRadius: 0.12,
+                        fill: { color: c.gold ? C_GOLD_BG : C_CARD },
+                        line: { color: c.gold ? C_GOLD_BORDER : C_BORDER, width: 1.5 }
+                    });
+                    s9.addText([
+                        { text: c.tag.toUpperCase() + "\n\n", options: { fontSize: 8.5, bold: true, color: c.gold ? C_GOLD : C_DARK_GRAY } },
+                        { text: c.title + "\n\n", options: { fontSize: 14, bold: true, color: c.gold ? C_GOLD : C_WHITE } },
+                        { text: c.desc, options: { fontSize: 9.5, color: C_GRAY } }
+                    ], { x: cx + 0.15, y: 2.0, w: 2.35, h: 1.8, fontFace: 'Arial', align: 'center' });
+                });
+                s9.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 4.15, w: 8.4, h: 0.95, rectRadius: 0.12, fill: { color: C_CARD }, line: { color: C_GOLD_BORDER, width: 2 } });
+                s9.addText([
+                    { text: "Insight Krusial: ", options: { bold: true, color: C_GOLD } },
+                    { text: "Resistensi di kalangan pesantren bukan sikap anti-kemajuan, melainkan proteksi rasional dalam menjaga adab dan transmisi keilmuan dari disrupsi informasi liar.", options: { color: C_WHITE } }
+                ], { x: 1.1, y: 4.25, w: 7.8, h: 0.75, fontFace: 'Arial', fontSize: 10 });
+
+                // Slide 10: Transformasi Organisasi
+                updateExportProgress(11, totalSlides, "Menyusun Slide 11 (Transformasi Organisasional)...");
+                const s10 = pptx.addSlide();
+                s10.background = { color: C_BG };
+                addSlideHeader(s10, "Pandangan Sistemik Organisasi", "TRANSFORMASI DIGITAL ADALAH PROSES ORGANISASIONAL UTUH");
+                const steps = [
+                    { step: "Tahap 1", title: "Infrastruktur & Akses", desc: "Perangkat keras, listrik, dan bandwidth internet stabil.", gold: false },
+                    { step: "Tahap 2", title: "Literasi SDM", desc: "Kompetensi pedagogis digital guru dan kepala lembaga.", gold: false },
+                    { step: "Tahap 3", title: "Negosiasi Nilai", desc: "Musyawarah dan legitimasi kultural berbasis maqasid.", gold: false },
+                    { step: "Tahap 4", title: "Tata Kelola Mutu", desc: "Supervisi berkala dan penjaminan mutu terpadu.", gold: true }
+                ];
+                steps.forEach((st, idx) => {
+                    const stx = 0.8 + idx * 2.15;
+                    s10.addShape(pptx.ShapeType.roundRect, {
+                        x: stx, y: 1.85, w: 1.95, h: 2.1, rectRadius: 0.12,
+                        fill: { color: st.gold ? C_GOLD_BG : C_CARD },
+                        line: { color: st.gold ? C_GOLD_BORDER : C_BORDER, width: 1.5 }
+                    });
+                    s10.addText([
+                        { text: st.step + "\n\n", options: { fontSize: 8.5, bold: true, color: st.gold ? C_GOLD : C_DARK_GRAY } },
+                        { text: st.title + "\n\n", options: { fontSize: 12, bold: true, color: st.gold ? C_GOLD : C_WHITE } },
+                        { text: st.desc, options: { fontSize: 9, color: C_GRAY } }
+                    ], { x: stx + 0.15, y: 2.0, w: 1.65, h: 1.8, fontFace: 'Arial' });
+                });
+
+                // Slide 11: 3 Lapis
+                updateExportProgress(12, totalSlides, "Menyusun Slide 12 (Model Tata Surya Tiga Lapis)...");
+                const s11 = pptx.addSlide();
+                s11.background = { color: C_BG };
+                addSlideHeader(s11, "Sintesis Konseptual Korpus", "TIGA LAPISAN. SATU KESATUAN SISTEM KEPEMIMPINAN.");
+                s11.addShape(pptx.ShapeType.ellipse, { x: 1.0, y: 1.85, w: 3.0, h: 3.0, fill: { color: '0A0A0E' }, line: { color: C_GOLD, width: 1.5, dashType: 'dash' } });
+                s11.addShape(pptx.ShapeType.ellipse, { x: 1.5, y: 2.35, w: 2.0, h: 2.0, fill: { color: '0A0A0E' }, line: { color: C_CYAN, width: 1.5, dashType: 'dash' } });
+                s11.addShape(pptx.ShapeType.ellipse, { x: 2.0, y: 2.85, w: 1.0, h: 1.0, fill: { color: C_GOLD_BG }, line: { color: C_GOLD, width: 2 } });
+                s11.addText("Digital\nLeadership", { x: 2.0, y: 2.95, w: 1.0, h: 0.8, fontFace: 'Arial', fontSize: 8.5, bold: true, color: C_GOLD, align: 'center', valign: 'middle' });
+                const sysLayers = [
+                    { tag: "Lapis 1 : Ekosistem Fisik", title: "Infrastruktur & Finansial (67.3%)", desc: "Pondasi fisik, perangkat keras, dan konektivitas internet.", border: C_GOLD },
+                    { tag: "Lapis 2 : Ekosistem Aktor", title: "Literasi Digital SDM (61.2%)", desc: "Kompetensi guru, pimpinan, dan budaya kolaboratif.", border: C_CYAN },
+                    { tag: "Lapis 3 : Inti Nilai Luhur", title: "Kultur, Otoritas & Etika (67.3%)", desc: "Kepatuhan pada kiai, transmisi adab, dan etika Islam.", border: C_GOLD }
+                ];
+                sysLayers.forEach((l, idx) => {
+                    const ly = 1.85 + idx * 1.05;
+                    s11.addShape(pptx.ShapeType.roundRect, {
+                        x: 4.6, y: ly, w: 4.6, h: 0.9, rectRadius: 0.1,
+                        fill: { color: C_CARD },
+                        line: { color: l.border, width: 1.5 }
+                    });
+                    s11.addText([
+                        { text: l.tag + "\n", options: { fontSize: 8.5, bold: true, color: l.border } },
+                        { text: l.title + "\n", options: { fontSize: 11, bold: true, color: C_WHITE } },
+                        { text: l.desc, options: { fontSize: 8.5, color: C_GRAY } }
+                    ], { x: 4.75, y: ly + 0.1, w: 4.3, h: 0.7, fontFace: 'Arial' });
+                });
+
+                // Slide 12: 5 Gaps
+                updateExportProgress(13, totalSlides, "Menyusun Slide 13 (Research Gaps)...");
+                const s12 = pptx.addSlide();
+                s12.background = { color: C_BG };
+                addSlideHeader(s12, "Pemetaan Research Gap", "APA YANG MASIH TERLEWATKAN DALAM LITERATUR?");
+                const gaps = [
+                    { id: "GAP 01", title: "Metodologis", desc: "Dominasi kualitatif (81.6%). Perlu studi longitudinal & kausal.", gold: false },
+                    { id: "GAP 02", title: "Kontekstual", desc: "Pesantren hanya 17.9%. Perlu riset multisitus luar Jawa.", gold: false },
+                    { id: "GAP 03", title: "Instrumentasi", desc: "Belum ada alat ukur baku kepemimpinan digital khas Islam.", gold: false },
+                    { id: "GAP 04", title: "Uji Model", desc: "Model normatif profetik belum diuji efektivitas empirisnya.", gold: false },
+                    { id: "GAP 05", title: "Evaluasi", desc: "Ketiadaan indikator kematangan digital berkelanjutan.", gold: true }
+                ];
+                gaps.forEach((g, idx) => {
+                    const gx = 0.8 + idx * 1.72;
+                    s12.addShape(pptx.ShapeType.roundRect, {
+                        x: gx, y: 1.85, w: 1.55, h: 3.1, rectRadius: 0.12,
+                        fill: { color: g.gold ? C_GOLD_BG : C_CARD },
+                        line: { color: g.gold ? C_GOLD_BORDER : C_BORDER, width: 1.5 }
+                    });
+                    s12.addText([
+                        { text: g.id + "\n\n", options: { fontSize: 10, bold: true, color: C_GOLD } },
+                        { text: g.title + "\n\n", options: { fontSize: 13, bold: true, color: C_WHITE } },
+                        { text: g.desc, options: { fontSize: 9.5, color: C_GRAY } }
+                    ], { x: gx + 0.12, y: 2.05, w: 1.31, h: 2.6, fontFace: 'Arial' });
+                });
+
+                // Slide 13: Roadmap
+                updateExportProgress(14, totalSlides, "Menyusun Slide 14 (Roadmap Riset)...");
+                const s13 = pptx.addSlide();
+                s13.background = { color: C_BG };
+                addSlideHeader(s13, "Agenda Riset Masa Depan", "DARI DESKRIPSI KASUS MENUJU PEMBUKTIAN EVIDENSI KUMULATIF");
+                const phases = [
+                    { p: "FASE 01", title: "Studi Longitudinal", desc: "Mengukur dampak jangka panjang kepemimpinan digital pada mutu.", gold: false },
+                    { p: "FASE 02", title: "Multisitus Pesantren", desc: "Melibatkan pesantren salaf luar Jawa untuk mengikis bias.", gold: false },
+                    { p: "FASE 03", title: "Validasi Alat Ukur", desc: "Menyusun instrumen baku kepemimpinan berbasis maqasid syariah.", gold: false },
+                    { p: "FASE 04", title: "Uji Empiris Model", desc: "Menguji efektivitas model profetik secara kuantitatif.", gold: false },
+                    { p: "FASE 05", title: "Audit Kematangan", desc: "Menetapkan indeks kesiapan dan mitigasi risiko digital.", gold: true }
+                ];
+                phases.forEach((ph, idx) => {
+                    const phx = 0.8 + idx * 1.72;
+                    s13.addShape(pptx.ShapeType.roundRect, {
+                        x: phx, y: 1.85, w: 1.55, h: 2.7, rectRadius: 0.12,
+                        fill: { color: ph.gold ? C_GOLD_BG : C_CARD },
+                        line: { color: ph.gold ? C_GOLD_BORDER : C_BORDER, width: 1.5 }
+                    });
+                    s13.addText([
+                        { text: ph.p + "\n\n", options: { fontSize: 9.5, bold: true, color: C_GOLD } },
+                        { text: ph.title + "\n\n", options: { fontSize: 11, bold: true, color: C_WHITE } },
+                        { text: ph.desc, options: { fontSize: 9, color: C_GRAY } }
+                    ], { x: phx + 0.12, y: 2.0, w: 1.31, h: 2.3, fontFace: 'Arial' });
+                });
+
+                // Slide 14: Kesimpulan
+                updateExportProgress(15, totalSlides, "Menyusun Slide 15 (Kesimpulan Akhir)...");
+                const s14 = pptx.addSlide();
+                s14.background = { color: C_BG };
+                s14.addShape(pptx.ShapeType.roundRect, { x: 3.5, y: 0.7, w: 3.0, h: 0.28, rectRadius: 0.14, fill: { color: '201C12' }, line: { color: C_GOLD_BORDER, width: 1 } });
+                s14.addText("KESIMPULAN SINTESIS AKHIR", { x: 3.5, y: 0.7, w: 3.0, h: 0.28, fontFace: 'Arial', fontSize: 8, bold: true, color: C_GOLD, align: 'center', valign: 'middle' });
+                s14.addText("KEPEMIMPINAN DIGITAL\nTIDAK BOLEH MENGGANTIKAN\nNILAI-NILAI ISLAM.", {
+                    x: 1.0, y: 1.15, w: 8.0, h: 1.6,
+                    fontFace: 'Arial', fontSize: 24, bold: true, color: C_WHITE, align: 'center', valign: 'middle'
+                });
+                s14.addShape(pptx.ShapeType.roundRect, { x: 2.2, y: 3.0, w: 5.6, h: 0.85, rectRadius: 0.15, fill: { color: C_GOLD_BG }, line: { color: C_GOLD_BORDER, width: 2 } });
+                s14.addText("IA HARUS BEKERJA MELALUINYA.", {
+                    x: 2.4, y: 3.1, w: 5.2, h: 0.65,
+                    fontFace: 'Arial', fontSize: 18, bold: true, color: C_GOLD, align: 'center', valign: 'middle'
+                });
+                s14.addText([
+                    { text: "Akbar Tausiur Rido\n", options: { fontSize: 13, bold: true, color: C_WHITE } },
+                    { text: "Magister MPI  |  Universitas Islam Negeri Sunan Gunung Djati Bandung", options: { fontSize: 9.5, color: C_GRAY } }
+                ], { x: 1.5, y: 4.15, w: 7.0, h: 0.8, fontFace: 'Arial', align: 'center' });
+
+                // Slide 15: Outro
+                updateExportProgress(16, totalSlides, "Menyusun Slide 16 (Outro Finale)...");
+                const s15 = pptx.addSlide();
+                s15.background = { color: C_BG };
+                s15.addShape(pptx.ShapeType.roundRect, { x: 3.6, y: 1.2, w: 2.8, h: 0.28, rectRadius: 0.14, fill: { color: '18181B' }, line: { color: C_DARK_GRAY, width: 1 } });
+                s15.addText("SESI PRESENTASI SELESAI", { x: 3.6, y: 1.2, w: 2.8, h: 0.28, fontFace: 'Arial', fontSize: 8, bold: true, color: C_GRAY, align: 'center', valign: 'middle' });
+                s15.addText("TERIMA KASIH", {
+                    x: 1.0, y: 1.7, w: 8.0, h: 1.0,
+                    fontFace: 'Arial', fontSize: 36, bold: true, color: C_WHITE, align: 'center', valign: 'middle'
+                });
+                s15.addText('"Alhamdulillahirobbil \'Alamin"', {
+                    x: 1.0, y: 2.7, w: 8.0, h: 0.45,
+                    fontFace: 'Georgia', fontSize: 16, italic: true, color: C_GOLD, align: 'center'
+                });
+                s15.addText([
+                    { text: "Akbar Tausiur Rido\n", options: { fontSize: 13, bold: true, color: C_WHITE } },
+                    { text: "Magister MPI  |  NIM 2269100087\n", options: { fontSize: 10, color: C_GRAY } },
+                    { text: "Universitas Islam Negeri Sunan Gunung Djati Bandung", options: { fontSize: 9.5, color: C_DARK_GRAY } }
+                ], { x: 1.5, y: 3.55, w: 7.0, h: 1.0, fontFace: 'Arial', align: 'center' });
+
+                updateExportProgress(totalSlides, totalSlides, "Menyimpan file PowerPoint Asli (.pptx)...");
+                await pptx.writeFile({ fileName: "Problematika-Kepemimpinan-Digital-Akbar-Tausiur-Rido.pptx" });
+                finishExportProgress("Berhasil! File PPTX asli (dapat diedit) telah terunduh.");
+            } catch (err) {
+                console.error("Gagal ekspor PPTX:", err);
+                finishExportProgress("Terjadi kendala saat menyusun PPTX. Silakan coba kembali.");
+            }
+        }
+
+        // Generate Vector 16:9 PDF (.pdf) Matching PPTX Layout Exactly Without Any Overlaps
+        async function generatePDF() {
+            closeExportModal();
+            updateExportProgress(0, totalSlides, "Menyiapkan penyusunan Dokumen PDF Presisi...");
+
+            try {
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+                    throw new Error("Library pemrosesan PDF belum siap.");
+                }
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'in',
+                    format: [10, 5.625]
+                });
+
+                // Theme color palette matching PPTX
+                const C = {
+                    bg: [5, 5, 5],
+                    card: [18, 18, 22],
+                    border: [39, 39, 42],
+                    gold: [251, 191, 36],
+                    goldBorder: [217, 119, 6],
+                    goldBg: [26, 23, 16],
+                    goldPill: [32, 28, 18],
+                    white: [255, 255, 255],
+                    gray: [156, 163, 175],
+                    darkGray: [75, 85, 99],
+                    cyan: [56, 189, 248],
+                    red: [248, 113, 113]
+                };
+
+                function setSlideBg() {
+                    pdf.setFillColor(...C.bg);
+                    pdf.rect(0, 0, 10, 5.625, 'F');
+                }
+
+                function drawCard(x, y, w, h, isGold = false, radius = 0.12) {
+                    pdf.setFillColor(...(isGold ? C.goldBg : C.card));
+                    pdf.setDrawColor(...(isGold ? C.goldBorder : C.border));
+                    pdf.setLineWidth(isGold ? 0.018 : 0.012);
+                    pdf.roundedRect(x, y, w, h, radius, radius, 'FD');
+                }
+
+                function drawHeader(tag, title, subtitle = null) {
+                    // Tag Badge
+                    pdf.setFillColor(...C.goldPill);
+                    pdf.setDrawColor(...C.goldBorder);
+                    pdf.setLineWidth(0.012);
+                    pdf.roundedRect(0.8, 0.35, 3.4, 0.28, 0.14, 0.14, 'FD');
+
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(8);
+                    pdf.setTextColor(...C.gold);
+                    pdf.text(tag.toUpperCase(), 2.5, 0.52, { align: 'center' });
+
+                    // Title
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(16.5);
+                    pdf.setTextColor(...C.white);
+                    pdf.text(title, 0.8, 0.95, { maxWidth: 8.4 });
+
+                    // Subtitle
+                    if (subtitle) {
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFontSize(9);
+                        pdf.setTextColor(...C.gray);
+                        pdf.text(subtitle, 0.8, 1.5, { maxWidth: 8.4 });
+                    }
+                }
+
+                // SLIDE 0: Judul & Identitas
+                updateExportProgress(1, totalSlides, "Menyusun Halaman PDF 1 (Judul)...");
+                setSlideBg();
+                pdf.setFillColor(...C.goldPill);
+                pdf.setDrawColor(...C.goldBorder);
+                pdf.setLineWidth(0.012);
+                pdf.roundedRect(3.2, 1.25, 3.6, 0.32, 0.16, 0.16, 'FD');
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(8.5);
+                pdf.setTextColor(...C.gold);
+                pdf.text("DISEMINASI RISET TESIS PASCASARJANA", 5.0, 1.45, { align: 'center' });
+
+                pdf.setFontSize(21);
+                pdf.setTextColor(...C.white);
+                pdf.text("PROBLEMATIKA KEPEMIMPINAN DIGITAL\nPADA LEMBAGA PENDIDIKAN ISLAM", 5.0, 2.05, { align: 'center' });
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(10.5);
+                pdf.setTextColor(...C.gray);
+                pdf.text("Systematic Literature Review & Pemetaan Research Gap (2023–2026)", 5.0, 3.0, { align: 'center' });
+
+                drawCard(2.2, 3.45, 5.6, 1.45, true, 0.15);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(13);
+                pdf.setTextColor(...C.white);
+                pdf.text("AKBAR TAUSIUR RIDO", 5.0, 3.85, { align: 'center' });
+                pdf.setFontSize(9.5);
+                pdf.setTextColor(...C.gold);
+                pdf.text("NIM 2269100087 | Magister MPI UIN SGD Bandung", 5.0, 4.15, { align: 'center' });
+                pdf.setDrawColor(...C.border);
+                pdf.line(2.8, 4.35, 7.2, 4.35);
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(9);
+                pdf.setTextColor(...C.gray);
+                pdf.text("Dosen Pengampu: Dr. H. Mulyawan Safwandy Nugraha, M.Ag., M.Pd.", 5.0, 4.6, { align: 'center' });
+
+                // SLIDE 1: Landasan Ontologis
+                updateExportProgress(2, totalSlides, "Menyusun Halaman PDF 2 (Landasan Ontologis)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Landasan Ontologis Riset", "DIGITALISASI ≠ SEKADAR PENGADAAN TEKNOLOGI");
+                const s1Cards = [
+                    { num: "01 / PERANGKAT", title: "TEKNOLOGI", desc: "Hardware & Jaringan", gold: false },
+                    { num: "02 / AKTOR", title: "MANUSIA", desc: "Guru, Santri, Staf", gold: false },
+                    { num: "03 / NILAI", title: "BUDAYA", desc: "Otoritas Kiai & Tradisi", gold: false },
+                    { num: "04 / KUNCI", title: "KEPEMIMPINAN", desc: "Orkestrator Nilai", gold: true }
+                ];
+                s1Cards.forEach((c, idx) => {
+                    const cx = 0.8 + idx * 2.15;
+                    drawCard(cx, 1.85, 1.95, 1.6, c.gold);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(8);
+                    pdf.setTextColor(...(c.gold ? C.gold : C.darkGray));
+                    pdf.text(c.num, cx + 0.15, 2.1);
+                    pdf.setFontSize(13);
+                    pdf.setTextColor(...(c.gold ? C.gold : C.white));
+                    pdf.text(c.title, cx + 0.15, 2.5);
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(8.5);
+                    pdf.setTextColor(...(c.gold ? [253, 230, 138] : C.gray));
+                    pdf.text(c.desc, cx + 0.15, 2.9);
+                });
+                drawCard(0.8, 3.7, 8.4, 1.25, false);
+                pdf.setDrawColor(...C.gold);
+                pdf.setLineWidth(0.035);
+                pdf.line(0.8, 3.7, 0.8, 4.95);
+                pdf.setFont('helvetica', 'italic');
+                pdf.setFontSize(10.5);
+                pdf.setTextColor(...C.white);
+                pdf.text('"Transformasi digital berubah menjadi problematika kepemimpinan serius saat teknologi berbenturan langsung dengan kesiapan manusia, budaya kelembagaan, dan nilai-nilai luhur pesantren/madrasah."', 1.1, 4.05, { maxWidth: 7.8 });
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(8.5);
+                pdf.setTextColor(...C.gold);
+                pdf.text("Rujukan: Mukti (2026); Biladina & Qadriah (2026); Bakr dkk. (2026)", 1.1, 4.65);
+
+                // SLIDE 2: Disparitas Organisasional
+                updateExportProgress(3, totalSlides, "Menyusun Halaman PDF 3 (Disparitas)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Dinamika Ketegangan Organisasi", "DISPARITAS: TRANSFORMASI CEPAT VS DAYA SERAP LEMBAGA");
+                drawCard(0.8, 1.8, 4.05, 2.1, false);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(10.5);
+                pdf.setTextColor(...C.white);
+                pdf.text("Laju Tuntutan Regulasi & Akuntabilitas", 1.05, 2.1);
+                pdf.setFontSize(13);
+                pdf.setTextColor(...C.gold);
+                pdf.text("85%", 4.5, 2.1, { align: 'right' });
+                pdf.setFillColor(...C.darkGray);
+                pdf.roundedRect(1.05, 2.45, 3.5, 0.16, 0.08, 0.08, 'F');
+                pdf.setFillColor(...C.gold);
+                pdf.roundedRect(1.05, 2.45, 2.975, 0.16, 0.08, 0.08, 'F');
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(9);
+                pdf.setTextColor(...C.gray);
+                pdf.text("EMIS, RDM, dan digitalisasi pelaporan Kementerian Agama menuntut respons instan.", 1.05, 2.9, { maxWidth: 3.5 });
+
+                drawCard(5.15, 1.8, 4.05, 2.1, false);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(10.5);
+                pdf.setTextColor(...C.white);
+                pdf.text("Kapasitas Nyata Penyerapan SDM", 5.4, 2.1);
+                pdf.setFontSize(13);
+                pdf.setTextColor(...C.red);
+                pdf.text("38.8%", 8.85, 2.1, { align: 'right' });
+                pdf.setFillColor(...C.darkGray);
+                pdf.roundedRect(5.4, 2.45, 3.5, 0.16, 0.08, 0.08, 'F');
+                pdf.setFillColor(...C.red);
+                pdf.roundedRect(5.4, 2.45, 1.358, 0.16, 0.08, 0.08, 'F');
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(9);
+                pdf.setTextColor(...C.gray);
+                pdf.text("Kesenjangan kompetensi guru senior dan keterbatasan perangkat menghambat penyerapan.", 5.4, 2.9, { maxWidth: 3.5 });
+
+                drawCard(0.8, 4.15, 8.4, 0.95, true);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(9.5);
+                pdf.setTextColor(...C.gold);
+                pdf.text("Temuan Kunci Biladina & Qadriah (2026):", 1.1, 4.45);
+                pdf.setFont('helvetica', 'normal');
+                pdf.setTextColor(...C.white);
+                pdf.text("Sebagian besar lembaga mengalami laju transformasi yang jauh lebih cepat daripada kesiapan struktur internal mereka, melahirkan kegagalan adopsi sistematis.", 1.1, 4.7, { maxWidth: 7.8 });
+
+                // SLIDE 3: Tren Publikasi
+                updateExportProgress(4, totalSlides, "Menyusun Halaman PDF 4 (Tren Publikasi)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Eksplorasi Korpus Literatur", "RISET MELESAT CEPAT, NAMUN BIDANG KAJIAN TERFRAGMENTASI", "Distribusi 49 artikel terpilih memperlihatkan lonjakan tajam pada kurun waktu 2025–2026 (77.6% korpus).");
+                const pdfBarData = [
+                    { year: "2023", count: "3", pct: "6.1%", h: 0.45, gold: false },
+                    { year: "2024", count: "8", pct: "16.3%", h: 0.95, gold: false },
+                    { year: "2025", count: "14", pct: "28.6%", h: 1.55, gold: false },
+                    { year: "2026", count: "24", pct: "49.0%", h: 2.3, gold: true }
+                ];
+                pdfBarData.forEach((b, idx) => {
+                    const bx = 1.6 + idx * 1.85;
+                    const by = 4.25 - b.h;
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(13);
+                    pdf.setTextColor(...(b.gold ? C.gold : C.white));
+                    pdf.text(b.count, bx + 0.5, by - 0.12, { align: 'center' });
+                    pdf.setFillColor(...(b.gold ? C.gold : C.darkGray));
+                    pdf.setDrawColor(...(b.gold ? C.goldBorder : C.border));
+                    pdf.roundedRect(bx + 0.05, by, 0.9, b.h, 0.06, 0.06, 'FD');
+                    pdf.setFontSize(10.5);
+                    pdf.text(b.year, bx + 0.5, 4.45, { align: 'center' });
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(8.5);
+                    pdf.setTextColor(...C.gray);
+                    pdf.text(b.pct, bx + 0.5, 4.68, { align: 'center' });
+                });
+
+                // SLIDE 4: Research Questions
+                updateExportProgress(5, totalSlides, "Menyusun Halaman PDF 5 (Research Questions)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Fokus & Arah Investigasi", "TIGA PERTANYAAN. SATU PETA PENELITIAN.");
+                const pdfRqCards = [
+                    { rq: "RQ 01 / METODE", title: "Karakteristik & Latar", desc: "Bagaimana karakteristik metodologis dan distribusi latar penelitian kepemimpinan digital pada lembaga pendidikan Islam 2023–2026?", focus: "Fokus: Membedah bias korpus", gold: false },
+                    { rq: "RQ 02 / PROBLEMATIKA", title: "Klaster Masalah", desc: "Problematika apa saja yang dilaporkan di lapangan dan bagaimana pengelompokan taksonominya secara empiris?", focus: "Fokus: Taksonomi 3 Klaster", gold: false },
+                    { rq: "RQ 03 / GAP & AGENDA", title: "Celah & Masa Depan", desc: "Celah penelitian apa yang tersisa dan bagaimana prioritas agenda riset untuk pengembangan ke depan?", focus: "Fokus: 5 Agenda Strategis", gold: true }
+                ];
+                pdfRqCards.forEach((r, idx) => {
+                    const rx = 0.8 + idx * 2.95;
+                    drawCard(rx, 1.85, 2.65, 3.1, r.gold);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(9.5);
+                    pdf.setTextColor(...C.gold);
+                    pdf.text(r.rq, rx + 0.2, 2.15);
+                    pdf.setFontSize(13.5);
+                    pdf.setTextColor(...C.white);
+                    pdf.text(r.title, rx + 0.2, 2.5);
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(9);
+                    pdf.setTextColor(...C.gray);
+                    pdf.text(r.desc, rx + 0.2, 2.9, { maxWidth: 2.25 });
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(8.5);
+                    pdf.setTextColor(...(r.gold ? C.gold : C.darkGray));
+                    pdf.text("— " + r.focus, rx + 0.2, 4.65);
+                });
+
+                // SLIDE 5: PRISMA & PICOC
+                updateExportProgress(6, totalSlides, "Menyusun Halaman PDF 6 (PRISMA & PICOC)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Protokol PRISMA 2020 & Kriteria PICOC", "DARI 136 REKAMAN AWAL MENUJU 49 STUDI TERPILIH");
+                const pdfPicocData = [
+                    { l: "P", tag: "POPULATION", title: "Pemimpin Pend. Islam", desc: "Kepala madrasah, kiai dan pengasuh pesantren, serta pimpinan PTKI." },
+                    { l: "I", tag: "INTERVENTION", title: "Praktik Kepemimpinan", desc: "Digital leadership, e-leadership, dan kepemimpinan adaptif berbasis teknologi." },
+                    { l: "C", tag: "COMPARISON", title: "Tidak Ada Pembanding", desc: "No comparator, karena tinjauan bersifat eksploratif-sintetik." },
+                    { l: "O", tag: "OUTCOME", title: "Problematika & Celah", desc: "Problematika, tantangan, hambatan implementasi, serta celah penelitian." },
+                    { l: "C", tag: "CONTEXT", title: "Lembaga 2023–2026", desc: "Pesantren, madrasah, dan PTKI pada periode 2023–2026." }
+                ];
+                pdfPicocData.forEach((pc, idx) => {
+                    const pcx = 0.8 + idx * 1.72;
+                    drawCard(pcx, 2.05, 1.55, 2.85, idx === 4);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(8);
+                    pdf.setTextColor(...C.gold);
+                    pdf.text(pc.l + " — " + pc.tag, pcx + 0.12, 2.3);
+                    pdf.setFontSize(9.5);
+                    pdf.setTextColor(...C.white);
+                    pdf.text(pc.title, pcx + 0.12, 2.65, { maxWidth: 1.35 });
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(8);
+                    pdf.setTextColor(...C.gray);
+                    pdf.text(pc.desc, pcx + 0.12, 3.2, { maxWidth: 1.35 });
+                });
+
+                // SLIDE 6: Distribusi Latar
+                updateExportProgress(7, totalSlides, "Menyusun Halaman PDF 7 (Distribusi Latar)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Distribusi Latar Lapangan (n = 28)", "49 ARTIKEL. SATU KORPUS YANG BIAS KE MADRASAH.", "Mayoritas riset lapangan berpusat di madrasah, sedangkan pesantren minim diteliti.");
+                const pdfBgDist = [
+                    { name: "Madrasah (MI, MTs, MA)", pct: "64.3% (18 Studi)", fillW: 5.4, gold: true },
+                    { name: "Pondok Pesantren", pct: "17.9% (5 Studi)", fillW: 1.5, gold: false },
+                    { name: "Lainnya (Sekolah Islam / Swasta)", pct: "10.7% (3 Studi)", fillW: 0.9, gold: false },
+                    { name: "PTKI (IAIN / UIN)", pct: "7.1% (2 Studi)", fillW: 0.6, gold: false }
+                ];
+                pdfBgDist.forEach((d, idx) => {
+                    const dy = 1.9 + idx * 0.72;
+                    drawCard(0.8, dy, 8.4, 0.6, d.gold);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(9.5);
+                    pdf.setTextColor(...C.white);
+                    pdf.text(d.name, 1.05, dy + 0.25);
+                    pdf.setTextColor(...(d.gold ? C.gold : C.white));
+                    pdf.text(d.pct, 9.0, dy + 0.25, { align: 'right' });
+                    pdf.setFillColor(...C.darkGray);
+                    pdf.roundedRect(1.05, dy + 0.35, 7.9, 0.12, 0.06, 0.06, 'F');
+                    pdf.setFillColor(...(d.gold ? C.gold : C.gray));
+                    pdf.roundedRect(1.05, dy + 0.35, d.fillW, 0.12, 0.06, 0.06, 'F');
+                });
+
+                // SLIDE 7: Ketimpangan Metodologis
+                updateExportProgress(8, totalSlides, "Menyusun Halaman PDF 8 (Metodologi)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Ketimpangan Desain Riset (n = 49)", "BUKTI EMPIRIS DIDOMINASI PENDEKATAN KUALITATIF DESKRIPTIF");
+                drawCard(0.8, 1.85, 3.8, 3.1, true);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(38);
+                pdf.setTextColor(...C.gold);
+                pdf.text("81.6%", 2.7, 2.75, { align: 'center' });
+                pdf.setFontSize(11);
+                pdf.setTextColor(...C.white);
+                pdf.text("KUALITATIF (40 STUDI)\nStudi Kasus & Telaah Pustaka", 2.7, 3.4, { align: 'center' });
+
+                const pdfMCards = [
+                    { title: "Kuantitatif Korelasional", val: "8.2% (4 Studi)" },
+                    { title: "Metode Campuran (Mixed-Method)", val: "6.1% (3 Studi)" },
+                    { title: "Research & Development (R&D)", val: "4.1% (2 Studi)" }
+                ];
+                pdfMCards.forEach((m, idx) => {
+                    const my = 1.85 + idx * 0.95;
+                    drawCard(4.9, my, 4.3, 0.8, false);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(10.5);
+                    pdf.setTextColor(...C.white);
+                    pdf.text(m.title, 5.15, my + 0.45);
+                    pdf.setTextColor(...C.gold);
+                    pdf.text(m.val, 8.95, my + 0.45, { align: 'right' });
+                });
+
+                // SLIDE 8: Tiga Titik Tekanan
+                updateExportProgress(9, totalSlides, "Menyusun Halaman PDF 9 (Taksonomi Problematika)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Sintesis Temuan Kunci (n = 49)", "TIGA MASALAH BESAR. SATU TANTANGAN KEPEMIMPINAN.");
+                const pdfKCards = [
+                    { num: "KLASTER 01", pct: "67.3%", title: "Infrastruktur & Finansial", desc: "Jaringan tidak stabil, keterbatasan perangkat digital, anggaran minim, dan disparitas desa-kota.", ref: "Suratman (2024); Ersalmina (2026)", gold: false },
+                    { num: "KLASTER 02", pct: "61.2%", title: "Kesenjangan Literasi SDM", desc: "Kompetensi digital guru rendah, guru senior lambat adaptasi, dan pelatihan sporadis.", ref: "Ratnawati (2025); Ramadhan (2026)", gold: false },
+                    { num: "KLASTER 03 (KHAS)", pct: "67.3%", title: "Resistensi Kultural", desc: "Dual challenge antara modernisasi dan pelestarian otoritas kiai serta proteksi sanad ilmu.", ref: "Manaf (2026); Riyadi (2025)", gold: true }
+                ];
+                pdfKCards.forEach((k, idx) => {
+                    const kx = 0.8 + idx * 2.95;
+                    drawCard(kx, 1.85, 2.65, 3.1, k.gold);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(8);
+                    pdf.setTextColor(...(k.gold ? C.gold : C.darkGray));
+                    pdf.text(k.num, kx + 0.2, 2.1);
+                    pdf.setFontSize(24);
+                    pdf.setTextColor(...(k.gold ? C.gold : C.white));
+                    pdf.text(k.pct, kx + 0.2, 2.6);
+                    pdf.setFontSize(12);
+                    pdf.setTextColor(...C.white);
+                    pdf.text(k.title, kx + 0.2, 3.0);
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(8.5);
+                    pdf.setTextColor(...C.gray);
+                    pdf.text(k.desc, kx + 0.2, 3.35, { maxWidth: 2.25 });
+                    pdf.setFontSize(7.5);
+                    pdf.setTextColor(...(k.gold ? C.gold : C.darkGray));
+                    pdf.text("Rujukan: " + k.ref, kx + 0.2, 4.65, { maxWidth: 2.25 });
+                });
+
+                // SLIDE 9: Dual Challenge
+                updateExportProgress(10, totalSlides, "Menyusun Halaman PDF 10 (Dual Challenge)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Dilema Kultural Lembaga Pendidikan Islam", "MODERNISASI TEKNOLOGI BERHADAPAN DENGAN TRADISI KEKIAIAN");
+                const pdfDcCards = [
+                    { tag: "Kutub Pertama", title: "Modernisasi Digital", desc: "Efisiensi operasional, big data, transparansi, dan otomatisasi pembelajaran.", gold: false },
+                    { tag: "Titik Temu", title: "Negosiator Budaya", desc: "Menjadikan teknologi sebagai alat pelestari nilai, bukan pengganti otoritas kiai.", gold: true },
+                    { tag: "Kutub Kedua", title: "Otoritas Tradisi Kiai", desc: "Rantai sanad keilmuan, keteladanan tatap muka langsung, dan adab pesantren.", gold: false }
+                ];
+                pdfDcCards.forEach((c, idx) => {
+                    const cx = 0.8 + idx * 2.95;
+                    drawCard(cx, 1.85, 2.65, 2.1, c.gold);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(8);
+                    pdf.setTextColor(...(c.gold ? C.gold : C.darkGray));
+                    pdf.text(c.tag.toUpperCase(), cx + 1.325, 2.15, { align: 'center' });
+                    pdf.setFontSize(13);
+                    pdf.setTextColor(...(c.gold ? C.gold : C.white));
+                    pdf.text(c.title, cx + 1.325, 2.55, { align: 'center' });
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(9);
+                    pdf.setTextColor(...C.gray);
+                    pdf.text(c.desc, cx + 1.325, 2.95, { maxWidth: 2.25, align: 'center' });
+                });
+                drawCard(0.8, 4.15, 8.4, 0.95, false);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(9.5);
+                pdf.setTextColor(...C.gold);
+                pdf.text("Insight Krusial:", 1.1, 4.45);
+                pdf.setFont('helvetica', 'normal');
+                pdf.setTextColor(...C.white);
+                pdf.text("Resistensi di kalangan pesantren bukan sikap anti-kemajuan, melainkan proteksi rasional dalam menjaga adab dan transmisi keilmuan dari disrupsi informasi liar.", 1.1, 4.7, { maxWidth: 7.8 });
+
+                // SLIDE 10: Transformasi Organisasional
+                updateExportProgress(11, totalSlides, "Menyusun Halaman PDF 11 (Transformasi Organisasi)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Pandangan Sistemik Organisasi", "TRANSFORMASI DIGITAL ADALAH PROSES ORGANISASIONAL UTUH");
+                const pdfSteps = [
+                    { step: "Tahap 1", title: "Infrastruktur & Akses", desc: "Perangkat keras, listrik, dan bandwidth internet stabil.", gold: false },
+                    { step: "Tahap 2", title: "Literasi SDM", desc: "Kompetensi pedagogis digital guru dan kepala lembaga.", gold: false },
+                    { step: "Tahap 3", title: "Negosiasi Nilai", desc: "Musyawarah dan legitimasi kultural berbasis maqasid.", gold: false },
+                    { step: "Tahap 4", title: "Tata Kelola Mutu", desc: "Supervisi berkala dan penjaminan mutu terpadu.", gold: true }
+                ];
+                pdfSteps.forEach((st, idx) => {
+                    const stx = 0.8 + idx * 2.15;
+                    drawCard(stx, 1.85, 1.95, 2.1, st.gold);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(8);
+                    pdf.setTextColor(...(st.gold ? C.gold : C.darkGray));
+                    pdf.text(st.step, stx + 0.15, 2.15);
+                    pdf.setFontSize(11);
+                    pdf.setTextColor(...(st.gold ? C.gold : C.white));
+                    pdf.text(st.title, stx + 0.15, 2.5);
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(8.5);
+                    pdf.setTextColor(...C.gray);
+                    pdf.text(st.desc, stx + 0.15, 2.9, { maxWidth: 1.65 });
+                });
+
+                // SLIDE 11: Tiga Lapisan (Orbit Tata Surya)
+                updateExportProgress(12, totalSlides, "Menyusun Halaman PDF 12 (Tata Surya Tiga Lapis)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Sintesis Konseptual Korpus", "TIGA LAPISAN. SATU KESATUAN SISTEM KEPEMIMPINAN.");
+                pdf.setDrawColor(...C.gold);
+                pdf.setLineWidth(0.015);
+                pdf.circle(2.5, 3.35, 1.5, 'S');
+                pdf.setDrawColor(...C.cyan);
+                pdf.circle(2.5, 3.35, 1.0, 'S');
+                pdf.setFillColor(...C.goldBg);
+                pdf.setDrawColor(...C.goldBorder);
+                pdf.setLineWidth(0.02);
+                pdf.circle(2.5, 3.35, 0.5, 'FD');
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(8.5);
+                pdf.setTextColor(...C.gold);
+                pdf.text("Digital\nLeadership", 2.5, 3.3, { align: 'center' });
+
+                const pdfSysLayers = [
+                    { tag: "Lapis 1 : Ekosistem Fisik", title: "Infrastruktur & Finansial (67.3%)", desc: "Pondasi fisik, perangkat keras, dan konektivitas internet.", border: C.gold },
+                    { tag: "Lapis 2 : Ekosistem Aktor", title: "Literasi Digital SDM (61.2%)", desc: "Kompetensi guru, pimpinan, dan budaya kolaboratif.", border: C.cyan },
+                    { tag: "Lapis 3 : Inti Nilai Luhur", title: "Kultur, Otoritas & Etika (67.3%)", desc: "Kepatuhan pada kiai, transmisi adab, dan etika Islam.", border: C.gold }
+                ];
+                pdfSysLayers.forEach((l, idx) => {
+                    const ly = 1.85 + idx * 1.05;
+                    drawCard(4.6, ly, 4.6, 0.9, idx === 2);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(8);
+                    pdf.setTextColor(...l.border);
+                    pdf.text(l.tag, 4.8, ly + 0.25);
+                    pdf.setFontSize(10.5);
+                    pdf.setTextColor(...C.white);
+                    pdf.text(l.title, 4.8, ly + 0.52);
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(8);
+                    pdf.setTextColor(...C.gray);
+                    pdf.text(l.desc, 4.8, ly + 0.75);
+                });
+
+                // SLIDE 12: Research Gaps
+                updateExportProgress(13, totalSlides, "Menyusun Halaman PDF 13 (Research Gaps)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Pemetaan Research Gap", "APA YANG MASIH TERLEWATKAN DALAM LITERATUR?");
+                const pdfGaps = [
+                    { id: "GAP 01", title: "Metodologis", desc: "Dominasi kualitatif (81.6%). Perlu studi longitudinal & kausal.", gold: false },
+                    { id: "GAP 02", title: "Kontekstual", desc: "Pesantren hanya 17.9%. Perlu riset multisitus luar Jawa.", gold: false },
+                    { id: "GAP 03", title: "Instrumentasi", desc: "Belum ada alat ukur baku kepemimpinan digital khas Islam.", gold: false },
+                    { id: "GAP 04", title: "Uji Model", desc: "Model normatif profetik belum diuji efektivitas empirisnya.", gold: false },
+                    { id: "GAP 05", title: "Evaluasi", desc: "Ketiadaan indikator kematangan digital berkelanjutan.", gold: true }
+                ];
+                pdfGaps.forEach((g, idx) => {
+                    const gx = 0.8 + idx * 1.72;
+                    drawCard(gx, 1.85, 1.55, 3.1, g.gold);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(9.5);
+                    pdf.setTextColor(...C.gold);
+                    pdf.text(g.id, gx + 0.15, 2.15);
+                    pdf.setFontSize(12);
+                    pdf.setTextColor(...C.white);
+                    pdf.text(g.title, gx + 0.15, 2.5);
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(8.5);
+                    pdf.setTextColor(...C.gray);
+                    pdf.text(g.desc, gx + 0.15, 2.9, { maxWidth: 1.25 });
+                });
+
+                // SLIDE 13: Roadmap Riset
+                updateExportProgress(14, totalSlides, "Menyusun Halaman PDF 14 (Roadmap Riset)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                drawHeader("Agenda Riset Masa Depan", "DARI DESKRIPSI KASUS MENUJU PEMBUKTIAN EVIDENSI KUMULATIF");
+                const pdfPhases = [
+                    { p: "FASE 01", title: "Studi Longitudinal", desc: "Mengukur dampak jangka panjang kepemimpinan digital pada mutu.", gold: false },
+                    { p: "FASE 02", title: "Multisitus Pesantren", desc: "Melibatkan pesantren salaf luar Jawa untuk mengikis bias.", gold: false },
+                    { p: "FASE 03", title: "Validasi Alat Ukur", desc: "Menyusun instrumen baku kepemimpinan berbasis maqasid syariah.", gold: false },
+                    { p: "FASE 04", title: "Uji Empiris Model", desc: "Menguji efektivitas model profetik secara kuantitatif.", gold: false },
+                    { p: "FASE 05", title: "Audit Kematangan", desc: "Menetapkan indeks kesiapan dan mitigasi risiko digital.", gold: true }
+                ];
+                pdfPhases.forEach((ph, idx) => {
+                    const phx = 0.8 + idx * 1.72;
+                    drawCard(phx, 1.85, 1.55, 2.7, ph.gold);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(9);
+                    pdf.setTextColor(...C.gold);
+                    pdf.text(ph.p, phx + 0.15, 2.15);
+                    pdf.setFontSize(10.5);
+                    pdf.setTextColor(...C.white);
+                    pdf.text(ph.title, phx + 0.15, 2.5);
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(8);
+                    pdf.setTextColor(...C.gray);
+                    pdf.text(ph.desc, phx + 0.15, 2.9, { maxWidth: 1.25 });
+                });
+
+                // SLIDE 14: Kesimpulan Akhir
+                updateExportProgress(15, totalSlides, "Menyusun Halaman PDF 15 (Kesimpulan)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                pdf.setFillColor(...C.goldPill);
+                pdf.setDrawColor(...C.goldBorder);
+                pdf.setLineWidth(0.012);
+                pdf.roundedRect(3.5, 0.7, 3.0, 0.28, 0.14, 0.14, 'FD');
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(8);
+                pdf.setTextColor(...C.gold);
+                pdf.text("KESIMPULAN SINTESIS AKHIR", 5.0, 0.88, { align: 'center' });
+
+                pdf.setFontSize(22);
+                pdf.setTextColor(...C.white);
+                pdf.text("KEPEMIMPINAN DIGITAL\nTIDAK BOLEH MENGGANTIKAN\nNILAI-NILAI ISLAM.", 5.0, 1.6, { align: 'center' });
+
+                drawCard(2.2, 2.95, 5.6, 0.85, true, 0.15);
+                pdf.setFontSize(16);
+                pdf.setTextColor(...C.gold);
+                pdf.text("IA HARUS BEKERJA MELALUINYA.", 5.0, 3.48, { align: 'center' });
+
+                pdf.setFontSize(12);
+                pdf.setTextColor(...C.white);
+                pdf.text("Akbar Tausiur Rido", 5.0, 4.3, { align: 'center' });
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(9);
+                pdf.setTextColor(...C.gray);
+                pdf.text("Magister MPI  |  Universitas Islam Negeri Sunan Gunung Djati Bandung", 5.0, 4.6, { align: 'center' });
+
+                // SLIDE 15: Outro Finale
+                updateExportProgress(16, totalSlides, "Menyusun Halaman PDF 16 (Outro)...");
+                pdf.addPage([10, 5.625], 'landscape');
+                setSlideBg();
+                pdf.setFillColor(...C.card);
+                pdf.setDrawColor(...C.darkGray);
+                pdf.setLineWidth(0.012);
+                pdf.roundedRect(3.6, 1.2, 2.8, 0.28, 0.14, 0.14, 'FD');
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(8);
+                pdf.setTextColor(...C.gray);
+                pdf.text("SESI PRESENTASI SELESAI", 5.0, 1.38, { align: 'center' });
+
+                pdf.setFontSize(32);
+                pdf.setTextColor(...C.white);
+                pdf.text("TERIMA KASIH", 5.0, 2.2, { align: 'center' });
+
+                pdf.setFont('times', 'italic');
+                pdf.setFontSize(16);
+                pdf.setTextColor(...C.gold);
+                pdf.text('"Alhamdulillahirobbil \'Alamin"', 5.0, 2.85, { align: 'center' });
+
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(12);
+                pdf.setTextColor(...C.white);
+                pdf.text("Akbar Tausiur Rido", 5.0, 3.75, { align: 'center' });
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(9.5);
+                pdf.setTextColor(...C.gray);
+                pdf.text("Magister MPI  |  NIM 2269100087", 5.0, 4.05, { align: 'center' });
+                pdf.setFontSize(8.5);
+                pdf.setTextColor(...C.darkGray);
+                pdf.text("Universitas Islam Negeri Sunan Gunung Djati Bandung", 5.0, 4.3, { align: 'center' });
+
+                updateExportProgress(totalSlides, totalSlides, "Menyimpan file PDF (.pdf)...");
+                pdf.save("Problematika-Kepemimpinan-Digital-Akbar-Tausiur-Rido.pdf");
+                finishExportProgress("Berhasil! Dokumen PDF presisi (16:9 lanskap) telah terunduh.");
+            } catch (err) {
+                console.error("Gagal ekspor PDF:", err);
+                finishExportProgress("Terjadi kendala saat menyusun PDF. Silakan coba kembali.");
             }
         }
 
@@ -2047,6 +3471,10 @@ Target Waktu: 11:30 - 12:00 (Durasi ~30 Detik)
                 case 'N':
                     toggleSecretNotes();
                     break;
+                case 'Escape':
+                    closeExportModal();
+                    if (isSecretNotesOpen) toggleSecretNotes();
+                    break;
                 case 'f':
                 case 'F':
                     try {
@@ -2057,7 +3485,7 @@ Target Waktu: 11:30 - 12:00 (Durasi ~30 Detik)
             }
         });
 
-        // Touch Swipe Navigation for iOS / Android with vertical scroll immunity
+        // Touch Swipe Navigation for iOS / Android
         let touchStartX = 0;
         let touchStartY = 0;
         window.addEventListener('touchstart', (e) => {
@@ -2071,14 +3499,34 @@ Target Waktu: 11:30 - 12:00 (Durasi ~30 Detik)
             const deltaX = touchEndX - touchStartX;
             const deltaY = touchEndY - touchStartY;
 
-            // Strict ratio: swipe only triggers if horizontal movement is more than 2x vertical movement
             if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 2.0) {
                 if (deltaX < 0) nextSlide();
                 else previousSlide();
             }
         }, { passive: true });
 
-        if (secretNotesBody) secretNotesBody.innerText = speakerNotesData[0];
+        // Secret Double-Tap on Mobile Slide Counter to Toggle Speaker Notes
+        let lastCounterTap = 0;
+        const counterEl = document.getElementById('hud-slide-counter');
+        if (counterEl) {
+            counterEl.addEventListener('click', () => {
+                const now = Date.now();
+                if (now - lastCounterTap < 350) {
+                    toggleSecretNotes();
+                }
+                lastCounterTap = now;
+            });
+        }
+
+        // Initialize Physical Pull-Cord Switch Interactions
+        setupPullCord('lamp-cord-wrapper', 'lamp-cord-chain', activateLampOpening);
+        setupPullCord('lamp-cord-wrapper-14', 'lamp-cord-chain-14', turnOffLampToSlide15);
+        setupPullCord('lamp-cord-wrapper-15', 'lamp-cord-chain-15', toggleLampSlide15);
+
+        // Preload Slide 0 Speaker Notes
+        if (secretNotesBody && speakerNotesData[0]) {
+            secretNotesBody.innerText = speakerNotesData[0];
+        }
     </script>
 </body>
 </html>
