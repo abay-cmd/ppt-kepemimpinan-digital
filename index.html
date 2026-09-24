@@ -843,52 +843,111 @@
                 RISET MELESAT CEPAT,<br/>
                 <span class="text-gray-400 font-bold">NAMUN BIDANG KAJIAN</span> <span class="text-amber-400 loop-shimmer">TERFRAGMENTASI.</span>
             </h2>
-            <p class="anim-element delay-1 text-xs sm:text-sm text-gray-400 mb-3 sm:mb-6">Distribusi 49 artikel terpilih memperlihatkan lonjakan tajam pada kurun waktu 2025–2026 (77.6% korpus).</p>
+            <p class="anim-element delay-1 text-xs sm:text-sm text-gray-400 mb-2 sm:mb-4">Distribusi 49 artikel terpilih memperlihatkan lonjakan tajam pada kurun waktu 2025–2026 (77.6% korpus).</p>
 
-            <div class="anim-element delay-2 glass-card p-3 sm:p-6 rounded-xl sm:rounded-2xl border border-white/10 flex flex-col my-1 sm:my-2">
-                <div class="flex items-end gap-2 sm:gap-6 md:gap-8 h-36 sm:h-52 md:h-60 border-b border-white/15 pb-2 relative">
-                    <div class="flex flex-col justify-between h-full font-mono text-[9px] sm:text-[10px] text-gray-400 border-r border-white/10 pr-1.5 sm:pr-2">
-                        <span>24 st</span>
-                        <span>16 st</span>
-                        <span>08 st</span>
-                        <span>00 st</span>
+            <div class="anim-element delay-2 glass-card p-3.5 sm:p-6 rounded-xl sm:rounded-2xl border border-white/10 flex flex-col my-1 sm:my-2">
+                <div class="relative w-full pt-7 sm:pt-8">
+                    <!-- Plot Area with Precise Grid Lines and Common Baseline -->
+                    <div class="relative h-36 sm:h-48 md:h-56 flex">
+                        <!-- Y-Axis Benchmark Labels Column -->
+                        <div class="w-12 sm:w-16 h-full relative border-r border-white/15 pr-2 select-none shrink-0">
+                            <!-- 24 st Benchmark (100% Top Grid) -->
+                            <div class="absolute top-0 right-2 -translate-y-1/2 font-mono text-[9px] sm:text-[11px] text-gray-300 font-bold flex items-center gap-1">
+                                <span>24 st</span>
+                            </div>
+                            <!-- 16 st Benchmark (66.67% Height Grid) -->
+                            <div class="absolute top-[33.33%] right-2 -translate-y-1/2 font-mono text-[9px] sm:text-[11px] text-gray-400 flex items-center gap-1">
+                                <span>16 st</span>
+                            </div>
+                            <!-- 08 st Benchmark (33.33% Height Grid) -->
+                            <div class="absolute top-[66.67%] right-2 -translate-y-1/2 font-mono text-[9px] sm:text-[11px] text-gray-400 flex items-center gap-1">
+                                <span>08 st</span>
+                            </div>
+                            <!-- 00 st Baseline Benchmark (0% Ground Line) -->
+                            <div class="absolute bottom-0 right-2 translate-y-1/2 font-mono text-[9px] sm:text-[11px] text-gray-500 font-semibold flex items-center gap-1">
+                                <span>00 st</span>
+                            </div>
+                        </div>
+
+                        <!-- Plot Body with Horizontal Grid Lines and Synchronized Bars -->
+                        <div class="flex-1 h-full relative border-b border-white/25">
+                            <!-- Horizontal Grid Guideline at 24 st (100%) -->
+                            <div class="absolute inset-x-0 top-0 border-t border-dashed border-white/15 pointer-events-none"></div>
+                            <!-- Horizontal Grid Guideline at 16 st (66.67%) -->
+                            <div class="absolute inset-x-0 top-[33.33%] border-t border-dashed border-white/10 pointer-events-none"></div>
+                            <!-- Horizontal Grid Guideline at 08 st (33.33%) -->
+                            <div class="absolute inset-x-0 top-[66.67%] border-t border-dashed border-white/10 pointer-events-none"></div>
+
+                            <!-- 4 Symmetrical Bar Columns -->
+                            <div class="absolute inset-0 flex items-end justify-around px-1 sm:px-4">
+                                <!-- 2023 Bar (3 studi / 12.5% of 24) -->
+                                <div class="flex-1 flex flex-col items-center justify-end h-full px-1 sm:px-3">
+                                    <div class="w-full max-w-[34px] sm:max-w-[52px] bg-white/15 hover:bg-white/25 rounded-t-md transition-all duration-1000 relative flex justify-center group"
+                                         style="height: 0%"
+                                         data-height="12.5%">
+                                        <span class="absolute -top-5 sm:-top-6.5 font-mono text-[10px] sm:text-xs text-gray-300 font-bold group-hover:text-amber-300 transition-colors pointer-events-none whitespace-nowrap" data-count="3">0</span>
+                                    </div>
+                                </div>
+
+                                <!-- 2024 Bar (8 studi / 33.33% of 24 - Lands Exactly on 08 st Line) -->
+                                <div class="flex-1 flex flex-col items-center justify-end h-full px-1 sm:px-3">
+                                    <div class="w-full max-w-[34px] sm:max-w-[52px] bg-white/25 hover:bg-white/35 rounded-t-md transition-all duration-1000 relative flex justify-center group"
+                                         style="height: 0%"
+                                         data-height="33.33%">
+                                        <span class="absolute -top-5 sm:-top-6.5 font-mono text-[10px] sm:text-xs text-gray-300 font-bold group-hover:text-amber-300 transition-colors pointer-events-none whitespace-nowrap" data-count="8">0</span>
+                                    </div>
+                                </div>
+
+                                <!-- 2025 Bar (14 studi / 58.33% of 24) -->
+                                <div class="flex-1 flex flex-col items-center justify-end h-full px-1 sm:px-3">
+                                    <div class="w-full max-w-[34px] sm:max-w-[52px] bg-amber-500/50 hover:bg-amber-500/70 border-t border-amber-400/40 rounded-t-md transition-all duration-1000 relative flex justify-center group"
+                                         style="height: 0%"
+                                         data-height="58.33%">
+                                        <span class="absolute -top-5 sm:-top-6.5 font-mono text-[10px] sm:text-xs text-amber-300 font-bold group-hover:scale-110 transition-transform pointer-events-none whitespace-nowrap" data-count="14">0</span>
+                                    </div>
+                                </div>
+
+                                <!-- 2026 Bar (24 studi / 100% of 24 - Lands Exactly on 24 st Line) -->
+                                <div class="flex-1 flex flex-col items-center justify-end h-full px-1 sm:px-3">
+                                    <div class="w-full max-w-[34px] sm:max-w-[52px] bg-gradient-to-t from-amber-500 to-yellow-300 rounded-t-md shadow-[0_0_22px_rgba(251,191,36,0.6)] transition-all duration-1000 relative flex justify-center group"
+                                         style="height: 0%"
+                                         data-height="100%">
+                                        <span class="absolute -top-5 sm:-top-6.5 font-mono text-[11px] sm:text-xs text-amber-300 font-black group-hover:scale-110 transition-transform pointer-events-none whitespace-nowrap" data-count="24">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- 2023 Bar -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
-                        <span class="font-mono text-[11px] sm:text-xs text-gray-300 font-bold mb-1" data-count="3">0</span>
-                        <div class="w-full max-w-[40px] sm:max-w-[56px] bg-white/10 rounded-t-lg transition-all duration-1000 h-0 group-hover:bg-white/20" data-height="12.5%"></div>
-                        <span class="font-mono text-[10px] sm:text-xs text-gray-400 mt-1.5 font-bold">2023</span>
-                        <span class="text-[9px] sm:text-[10px] text-gray-400">6.1%</span>
-                    </div>
+                    <!-- X-Axis Labels Row Positioned Directly Below Baseline -->
+                    <div class="flex items-start pt-2 sm:pt-2.5">
+                        <!-- Space compensation matching Y-Axis width -->
+                        <div class="w-12 sm:w-16 shrink-0"></div>
 
-                    <!-- 2024 Bar -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
-                        <span class="font-mono text-[11px] sm:text-xs text-gray-300 font-bold mb-1" data-count="8">0</span>
-                        <div class="w-full max-w-[40px] sm:max-w-[56px] bg-white/20 rounded-t-lg transition-all duration-1000 h-0 group-hover:bg-white/30" data-height="33.3%"></div>
-                        <span class="font-mono text-[10px] sm:text-xs text-gray-400 mt-1.5 font-bold">2024</span>
-                        <span class="text-[9px] sm:text-[10px] text-gray-400">16.3%</span>
-                    </div>
-
-                    <!-- 2025 Bar -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
-                        <span class="font-mono text-[11px] sm:text-xs text-amber-300 font-bold mb-1" data-count="14">0</span>
-                        <div class="w-full max-w-[40px] sm:max-w-[56px] bg-amber-500/50 rounded-t-lg transition-all duration-1000 h-0 group-hover:bg-amber-500/70" data-height="58.3%"></div>
-                        <span class="font-mono text-[10px] sm:text-xs text-gray-400 mt-1.5 font-bold">2025</span>
-                        <span class="text-[9px] sm:text-[10px] text-gray-400">28.6%</span>
-                    </div>
-
-                    <!-- 2026 Bar -->
-                    <div class="flex-1 flex flex-col items-center h-full justify-end group">
-                        <span class="font-mono text-[11px] sm:text-xs text-amber-300 font-black mb-1" data-count="24">0</span>
-                        <div class="w-full max-w-[40px] sm:max-w-[56px] bg-gradient-to-t from-amber-500 to-yellow-300 rounded-t-lg shadow-[0_0_20px_rgba(251,191,36,0.5)] transition-all duration-1000 h-0" data-height="100%"></div>
-                        <span class="font-mono text-[10px] sm:text-xs text-amber-400 mt-1.5 font-black">2026</span>
-                        <span class="text-[9px] sm:text-[10px] text-amber-300 font-bold">49.0%</span>
+                        <!-- 4 Columns Exactly Aligned with the Bars Above -->
+                        <div class="flex-1 flex items-center justify-around px-1 sm:px-4 text-center">
+                            <div class="flex-1 flex flex-col items-center">
+                                <span class="font-mono text-[10px] sm:text-xs text-gray-400 font-bold">2023</span>
+                                <span class="text-[9px] sm:text-[10px] text-gray-500 font-mono">6.1%</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center">
+                                <span class="font-mono text-[10px] sm:text-xs text-gray-400 font-bold">2024</span>
+                                <span class="text-[9px] sm:text-[10px] text-gray-500 font-mono">16.3%</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center">
+                                <span class="font-mono text-[10px] sm:text-xs text-gray-300 font-bold">2025</span>
+                                <span class="text-[9px] sm:text-[10px] text-gray-400 font-mono">28.6%</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center">
+                                <span class="font-mono text-[10px] sm:text-xs text-amber-400 font-black">2026</span>
+                                <span class="text-[9px] sm:text-[10px] text-amber-300 font-bold font-mono">49.0%</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="anim-element delay-3 text-[10px] sm:text-xs text-gray-400 font-mono mt-2 sm:mt-3 flex items-center justify-between">
+            <div class="anim-element delay-3 text-[10px] sm:text-xs text-gray-400 font-mono mt-1 sm:mt-2 flex items-center justify-between">
                 <span>Total Korpus: 49 Studi Tervalidasi</span>
                 <span class="text-amber-400">Sumber: SLR Akbar Tausiur Rido (2026)</span>
             </div>
@@ -2450,10 +2509,10 @@ Waktu dan kesempatan sepenuhnya saya kembalikan kepada forum untuk sesi pendalam
                 s3.background = { color: C_BG };
                 addSlideHeader(s3, "Eksplorasi Korpus Literatur", "RISET MELESAT CEPAT, NAMUN BIDANG KAJIAN TERFRAGMENTASI", "Distribusi 49 artikel terpilih memperlihatkan lonjakan tajam pada kurun waktu 2025–2026 (77.6% korpus).");
                 const barData = [
-                    { year: "2023", count: "3", pct: "6.1%", h: 0.45, gold: false },
-                    { year: "2024", count: "8", pct: "16.3%", h: 0.95, gold: false },
-                    { year: "2025", count: "14", pct: "28.6%", h: 1.55, gold: false },
-                    { year: "2026", count: "24", pct: "49.0%", h: 2.3, gold: true }
+                    { year: "2023", count: "3", pct: "6.1%", h: 0.28, gold: false },
+                    { year: "2024", count: "8", pct: "16.3%", h: 0.75, gold: false },
+                    { year: "2025", count: "14", pct: "28.6%", h: 1.31, gold: false },
+                    { year: "2026", count: "24", pct: "49.0%", h: 2.25, gold: true }
                 ];
                 barData.forEach((b, idx) => {
                     const bx = 1.6 + idx * 1.85;
@@ -2969,10 +3028,10 @@ Waktu dan kesempatan sepenuhnya saya kembalikan kepada forum untuk sesi pendalam
                 setSlideBg();
                 drawHeader("Eksplorasi Korpus Literatur", "RISET MELESAT CEPAT, NAMUN BIDANG KAJIAN TERFRAGMENTASI", "Distribusi 49 artikel terpilih memperlihatkan lonjakan tajam pada kurun waktu 2025–2026 (77.6% korpus).");
                 const pdfBarData = [
-                    { year: "2023", count: "3", pct: "6.1%", h: 0.45, gold: false },
-                    { year: "2024", count: "8", pct: "16.3%", h: 0.95, gold: false },
-                    { year: "2025", count: "14", pct: "28.6%", h: 1.55, gold: false },
-                    { year: "2026", count: "24", pct: "49.0%", h: 2.3, gold: true }
+                    { year: "2023", count: "3", pct: "6.1%", h: 0.28, gold: false },
+                    { year: "2024", count: "8", pct: "16.3%", h: 0.75, gold: false },
+                    { year: "2025", count: "14", pct: "28.6%", h: 1.31, gold: false },
+                    { year: "2026", count: "24", pct: "49.0%", h: 2.25, gold: true }
                 ];
                 pdfBarData.forEach((b, idx) => {
                     const bx = 1.6 + idx * 1.85;
